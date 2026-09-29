@@ -294,7 +294,6 @@
      --side = ความกว้างแถบซ้ายที่ใช้งานจริง (ย่อ = rail, ปักหมุด = rail-open)
      hover แล้วขยายชั่วคราว จะลอยทับ ไม่ดันเนื้อหา */
   :root{--content-max:1280px;--side:var(--rail);}
-  body.sb-pinned{--side:var(--rail-open);}
   html{scrollbar-gutter:stable;}
   .shell{
     max-width:none;margin:0;
@@ -314,7 +313,6 @@
   @media (hover:hover){
     nav.tabs:hover{width:var(--rail-open);box-shadow:14px 0 34px rgba(0,0,0,.55);}
   }
-  body.sb-pinned nav.tabs{width:var(--rail-open);box-shadow:14px 0 34px rgba(0,0,0,.35);}
   nav.tabs .sb-head{
     flex:none;display:flex;align-items:center;gap:14px;height:64px;margin:0 -10px 10px;padding:0 24px;
     border-bottom:1px solid var(--line);color:var(--cyan);white-space:nowrap;
@@ -332,22 +330,16 @@
   nav.tabs button i{font-size:16px;width:20px;flex:none;text-align:center;}
   nav.tabs button .lbl,nav.tabs .sb-head .lbl{opacity:0;transition:opacity .12s ease;}
   @media (hover:hover){ nav.tabs:hover button .lbl, nav.tabs:hover .sb-head .lbl{opacity:1;transition:opacity .18s ease .07s;} }
-  body.sb-pinned nav.tabs button .lbl, body.sb-pinned nav.tabs .sb-head .lbl{opacity:1;transition:opacity .18s ease .07s;}
   nav.tabs button:hover{color:var(--text-main);background:rgba(255,255,255,.05);}
   nav.tabs button.active{
     color:#1a1030;background:linear-gradient(120deg, var(--cyan), var(--lavender) 65%, var(--pink));
     box-shadow:0 0 18px rgba(185,194,255,.4);border-color:transparent;
   }
-  nav.tabs .sb-foot{flex:none;border-top:1px solid var(--line);margin:0 -10px;padding:12px 10px 0;}
-  nav.tabs .sb-pin i{transition:transform .22s ease;}
-  body.sb-pinned nav.tabs .sb-pin i{transform:rotate(180deg);}
   @media (max-width:760px){
     :root{--rail:56px;}
     nav.tabs{padding:0 7px 12px;}
     nav.tabs .sb-head{margin:0 -7px 8px;padding:0 18px;}
-    nav.tabs .sb-foot{margin:0 -7px;padding:10px 7px 0;}
     nav.tabs button{padding:0 10px;}
-    body.sb-pinned{--side:var(--rail);}   /* จอเล็ก: แถบลอยทับ ไม่ดันเนื้อหา */
     .shell{--gut:12px;}
   }
 
@@ -475,6 +467,65 @@
   .alert-row.overdue .alert-badge{background:rgba(255,59,92,.16);color:var(--red);border-color:rgba(255,59,92,.35);box-shadow:0 0 12px rgba(255,59,92,.15);}
   .alert-row.urgent .alert-badge{background:rgba(255,140,66,.16);color:var(--orange);border-color:rgba(255,140,66,.35);box-shadow:0 0 12px rgba(255,140,66,.15);}
   .alert-row.ok .alert-badge{background:rgba(255,255,255,.05);color:var(--text-muted);border-color:var(--line-soft);}
+
+
+  /* ===== OC cases ===== */
+  .oc-board-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-bottom:12px;}
+  .oc-board-head .form-title{margin:0;}
+  .oc-legend{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;}
+  .oc-lg{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line-soft);color:var(--text-muted);background:rgba(255,255,255,.03);}
+  .oc-lg i{font-size:8px;}
+  .oc-lg.overdue{color:var(--red);border-color:rgba(255,59,92,.4);background:rgba(255,59,92,.1);}
+  .oc-lg.near{color:var(--orange);border-color:rgba(255,140,66,.4);background:rgba(255,140,66,.1);}
+  .oc-lg.wait{color:var(--yellow);border-color:rgba(255,210,63,.4);background:rgba(255,210,63,.09);}
+  .oc-lg.none{color:var(--text-muted);}
+  .oc-total{font-size:12.5px;color:var(--text-muted);}
+  .oc-total b{color:#fff;font-family:'JetBrains Mono',monospace;}
+  #oc-board{display:flex;flex-direction:column;justify-content:flex-start;gap:8px;min-height:342px;} /* 5 แถว x 62px + ช่องว่าง 4 x 8px */
+  .oc-row{min-height:62px;box-sizing:border-box;}
+  #oc-board .empty{margin:auto;}
+  .oc-row{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 14px 10px 18px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);overflow:hidden;}
+  .oc-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--text-faint);}
+  .oc-row.overdue{border-color:rgba(255,59,92,.4);background:rgba(255,59,92,.07);}
+  .oc-row.overdue::before{background:var(--red);box-shadow:0 0 10px var(--red);}
+  .oc-row.near{border-color:rgba(255,140,66,.4);background:rgba(255,140,66,.07);}
+  .oc-row.near::before{background:var(--orange);box-shadow:0 0 10px var(--orange);}
+  .oc-row.wait{border-color:rgba(255,210,63,.3);background:rgba(255,210,63,.045);}
+  .oc-row.wait::before{background:var(--yellow);}
+  .oc-row.none::before{background:rgba(255,255,255,.18);}
+  .oc-who{flex:1 1 200px;min-width:0;}
+  .oc-who .n{font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .oc-who .s{font-size:11.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .oc-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#fff;min-width:84px;text-align:right;}
+  .oc-due{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:9px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;min-width:122px;}
+  .oc-row.overdue .oc-due{background:rgba(255,59,92,.16);border-color:rgba(255,59,92,.5);}
+  .oc-row.near .oc-due{background:rgba(255,140,66,.16);border-color:rgba(255,140,66,.5);}
+  .oc-row.wait .oc-due{background:rgba(255,210,63,.12);border-color:rgba(255,210,63,.4);}
+  .oc-cd{font-weight:700;font-size:11px;letter-spacing:.03em;padding:5px 11px;border-radius:999px;min-width:118px;text-align:center;border:1px solid var(--line-soft);color:var(--text-muted);background:rgba(255,255,255,.05);}
+  .oc-row.overdue .oc-cd{color:var(--red);background:rgba(255,59,92,.16);border-color:rgba(255,59,92,.4);}
+  .oc-row.near .oc-cd{color:var(--orange);background:rgba(255,140,66,.16);border-color:rgba(255,140,66,.4);}
+  .oc-row.wait .oc-cd{color:var(--yellow);background:rgba(255,210,63,.13);border-color:rgba(255,210,63,.4);}
+  .oc-st{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .oc-radios{display:flex;flex-wrap:wrap;gap:8px;}
+  .oc-radios label{margin:0;cursor:pointer;}
+  .oc-radios input{position:absolute;opacity:0;pointer-events:none;width:0;height:0;}
+  .oc-radios span{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--text-muted);font-weight:600;font-size:13px;transition:all .15s;}
+  .oc-radios span i{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--text-faint);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:transparent;}
+  .oc-radios input:checked + span{color:#fff;border-color:var(--sc);background:color-mix(in srgb,var(--sc) 18%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--sc) 25%,transparent);}
+  .oc-radios input:checked + span i{background:var(--sc);border-color:var(--sc);color:#0a1220;}
+  .oc-radios input:focus-visible + span{outline:2px solid var(--cyan);outline-offset:2px;}
+  .oc-table-panel{scrollbar-width:none;-ms-overflow-style:none;} /* ซ่อนแถบเลื่อน แต่ยังเลื่อนได้ */
+  .oc-table-panel::-webkit-scrollbar{display:none;width:0;height:0;}
+  .oc-pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  #oc-tbl-box{min-height:590px;} /* header + 10 แถว */
+  .oc-pager .pg-info{margin-right:auto;font-size:12px;color:var(--text-muted);}
+  .oc-pager .pg-mid{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-muted);}
+  .oc-pager input{width:56px;text-align:center;background:var(--bg-panel-2);color:var(--text-main);border:1px solid var(--line-soft);border-radius:8px;padding:6px 4px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;-moz-appearance:textfield;}
+  .oc-pager input:focus{border-color:var(--cyan);}
+  .oc-pager input::-webkit-outer-spin-button,.oc-pager input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .oc-pager .btn[disabled]{opacity:.35;cursor:not-allowed;pointer-events:none;}
+  select.oc-quick{background:var(--bg-panel-2);color:var(--text-main);border:1px solid var(--line-soft);border-radius:8px;padding:5px 6px;font-size:12px;font-family:inherit;}
+  @media(max-width:640px){.oc-amt{text-align:left;min-width:0;}.oc-due,.oc-cd{min-width:0;}}
 
   /* form */
   .form-panel{margin-bottom:18px;}
@@ -833,12 +884,12 @@
     <button data-tab="notes" title="บันทึกงาน" aria-label="บันทึกงาน"><i class="fa-solid fa-note-sticky"></i><span class="lbl">บันทึกงาน</span></button>
     <button data-tab="tasks" title="ลิสต์งาน" aria-label="ลิสต์งาน"><i class="fa-solid fa-list-check"></i><span class="lbl">ลิสต์งาน</span></button>
     <button data-tab="punishments" title="ประวัติโทษ" aria-label="ประวัติโทษ"><i class="fa-solid fa-gavel"></i><span class="lbl">ประวัติโทษ</span></button>
+    <button data-tab="oc" title="เคสซื้อขาย OC" aria-label="เคสซื้อขาย OC"><i class="fa-solid fa-hand-holding-dollar"></i><span class="lbl">เคสซื้อขาย OC</span></button>
     <button data-tab="cars" title="คลังรถ" aria-label="คลังรถ"><i class="fa-solid fa-car-side"></i><span class="lbl">คลังรถ</span></button>
     <button data-tab="outfits" title="ชุดในเกม" aria-label="ชุดในเกม"><i class="fa-solid fa-id-card"></i><span class="lbl">ชุดในเกม</span></button>
     <button data-tab="links" title="ลิงก์สำคัญ" aria-label="ลิงก์สำคัญ"><i class="fa-solid fa-link"></i><span class="lbl">ลิงก์สำคัญ</span></button>
     <button data-tab="commands" title="คำสั่ง ADMIN" aria-label="คำสั่ง ADMIN"><i class="fa-solid fa-user-shield"></i><span class="lbl">คำสั่ง ADMIN</span></button>
     <div class="sb-spacer"></div>
-    <div class="sb-foot"><button type="button" class="sb-pin" id="sbPin" title="ตรึงเมนูให้ขยายค้างไว้" aria-label="ตรึงเมนู" aria-pressed="false"><i class="fa-solid fa-angles-right"></i><span class="lbl">ตรึงเมนูไว้</span></button></div>
   </nav>
 
   <!-- ============ DASHBOARD ============ -->
@@ -1063,6 +1114,77 @@
     <div id="cmds-list" class="list-wrap"></div>
   </section>
 
+  <!-- ============ OC CASES ============ -->
+  <section class="view" id="view-oc">
+    <div class="view-head">
+      <div><h2><i class="fa-solid fa-hand-holding-dollar"></i>เคสซื้อขาย OC</h2><p>บันทึกเคสที่ต้องจ่ายเงินคืนให้นายก พร้อมบอร์ดแจ้งเตือนกำหนดชำระ</p></div>
+    </div>
+
+    <div class="panel bracket" style="margin-bottom:16px;">
+      <div class="bl"></div><div class="br"></div>
+      <div class="oc-board-head">
+        <div class="form-title"><i class="fa-solid fa-bell"></i>บอร์ดแจ้งเตือน: ค้างจ่ายคืนนายก</div>
+        <div class="oc-legend">
+          <span class="oc-lg overdue"><i class="fa-solid fa-circle"></i>เลยกำหนด <span id="oc-n-overdue">0</span></span>
+          <span class="oc-lg near"><i class="fa-solid fa-circle"></i>ใกล้ครบกำหนด <span id="oc-n-near">0</span></span>
+          <span class="oc-lg wait"><i class="fa-solid fa-circle"></i>รอชำระ <span id="oc-n-wait">0</span></span>
+          <span class="oc-lg none"><i class="fa-solid fa-circle"></i>ยังไม่มีกำหนด <span id="oc-n-none">0</span></span>
+        </div>
+      </div>
+      <div class="oc-total">ยอดค้างรวม <b id="oc-sum">0</b></div>
+      <div id="oc-board" style="margin-top:10px;"></div>
+      <div class="oc-pager" id="oc-pager">
+        <span class="pg-info" id="oc-pg-info"></span>
+        <button class="btn sm" id="oc-pg-prev" type="button"><i class="fa-solid fa-angle-left"></i>กลับ</button>
+        <span class="pg-mid"><input type="number" id="oc-pg-input" min="1" value="1" aria-label="เลขหน้า"><span>/ <b id="oc-pg-total">1</b></span></span>
+        <button class="btn sm" id="oc-pg-next" type="button">ถัดไป<i class="fa-solid fa-angle-right"></i></button>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-oc-search" placeholder="ค้นหาเคส (ชื่อ / ID DC / Steam / หมายเหตุ / สถานะ)...">
+    </div>
+    <div class="panel form-panel admin-only">
+      <div class="form-title" id="oc-form-title"><i class="fa-solid fa-pen"></i>เพิ่มเคสใหม่</div>
+      <div class="frow">
+        <div class="field"><label>ชื่อ</label><input id="f-oc-name" placeholder="ชื่อผู้ซื้อขาย"></div>
+        <div class="field"><label>ID DC</label><input id="f-oc-dc" placeholder="Discord ID"></div>
+        <div class="field"><label>Steam</label><input id="f-oc-steam" placeholder="Steam ID / ชื่อ Steam"></div>
+        <div class="field"><label>ยอดเงิน</label><input type="number" min="0" step="any" id="f-oc-amount" placeholder="0"></div>
+        <div class="field"><label>เวลาที่ได้รับเงิน (กำหนดชำระ)</label><input type="date" id="f-oc-due"></div>
+      </div>
+      <div class="frow">
+        <div class="field full"><label>สถานะการชำระ</label>
+          <div class="oc-radios" id="f-oc-status"></div>
+        </div>
+      </div>
+      <div class="frow"><div class="field full"><label>หมายเหตุ</label><textarea id="f-oc-note" placeholder="รายละเอียดเคส / ข้อตกลงกับนายก..."></textarea></div></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn primary" id="btn-save-oc"><i class="fa-solid fa-plus"></i>เพิ่มเคส</button>
+        <button class="btn ghost" id="btn-cancel-oc" style="display:none;">ยกเลิกแก้ไข</button>
+      </div>
+    </div>
+    <div class="tier-filters" id="oc-filters"></div>
+    <div class="note-count" id="oc-count"></div>
+    <div class="panel bracket oc-table-panel" style="padding:6px 10px;overflow-x:auto;">
+      <div class="bl"></div><div class="br"></div>
+      <div id="oc-tbl-box">
+      <table class="plist">
+        <thead><tr><th>ชื่อ</th><th>ID DC</th><th>Steam</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <tbody id="oc-tbody"></tbody>
+      </table>
+      <div id="oc-empty"></div>
+      </div>
+      <div class="oc-pager" id="oc-tpager" style="padding:0 6px 8px;">
+        <span class="pg-info" id="oc-tpg-info"></span>
+        <button class="btn sm" id="oc-tpg-prev" type="button"><i class="fa-solid fa-angle-left"></i>กลับ</button>
+        <span class="pg-mid"><input type="number" id="oc-tpg-input" min="1" value="1" aria-label="เลขหน้า"><span>/ <b id="oc-tpg-total">1</b></span></span>
+        <button class="btn sm" id="oc-tpg-next" type="button">ถัดไป<i class="fa-solid fa-angle-right"></i></button>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script>
@@ -1148,7 +1270,7 @@ const PENALTIES = {
 };
 
 /* ================= STATE ================= */
-let DB = { tasks:[], notes:[], punishments:[], cars:[], outfits:[], links:[], commands:[] };
+let DB = { tasks:[], notes:[], punishments:[], cars:[], outfits:[], links:[], commands:[], ocCases:[] };
 let mode = 'dev';
 let editing = { task:null, punish:null, car:null, outfit:null, link:null, cmd:null, note:null };
 let activeTierFilter = 'all';
@@ -1315,26 +1437,6 @@ document.getElementById('tabs').addEventListener('click', e=>{
     });
   }
 });
-
-/* ================= SIDEBAR PIN ================= */
-(function(){
-  const nav = document.getElementById('tabs'), pin = document.getElementById('sbPin');
-  const KEY = 'sc_sidebar_pinned', narrow = () => window.matchMedia('(max-width:760px)').matches;
-  function set(v, save){
-    document.body.classList.toggle('sb-pinned', v);
-    pin.setAttribute('aria-pressed', v ? 'true' : 'false');
-    pin.querySelector('.lbl').textContent = v ? 'ย่อเมนู' : 'ตรึงเมนูไว้';
-    if(save){ try{ localStorage.setItem(KEY, v ? '1' : '0'); }catch(e){} }
-  }
-  let init = false;
-  try{ init = localStorage.getItem(KEY) === '1'; }catch(e){}
-  set(init && !narrow(), false);
-  pin.addEventListener('click', ()=> set(!document.body.classList.contains('sb-pinned'), !narrow()));
-  nav.addEventListener('click', e=>{ if(narrow() && e.target.closest('button[data-tab]')) set(false, false); });
-  document.addEventListener('click', e=>{
-    if(narrow() && document.body.classList.contains('sb-pinned') && !nav.contains(e.target)) set(false, false);
-  });
-})();
 
 /* ================= CLOCK ================= */
 function tickClock(){
@@ -1985,13 +2087,245 @@ document.getElementById('cmds-list').addEventListener('click', async e=>{
   if(delBtn){ DB.commands = DB.commands.filter(x=>x.id!==delBtn.dataset.id); await saveKey('commands', DB.commands); renderCommands(); }
 });
 
+/* ================= OC CASES ================= */
+const OC_NEAR_DAYS = 3; /* เหลือกี่วันถึงจะนับว่า "ใกล้ครบกำหนด" */
+const OC_STATUS = {
+  paid:      {label:'จ่ายแล้ว',          color:'#33ffb0', icon:'fa-circle-check'},
+  unpaid:    {label:'ยังไม่จ่าย',        color:'#ff3b5c', icon:'fa-circle-xmark'},
+  installment:{label:'ผ่อนชำระ',         color:'#4dd8ff', icon:'fa-arrows-rotate'},
+  nocontact: {label:'ยังไม่มีการติดต่อ', color:'#8892a8', icon:'fa-phone-slash'},
+};
+let ocFilter = 'all';
+let ocPage = 1;
+let ocTPage = 1;
+const OC_TPAGE_SIZE = 10;
+let ocTFullH = 0;
+let ocFullH = 0; /* ความสูงบอร์ดตอนเต็ม 5 แถว วัดจริง */
+const OC_PAGE_SIZE = 5;
+function ocMoney(n){ n = Number(n)||0; return '฿' + n.toLocaleString('th-TH'); }
+function ocSt(k){ return OC_STATUS[k] || OC_STATUS.unpaid; }
+function ocStatusBadge(k){
+  const st = ocSt(k);
+  return `<span class="oc-st" style="background:color-mix(in srgb,${st.color} 16%,transparent);color:${st.color};border:1px solid color-mix(in srgb,${st.color} 40%,transparent)"><i class="fa-solid ${st.icon}"></i> ${st.label}</span>`;
+}
+function initOcForm(){
+  document.getElementById('f-oc-status').innerHTML = Object.entries(OC_STATUS).map(([k,v],i)=>
+    `<label><input type="radio" name="oc-status" value="${k}" ${i===1?'checked':''}><span style="--sc:${v.color}"><i class="fa-solid fa-check"></i>${v.label}</span></label>`).join('');
+  document.getElementById('oc-filters').innerHTML = `<button class="tier-chip active" data-oc="all">ทั้งหมด</button>` +
+    Object.entries(OC_STATUS).map(([k,v])=>`<button class="tier-chip" data-oc="${k}" style="--tc:${v.color}">${v.label}</button>`).join('');
+}
+function ocGetStatus(){ const r=document.querySelector('input[name="oc-status"]:checked'); return r?r.value:'unpaid'; }
+function ocSetStatus(k){ const r=document.querySelector('input[name="oc-status"][value="'+k+'"]'); if(r) r.checked=true; }
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function clearOcForm(){
+  ['f-oc-name','f-oc-dc','f-oc-steam','f-oc-amount','f-oc-note'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-oc-due').value='';
+  ocSetStatus('unpaid');
+  editing.oc=null;
+  document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>เพิ่มเคสใหม่';
+  document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-plus"></i>เพิ่มเคส';
+  document.getElementById('btn-cancel-oc').style.display='none';
+}
+document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
+  const name=document.getElementById('f-oc-name').value.trim();
+  if(!name) return toast('กรอกชื่อก่อนบันทึก','error');
+  const status = ocGetStatus();
+  const f = {
+    name,
+    dc:document.getElementById('f-oc-dc').value.trim(),
+    steam:document.getElementById('f-oc-steam').value.trim(),
+    amount:Number(document.getElementById('f-oc-amount').value)||0,
+    due:document.getElementById('f-oc-due').value,
+    status,
+    note:document.getElementById('f-oc-note').value.trim(),
+  };
+  if(editing.oc){
+    const i = DB.ocCases.findIndex(c=>c.id===editing.oc);
+    const old = DB.ocCases[i];
+    f.paidAt = status==='paid' ? (old.paidAt||todayISO()) : '';
+    DB.ocCases[i] = {...old, ...f};
+  } else {
+    f.paidAt = status==='paid' ? todayISO() : '';
+    DB.ocCases.push({id:uid(), ...f, createdAt:Date.now()});
+  }
+  const ok = await saveKey('oc_cases', DB.ocCases);
+  if(!ok) return;
+  clearOcForm(); renderOc();
+});
+document.getElementById('btn-cancel-oc').addEventListener('click', clearOcForm);
+document.getElementById('f-oc-search').addEventListener('input', ()=>{ ocTPage=1; renderOc(); });
+document.getElementById('oc-tpg-prev').addEventListener('click', ()=>{ ocTPage--; renderOc(); });
+document.getElementById('oc-tpg-next').addEventListener('click', ()=>{ ocTPage++; renderOc(); });
+(function(){
+  const inp = document.getElementById('oc-tpg-input');
+  const go = ()=>{ const v = parseInt(inp.value,10); ocTPage = isNaN(v) ? ocTPage : v; inp.blur(); renderOc(); };
+  inp.addEventListener('change', go);
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+  inp.addEventListener('focus', ()=>inp.select());
+})();
+document.getElementById('oc-pg-prev').addEventListener('click', ()=>{ ocPage--; renderOc(); });
+document.getElementById('oc-pg-next').addEventListener('click', ()=>{ ocPage++; renderOc(); });
+(function(){
+  const inp = document.getElementById('oc-pg-input');
+  const go = ()=>{ const v = parseInt(inp.value,10); ocPage = isNaN(v) ? ocPage : v; inp.blur(); renderOc(); };
+  inp.addEventListener('change', go);
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+  inp.addEventListener('focus', ()=>inp.select());
+})();
+document.getElementById('oc-filters').addEventListener('click', e=>{
+  const b = e.target.closest('.tier-chip'); if(!b) return;
+  ocFilter = b.dataset.oc; ocTPage = 1;
+  document.querySelectorAll('#oc-filters .tier-chip').forEach(c=>c.classList.toggle('active', c===b));
+  renderOc();
+});
+function ocBoardItem(c){
+  const dl = c.due ? daysLeft(c.due) : null;
+  let cat, badge, icon;
+  if(dl!==null && dl<0){ cat='overdue'; badge='เลยกำหนด '+Math.abs(dl)+' วัน'; icon='fa-calendar-xmark'; }
+  else if(dl!==null && dl<=OC_NEAR_DAYS){ cat='near'; badge= dl===0?'ครบกำหนดวันนี้':'เหลือ '+dl+' วัน'; icon='fa-bolt'; }
+  else if(dl!==null){ cat='wait'; badge='รอชำระ • เหลือ '+dl+' วัน'; icon='fa-hourglass-half'; }
+  else { cat='none'; badge='ยังไม่มีกำหนด'; icon='fa-circle-question'; }
+  return {c, dl, cat, badge, icon};
+}
+function renderOc(){
+  /* ---------- บอร์ดแจ้งเตือน: เฉพาะเคสที่ยังไม่จ่าย ---------- */
+  const items = DB.ocCases.filter(c=>c.status!=='paid').map(ocBoardItem)
+    .sort((a,b)=>{
+      if(a.dl===null && b.dl===null) return (a.c.createdAt||0)-(b.c.createdAt||0);
+      if(a.dl===null) return 1; if(b.dl===null) return -1;
+      return a.dl-b.dl; /* เลยกำหนดมากสุดก่อน → ใกล้ครบ → ไกลสุด → ไม่มีกำหนด */
+    });
+  const cnt = {overdue:0, near:0, wait:0, none:0};
+  items.forEach(i=>cnt[i.cat]++);
+  Object.keys(cnt).forEach(k=>{ const el=document.getElementById('oc-n-'+k); if(el) el.textContent=cnt[k]; });
+  document.getElementById('oc-sum').textContent = ocMoney(items.reduce((s,i)=>s+(Number(i.c.amount)||0),0));
+  const pages = Math.max(1, Math.ceil(items.length / OC_PAGE_SIZE));
+  if(ocPage > pages) ocPage = pages;
+  if(ocPage < 1) ocPage = 1;
+  const pageItems = items.slice((ocPage-1)*OC_PAGE_SIZE, ocPage*OC_PAGE_SIZE);
+  const pager = document.getElementById('oc-pager');
+  pager.classList.toggle('show', items.length > OC_PAGE_SIZE);
+  document.getElementById('oc-pg-info').textContent = items.length ? `แสดง ${(ocPage-1)*OC_PAGE_SIZE+1}-${(ocPage-1)*OC_PAGE_SIZE+pageItems.length} จาก ${items.length} รายชื่อ` : '';
+  const pgIn = document.getElementById('oc-pg-input');
+  pgIn.max = pages; if(document.activeElement!==pgIn) pgIn.value = ocPage;
+  document.getElementById('oc-pg-total').textContent = pages;
+  document.getElementById('oc-pg-prev').disabled = ocPage<=1;
+  document.getElementById('oc-pg-next').disabled = ocPage>=pages;
+  const board = document.getElementById('oc-board');
+  board.innerHTML = items.length===0
+    ? `<div class="empty"><i class="fa-solid fa-circle-check"></i><div class="e1">ไม่มีเคสค้างจ่าย</div><div class="e2">ทุกเคสจ่ายคืนนายกเรียบร้อยแล้ว</div></div>`
+    : pageItems.map(({c,cat,badge,icon})=>`
+      <div class="oc-row ${cat}">
+        <div class="alert-icon"><i class="fa-solid ${icon}"></i></div>
+        <div class="oc-who">
+          <div class="n">${esc(c.name)}</div>
+          <div class="s">${[c.dc&&'DC: '+esc(c.dc), c.steam&&'Steam: '+esc(c.steam)].filter(Boolean).join(' • ')||'-'}</div>
+        </div>
+        <div class="oc-amt">${ocMoney(c.amount)}</div>
+        <div class="oc-due"><i class="fa-regular fa-calendar-check"></i>${c.due?fmtDate(c.due):'ไม่ระบุวัน'}</div>
+        <div class="oc-cd">${badge}</div>
+        ${ocStatusBadge(c.status)}
+      </div>`).join('');
+  /* ล็อกความสูงบอร์ดให้เท่ากับตอนมี 5 รายชื่อเสมอ */
+  if(pageItems.length >= OC_PAGE_SIZE){ board.style.minHeight=''; ocFullH = board.offsetHeight; }
+  else { board.style.minHeight = ocFullH ? ocFullH+'px' : ''; }
+
+  /* ---------- ตารางรายการทั้งหมด ---------- */
+  const q = getQ('f-oc-search');
+  let base = [...DB.ocCases].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(ocFilter!=='all') base = base.filter(c=>c.status===ocFilter);
+  let list = base, tokens=[];
+  if(q){
+    const r = rankSearch(base, q, c=>c.name||'', c=>[c.name,c.dc,c.steam,c.note,ocSt(c.status).label,c.amount].filter(x=>x!==undefined&&x!=='').join(' '));
+    list = r.list; tokens = r.tokens;
+  }
+  setCount('oc-count', !!q, list.length, base.length);
+  const tbody = document.getElementById('oc-tbody'), emptyHost = document.getElementById('oc-empty');
+  const tPages = Math.max(1, Math.ceil(list.length / OC_TPAGE_SIZE));
+  if(ocTPage > tPages) ocTPage = tPages;
+  if(ocTPage < 1) ocTPage = 1;
+  const tStart = (ocTPage-1)*OC_TPAGE_SIZE;
+  const pageList = list.slice(tStart, tStart + OC_TPAGE_SIZE);
+  const tBox = document.getElementById('oc-tbl-box');
+  document.getElementById('oc-tpager').classList.toggle('show', list.length > OC_TPAGE_SIZE);
+  document.getElementById('oc-tpg-info').textContent = list.length ? `แสดง ${tStart+1}-${tStart+pageList.length} จาก ${list.length} รายการ` : '';
+  const tIn = document.getElementById('oc-tpg-input');
+  tIn.max = tPages; if(document.activeElement!==tIn) tIn.value = ocTPage;
+  document.getElementById('oc-tpg-total').textContent = tPages;
+  document.getElementById('oc-tpg-prev').disabled = ocTPage<=1;
+  document.getElementById('oc-tpg-next').disabled = ocTPage>=tPages;
+  if(list.length===0){
+    tbody.innerHTML='';
+    if(ocTFullH) tBox.style.minHeight = ocTFullH+'px';
+    emptyHost.innerHTML = `<div class="empty"><i class="fa-solid fa-hand-holding-dollar"></i><div class="e1">${q?'ไม่พบผลลัพธ์ที่ตรงกับการค้นหา':(DB.ocCases.length?'ไม่มีเคสในสถานะนี้':'ยังไม่มีเคสซื้อขาย OC')}</div><div class="e2">${q?'ลองค้นด้วยคำอื่น':'เพิ่มเคสแรกจากฟอร์มด้านบน'}</div></div>`;
+    return;
+  }
+  emptyHost.innerHTML='';
+  tbody.innerHTML = pageList.map(c=>`<tr>
+    <td>${highlightText(c.name||'',tokens)}</td>
+    <td class="pid">${c.dc?highlightText(c.dc,tokens):'-'}</td>
+    <td class="pid">${c.steam?highlightText(c.steam,tokens):'-'}</td>
+    <td class="pid">${ocMoney(c.amount)}</td>
+    <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
+    <td>${ocStatusBadge(c.status)}</td>
+    <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:260px;white-space:pre-wrap;">${highlightText(c.note,tokens)}</div>`:'-'}</td>
+    <td class="admin-only"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+      <select class="oc-quick" data-act="oc-quick" data-id="${c.id}" title="เปลี่ยนสถานะเร็ว">
+        ${Object.entries(OC_STATUS).map(([k,v])=>`<option value="${k}" ${k===c.status?'selected':''}>${v.label}</option>`).join('')}
+      </select>
+      <button class="btn sm" data-act="edit-oc" data-id="${c.id}"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn danger sm" data-act="del-oc" data-id="${c.id}"><i class="fa-solid fa-trash"></i></button>
+    </div></td>
+  </tr>`).join('');
+  /* ล็อกความสูงตารางให้เท่ากับตอนมี 10 รายการ */
+  if(pageList.length >= OC_TPAGE_SIZE){ tBox.style.minHeight=''; ocTFullH = tBox.offsetHeight; }
+  else if(ocTFullH){ tBox.style.minHeight = ocTFullH+'px'; }
+}
+document.getElementById('oc-tbody').addEventListener('change', async e=>{
+  const sel = e.target.closest('[data-act="oc-quick"]'); if(!sel) return;
+  const c = DB.ocCases.find(x=>x.id===sel.dataset.id); if(!c) return;
+  const prev = {status:c.status, paidAt:c.paidAt};
+  c.status = sel.value;
+  c.paidAt = c.status==='paid' ? (c.paidAt||todayISO()) : '';
+  const ok = await saveKey('oc_cases', DB.ocCases);
+  if(!ok){ c.status=prev.status; c.paidAt=prev.paidAt; }
+  renderOc();
+});
+document.getElementById('oc-tbody').addEventListener('click', async e=>{
+  const editBtn = e.target.closest('[data-act="edit-oc"]');
+  const delBtn = e.target.closest('[data-act="del-oc"]');
+  if(editBtn){
+    const c = DB.ocCases.find(x=>x.id===editBtn.dataset.id); if(!c) return;
+    editing.oc = c.id;
+    document.getElementById('f-oc-name').value=c.name||'';
+    document.getElementById('f-oc-dc').value=c.dc||'';
+    document.getElementById('f-oc-steam').value=c.steam||'';
+    document.getElementById('f-oc-amount').value=c.amount||'';
+    document.getElementById('f-oc-due').value=c.due||'';
+    document.getElementById('f-oc-note').value=c.note||'';
+    ocSetStatus(c.status);
+    document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>แก้ไขเคส';
+    document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
+    document.getElementById('btn-cancel-oc').style.display='inline-flex';
+    document.getElementById('f-oc-name').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  if(delBtn){
+    DB.ocCases = DB.ocCases.filter(x=>x.id!==delBtn.dataset.id);
+    await saveKey('oc_cases', DB.ocCases); renderOc();
+  }
+});
+/* รีเฟรชบอร์ดทุกนาที + ตอนข้ามเที่ยงคืน เพื่อให้จำนวนวันที่เหลืออัปเดตเอง */
+window.addEventListener('resize', ()=>{ ocFullH = 0; ocTFullH = 0; try{ renderOc(); }catch(e){} });
+setInterval(()=>{ try{ if(document.activeElement!==document.getElementById('oc-pg-input') && document.activeElement!==document.getElementById('oc-tpg-input')) renderOc(); }catch(e){} }, 60000);
+
 /* ================= INIT ================= */
 async function init(){
  try{
   tickClock();
   initCarTierSelect();
   initTierFilters();
-  const [tasks, notes, punishments, cars, outfits, links, commands, uiMode, bgImageUrl] = await Promise.all([
+  initOcForm();
+  const [tasks, notes, punishments, cars, outfits, links, commands, ocCases, uiMode, bgImageUrl] = await Promise.all([
     loadKey('tasks', []),
     loadKey('notes', []),
     loadKey('punishments', []),
@@ -1999,13 +2333,14 @@ async function init(){
     loadKey('outfits', []),
     loadKey('links', []),
     loadKey('commands', []),
+    loadKey('oc_cases', []),
     loadKey('ui_mode', 'dev'),
     loadKey('bg_image_url', ''),
   ]);
-  DB = { tasks, notes, punishments, cars, outfits, links, commands };
+  DB = { tasks, notes, punishments, cars, outfits, links, commands, ocCases };
   await setMode(uiMode, false);
   if(bgImageUrl){ document.getElementById('f-bgimg-url').value = bgImageUrl; applyBgImage(bgImageUrl); }
-  [renderDashboard, renderNotes, renderTasks, renderPunishments, renderCars, renderOutfits, renderLinks, renderCommands]
+  [renderDashboard, renderNotes, renderTasks, renderPunishments, renderCars, renderOutfits, renderLinks, renderCommands, renderOc]
     .forEach(f=>{ try{ f(); }catch(e){ console.error('render', f.name, e); } });
  }catch(e){ console.error('init', e); }
  finally{ setTimeout(()=>{ const b=document.getElementById('boot'); if(b) b.classList.add('hide'); }, 650); }
