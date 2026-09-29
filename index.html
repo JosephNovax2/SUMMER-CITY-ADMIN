@@ -41,9 +41,9 @@
     --r-lg:24px;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;background:#000;}
   body{
-    background:transparent;
+    background:#000;
     color:var(--text-main);
     font-family:'IBM Plex Sans Thai',sans-serif;
     font-weight:500;
@@ -65,6 +65,7 @@
   :focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
 
   /* ---------- ambient background ---------- */
+  .bg-grid,.bg-glow{display:none!important;}  /* พื้นหลังดำล้วน */
   .bg-grid{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background-image:
@@ -239,16 +240,28 @@
   }
   .switch.visitor .knob{transform:translateX(26px);background:var(--text-faint);box-shadow:none;}
 
-  /* ---------- background photo layer ---------- */
-  .bg-photo{
-    position:fixed;inset:0;z-index:-1;background-position:center;background-size:cover;
+  /* ---------- hero banner (รูปหัวเว็บ + ชื่อตรงกลาง) ---------- */
+  .hero{
+    position:relative;z-index:1;width:100%;height:clamp(150px,20vw,250px);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    background:#000;overflow:hidden;padding:0 20px 0 calc(var(--side) + 20px);
+    transition:padding .22s ease;
+  }
+  .hero .bg-photo{
+    position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;
     opacity:0;transition:opacity .5s ease;pointer-events:none;
   }
-  .bg-photo.on{opacity:1;}
-  .bg-photo::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(4,7,5,.32), rgba(4,7,5,.42) 60%, rgba(4,7,5,.5));
+  .hero .bg-photo.on{opacity:1;}
+  .hero::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,.7) 85%, #000 100%);
   }
+  .hero-title{
+    position:relative;z-index:2;margin:0;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;
+    font-size:clamp(22px,4.6vw,56px);line-height:1.1;letter-spacing:.02em;color:#fff;text-transform:uppercase;
+    text-shadow:0 2px 4px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.7), 0 0 2px #000;
+  }
+  @media (max-width:760px){ .hero{padding:0 12px 0 calc(var(--side) + 12px);} }
 
   /* ---------- icon button + bg image popover ---------- */
   .icon-btn{
@@ -277,8 +290,18 @@
 
   /* ---------- side nav (icon rail, expands on hover) ---------- */
   :root{--rail:68px;--rail-open:240px;}
-  .shell{padding-left:calc(var(--rail) + 20px);transition:padding-left .22s ease;}
-  body.sb-pinned .shell{padding-left:calc(var(--rail-open) + 20px);}
+  /* เนื้อหาทุกหมวดอยู่กึ่งกลางของพื้นที่ "ขวาแถบซ้าย" เสมอ (กว้างสูงสุด 1280px)
+     --side = ความกว้างแถบซ้ายที่ใช้งานจริง (ย่อ = rail, ปักหมุด = rail-open)
+     hover แล้วขยายชั่วคราว จะลอยทับ ไม่ดันเนื้อหา */
+  :root{--content-max:1280px;--side:var(--rail);}
+  body.sb-pinned{--side:var(--rail-open);}
+  html{scrollbar-gutter:stable;}
+  .shell{
+    max-width:none;margin:0;
+    --gut:max(20px, calc((100% - var(--side) - var(--content-max)) / 2));
+    padding-left:calc(var(--side) + var(--gut));padding-right:var(--gut);
+    transition:padding .22s ease;
+  }
   nav.tabs{
     position:fixed;top:0;left:0;bottom:0;z-index:100;width:var(--rail);
     display:flex;flex-direction:column;gap:6px;padding:0 10px 14px;
@@ -324,8 +347,8 @@
     nav.tabs .sb-head{margin:0 -7px 8px;padding:0 18px;}
     nav.tabs .sb-foot{margin:0 -7px;padding:10px 7px 0;}
     nav.tabs button{padding:0 10px;}
-    .shell{padding-left:calc(var(--rail) + 12px);padding-right:12px;}
-    body.sb-pinned .shell{padding-left:calc(var(--rail) + 12px);}
+    body.sb-pinned{--side:var(--rail);}   /* จอเล็ก: แถบลอยทับ ไม่ดันเนื้อหา */
+    .shell{--gut:12px;}
   }
 
   /* ---------- panels ---------- */
@@ -523,8 +546,11 @@
   .badge{font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em;padding:3px 10px;border-radius:999px;display:inline-block;}
 
   /* notes */
-  #notes-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,340px));gap:12px;align-items:start;}
+  /* แถวละ 3 การ์ด กว้างเต็มแนวเดียวกับฟอร์ม แถวถัดไปเรียงชิดซ้ายตามคอลัมน์ */
+  #notes-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;}
   #notes-list .empty{grid-column:1/-1;}
+  @media (max-width:900px){ #notes-list{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media (max-width:600px){ #notes-list{grid-template-columns:1fr;} }
   .note-card{display:flex;flex-direction:column;height:210px;padding:14px 16px;font-size:13.5px;line-height:1.6;}
   .note-card.is-editing{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset;}
   .note-body{flex:1;min-height:0;overflow-y:auto;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;padding-right:6px;scrollbar-width:thin;}
@@ -748,7 +774,6 @@
   <div class="boot-bar"><div class="boot-bar-fill"></div></div>
 </div>
 
-<div class="bg-photo" id="bgPhoto"></div>
 <div class="bg-grid"></div>
 <div class="bg-glow"><span></span><span></span><span></span><span></span></div>
 <div class="sparkle-layer" aria-hidden="true">
@@ -764,6 +789,11 @@
 </div>
 <div id="toast-host"></div>
 
+<div class="hero" id="hero">
+  <div class="bg-photo" id="bgPhoto"></div>
+  <h1 class="hero-title">SUMMER CITY ADMIN JOSEPH</h1>
+</div>
+
 <div class="shell">
 
   <header class="topbar">
@@ -777,7 +807,7 @@
     <div class="top-right">
       <div id="clock"><div class="t"></div><div class="d"></div></div>
       <div style="position:relative;">
-        <button class="icon-btn" id="btn-bgimg" title="ตั้งค่ารูปพื้นหลัง" aria-label="ตั้งค่ารูปพื้นหลัง"><i class="fa-solid fa-image"></i></button>
+        <button class="icon-btn" id="btn-bgimg" title="ตั้งค่ารูปหัวเว็บ" aria-label="ตั้งค่ารูปหัวเว็บ"><i class="fa-solid fa-image"></i></button>
       </div>
       <div class="mode-toggle">
         <span class="lbl active-dev" id="lbl-dev">DEV</span>
@@ -788,7 +818,7 @@
   </header>
 
   <div class="bgimg-pop" id="bgimgPop">
-    <div class="pt"><i class="fa-solid fa-panorama"></i>ลิงก์รูปพื้นหลัง</div>
+    <div class="pt"><i class="fa-solid fa-panorama"></i>ลิงก์รูปหัวเว็บ (แบนเนอร์)</div>
     <input id="f-bgimg-url" placeholder="https://...">
     <div class="row">
       <button class="btn primary" id="btn-bgimg-apply"><i class="fa-solid fa-check"></i>ใช้งาน</button>
@@ -1232,14 +1262,14 @@ document.getElementById('btn-bgimg-apply').addEventListener('click', async ()=>{
   if(!url){ toast('กรอกลิงก์รูปก่อน', 'error'); return; }
   applyBgImage(url);
   await saveKey('bg_image_url', url);
-  toast('ตั้งค่ารูปพื้นหลังแล้ว');
+  toast('ตั้งค่ารูปหัวเว็บแล้ว');
   document.getElementById('bgimgPop').classList.remove('open');
 });
 document.getElementById('btn-bgimg-clear').addEventListener('click', async ()=>{
   document.getElementById('f-bgimg-url').value='';
   applyBgImage('');
   await saveKey('bg_image_url', '');
-  toast('ล้างรูปพื้นหลังแล้ว');
+  toast('ล้างรูปหัวเว็บแล้ว');
   document.getElementById('bgimgPop').classList.remove('open');
 });
 
