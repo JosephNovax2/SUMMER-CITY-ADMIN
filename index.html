@@ -523,7 +523,17 @@
   .badge{font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em;padding:3px 10px;border-radius:999px;display:inline-block;}
 
   /* notes */
-  .note-card{white-space:pre-wrap;font-size:13.5px;line-height:1.6;}
+  #notes-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,340px));gap:12px;align-items:start;}
+  #notes-list .empty{grid-column:1/-1;}
+  .note-card{display:flex;flex-direction:column;height:210px;padding:14px 16px;font-size:13.5px;line-height:1.6;}
+  .note-card.is-editing{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset;}
+  .note-body{flex:1;min-height:0;overflow-y:auto;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;padding-right:6px;scrollbar-width:thin;}
+  .note-body::-webkit-scrollbar{width:5px;}
+  .note-card .card-actions{margin-top:10px;flex:none;}
+  .note-card .note-time{flex:none;margin-bottom:6px;}
+  .note-time .edited{color:var(--cyan);margin-left:6px;}
+  mark.hl{background:rgba(51,255,176,.28);color:inherit;border-radius:3px;padding:0 1px;}
+  .note-count{font-size:11.5px;color:var(--text-faint);margin:-8px 4px 12px;font-family:'JetBrains Mono',monospace;}
   .note-time{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);margin-bottom:8px;}
 
   /* tasks */
@@ -827,18 +837,30 @@
     <div class="view-head">
       <div><h2><i class="fa-solid fa-note-sticky"></i>บันทึกงานจิปาถะ</h2><p>โน้ตเรื่องเรื่อยเปื่อยระหว่างทำงาน เก็บไว้ค้นย้อนหลังได้</p></div>
     </div>
-    <div class="panel form-panel admin-only">
-      <div class="form-title"><i class="fa-solid fa-pen"></i>เพิ่มบันทึกใหม่</div>
-      <div class="frow"><div class="field full"><label>ข้อความบันทึก</label><textarea id="f-note-text" placeholder="พิมพ์สิ่งที่ต้องจำ / งานจิปาถะ..."></textarea></div></div>
-      <button class="btn primary" id="btn-add-note"><i class="fa-solid fa-plus"></i>บันทึก</button>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-note-search" placeholder="ค้นหาบันทึก (ตัวเลข / ตัวหนังสือ / หลายคำคั่นด้วยเว้นวรรค)...">
     </div>
-    <div id="notes-list" class="list-wrap"></div>
+    <div class="panel form-panel admin-only">
+      <div class="form-title" id="note-form-title"><i class="fa-solid fa-pen"></i>เพิ่มบันทึกใหม่</div>
+      <div class="frow"><div class="field full"><label>ข้อความบันทึก</label><textarea id="f-note-text" placeholder="พิมพ์สิ่งที่ต้องจำ / งานจิปาถะ..."></textarea></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn primary" id="btn-add-note"><i class="fa-solid fa-plus"></i>บันทึก</button>
+        <button class="btn ghost" id="btn-cancel-note" style="display:none;">ยกเลิกแก้ไข</button>
+      </div>
+    </div>
+    <div class="note-count" id="note-count"></div>
+    <div id="notes-list"></div>
   </section>
 
   <!-- ============ TASKS ============ -->
   <section class="view" id="view-tasks">
     <div class="view-head">
       <div><h2><i class="fa-solid fa-list-check"></i>ลิสต์งาน / เดดไลน์</h2><p>ติดตามงานที่ได้รับมอบหมาย พร้อมกำหนดเวลาและผู้สั่งงาน</p></div>
+    </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-task-search" placeholder="ค้นหางาน (ชื่องาน / รายละเอียด / ผู้สั่งงาน / สถานะ)...">
     </div>
     <div class="panel form-panel admin-only">
       <div class="form-title" id="task-form-title"><i class="fa-solid fa-pen"></i>เพิ่มงานใหม่</div>
@@ -859,6 +881,7 @@
         <button class="btn ghost" id="btn-cancel-task" style="display:none;">ยกเลิกแก้ไข</button>
       </div>
     </div>
+    <div class="note-count" id="task-count"></div>
     <div id="tasks-list" class="list-wrap"></div>
   </section>
 
@@ -917,6 +940,10 @@
     <div class="view-head">
       <div><h2><i class="fa-solid fa-car-side"></i>คลังรถ</h2><p>บันทึกรายชื่อรถแยกตามเทียร์ พร้อมรูปประกอบ</p></div>
     </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-car-search" placeholder="ค้นหารถ (ชื่อรถ / เทียร์)...">
+    </div>
     <div class="panel form-panel admin-only">
       <div class="form-title" id="car-form-title"><i class="fa-solid fa-pen"></i>เพิ่มรถใหม่</div>
       <div class="frow">
@@ -930,6 +957,7 @@
       </div>
     </div>
     <div class="tier-filters" id="tier-filters"></div>
+    <div class="note-count" id="car-count"></div>
     <div id="cars-grid" class="grid-wrap"></div>
   </section>
 
@@ -958,6 +986,10 @@
     <div class="view-head">
       <div><h2><i class="fa-solid fa-link"></i>ลิงก์เว็บสำคัญ</h2><p>รวมลิงก์เว็บงานต่างๆ ที่ใช้บ่อย</p></div>
     </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-link-search" placeholder="ค้นหาลิงก์ (ชื่อเว็บ / URL)...">
+    </div>
     <div class="panel form-panel admin-only">
       <div class="form-title" id="link-form-title"><i class="fa-solid fa-pen"></i>เพิ่มลิงก์ใหม่</div>
       <div class="frow">
@@ -969,6 +1001,7 @@
         <button class="btn ghost" id="btn-cancel-link" style="display:none;">ยกเลิกแก้ไข</button>
       </div>
     </div>
+    <div class="note-count" id="link-count"></div>
     <div id="links-list" class="list-wrap"></div>
   </section>
 
@@ -992,6 +1025,11 @@
         </div>
       </div>
     </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="f-cmd-search" placeholder="ค้นหาคำสั่ง (ชื่อคำสั่ง / โค้ดคำสั่ง)...">
+    </div>
+    <div class="note-count" id="cmd-count"></div>
     <div id="cmds-list" class="list-wrap"></div>
   </section>
 
@@ -1082,7 +1120,7 @@ const PENALTIES = {
 /* ================= STATE ================= */
 let DB = { tasks:[], notes:[], punishments:[], cars:[], outfits:[], links:[], commands:[] };
 let mode = 'dev';
-let editing = { task:null, punish:null, car:null, outfit:null, link:null, cmd:null };
+let editing = { task:null, punish:null, car:null, outfit:null, link:null, cmd:null, note:null };
 let activeTierFilter = 'all';
 
 /* ================= STORAGE HELPERS (Supabase) ================= */
@@ -1306,28 +1344,128 @@ function renderDashboard(){
 }
 
 /* ================= NOTES ================= */
+/* ให้คะแนนความตรงของบันทึกกับคำค้น: ตรงทั้งประโยค > ตรงครบทุกคำ > ตรงบางคำ */
+function scoreNote(text, q, tokens){
+  const t = text.toLowerCase();
+  let score = 0, matched = 0;
+  if(t === q) score += 5000;
+  const phraseAt = t.indexOf(q);
+  if(phraseAt >= 0){ score += 1500; if(phraseAt === 0) score += 300; }
+  for(const tk of tokens){
+    let at = t.indexOf(tk), cnt = 0;
+    if(at < 0) continue;
+    matched++;
+    score += 200;
+    while(at >= 0 && cnt < 5){ cnt++; at = t.indexOf(tk, at + tk.length); }
+    score += (cnt - 1) * 10;
+    if(t.startsWith(tk)) score += 60;
+    if(/^[a-z0-9]+$/.test(tk)){                       /* ตัวเลข/อังกฤษ: ให้แต้มเพิ่มถ้าเป็นคำเต็ม ไม่ใช่เศษของคำอื่น */
+      const re = new RegExp('(^|[^a-z0-9])'+tk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'($|[^a-z0-9])');
+      if(re.test(t)) score += 80;
+    }
+  }
+  if(matched === 0) return 0;
+  if(matched === tokens.length) score += 1000;       /* ครบทุกคำ */
+  score += Math.round(200 * (matched / tokens.length));
+  return score;
+}
+function highlightText(text, tokens){
+  if(!tokens.length) return esc(text);
+  const pat = tokens.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).sort((a,b)=>b.length-a.length).join('|');
+  const re = new RegExp('('+pat+')','gi');
+  return text.split(re).map((part,i)=> i%2 ? `<mark class="hl">${esc(part)}</mark>` : esc(part)).join('');
+}
+/* ค้นหาแบบเรียงตามความตรง (ใช้ร่วมกันทุกหมวด) : primary = ฟิลด์หลัก (ชื่อ) ได้น้ำหนักมากกว่า */
+function rankSearch(items, q, primaryFn, allFn){
+  const tokens = q ? [...new Set(q.split(/\s+/).filter(Boolean))] : [];
+  if(!tokens.length) return {list:items, tokens, searching:false};
+  const list = items.map(it=>({it, sc: scoreNote(allFn(it), q, tokens) + 2*scoreNote(primaryFn(it), q, tokens)}))
+    .filter(x=>x.sc>0)
+    .sort((a,b)=> b.sc-a.sc || (b.it.createdAt||0)-(a.it.createdAt||0))
+    .map(x=>x.it);
+  return {list, tokens, searching:true};
+}
+function getQ(id){ return document.getElementById(id).value.trim().toLowerCase(); }
+function setCount(id, searching, shown, total){
+  const el = document.getElementById(id); if(!el) return;
+  el.textContent = searching ? `พบ ${shown} จาก ${total} รายการ (เรียงตามความตรงมากที่สุดก่อน)` : (total ? `ทั้งหมด ${total} รายการ` : '');
+}
+function noResultHTML(icon,q,extra){
+  return `<div class="empty" ${extra||''}><i class="fa-solid ${icon}"></i><div class="e1">ไม่พบผลลัพธ์ที่ตรงกับ "${esc(q)}"</div><div class="e2">ลองใช้คำอื่น หรือพิมพ์ให้สั้นลง</div></div>`;
+}
 async function renderNotes(){
   const host = document.getElementById('notes-list');
-  const list = [...DB.notes].sort((a,b)=>b.createdAt-a.createdAt);
-  if(list.length===0){ host.innerHTML = `<div class="empty"><i class="fa-solid fa-note-sticky"></i><div class="e1">ยังไม่มีบันทึก</div><div class="e2">เริ่มจดสิ่งที่ต้องจำได้เลย</div></div>`; return; }
+  const countEl = document.getElementById('note-count');
+  const q = document.getElementById('f-note-search').value.trim().toLowerCase();
+  const tokens = q ? [...new Set(q.split(/\s+/).filter(Boolean))] : [];
+  let list;
+  if(tokens.length){
+    list = DB.notes.map(n=>({n, sc:scoreNote(n.text||'', q, tokens)})).filter(x=>x.sc>0)
+      .sort((a,b)=> b.sc-a.sc || b.n.createdAt-a.n.createdAt).map(x=>x.n);
+    countEl.textContent = `พบ ${list.length} จาก ${DB.notes.length} รายการ (เรียงตามความตรงมากที่สุดก่อน)`;
+  }else{
+    list = [...DB.notes].sort((a,b)=>b.createdAt-a.createdAt);
+    countEl.textContent = DB.notes.length ? `ทั้งหมด ${DB.notes.length} รายการ` : '';
+  }
+  if(DB.notes.length===0){ host.innerHTML = `<div class="empty"><i class="fa-solid fa-note-sticky"></i><div class="e1">ยังไม่มีบันทึก</div><div class="e2">เริ่มจดสิ่งที่ต้องจำได้เลย</div></div>`; return; }
+  if(list.length===0){ host.innerHTML = `<div class="empty"><i class="fa-solid fa-magnifying-glass"></i><div class="e1">ไม่พบบันทึกที่ตรงกับ "${esc(q)}"</div><div class="e2">ลองใช้คำอื่น หรือพิมพ์ให้สั้นลง</div></div>`; return; }
   host.innerHTML = list.map(n=>`
-    <div class="panel note-card" data-id="${n.id}">
-      <div class="note-time">${new Date(n.createdAt).toLocaleString('th-TH')}</div>
-      <div>${esc(n.text)}</div>
-      <div class="card-actions admin-only"><button class="btn danger sm" data-act="del-note" data-id="${n.id}"><i class="fa-solid fa-trash"></i>ลบ</button></div>
+    <div class="panel note-card ${editing.note===n.id?'is-editing':''}" data-id="${n.id}">
+      <div class="note-time">${new Date(n.createdAt).toLocaleString('th-TH')}${n.updatedAt?'<span class="edited">· แก้ไขแล้ว</span>':''}</div>
+      <div class="note-body">${highlightText(n.text||'', tokens)}</div>
+      <div class="card-actions admin-only">
+        <button class="btn sm" data-act="edit-note" data-id="${n.id}"><i class="fa-solid fa-pen"></i>แก้ไข</button>
+        <button class="btn danger sm" data-act="del-note" data-id="${n.id}"><i class="fa-solid fa-trash"></i>ลบ</button>
+      </div>
     </div>`).join('');
 }
+function clearNoteForm(){
+  editing.note = null;
+  document.getElementById('f-note-text').value = '';
+  document.getElementById('note-form-title').innerHTML = '<i class="fa-solid fa-pen"></i>เพิ่มบันทึกใหม่';
+  document.getElementById('btn-add-note').innerHTML = '<i class="fa-solid fa-plus"></i>บันทึก';
+  document.getElementById('btn-cancel-note').style.display = 'none';
+  renderNotes();
+}
+document.getElementById('f-note-search').addEventListener('input', renderNotes);
+document.getElementById('btn-cancel-note').addEventListener('click', clearNoteForm);
 document.getElementById('btn-add-note').addEventListener('click', async ()=>{
   const el = document.getElementById('f-note-text');
   if(!el.value.trim()) return toast('กรอกข้อความก่อนบันทึก','error');
+  if(editing.note){
+    const n = DB.notes.find(x=>x.id===editing.note);
+    if(n){ n.text = el.value.trim(); n.updatedAt = Date.now(); }
+    await saveKey('notes', DB.notes);
+    toast('แก้ไขบันทึกแล้ว');
+    clearNoteForm(); renderDashboard();
+    return;
+  }
   DB.notes.push({id:uid(), text:el.value.trim(), createdAt:Date.now()});
   await saveKey('notes', DB.notes);
   el.value=''; renderNotes(); renderDashboard();
 });
 document.getElementById('notes-list').addEventListener('click', async e=>{
-  const btn = e.target.closest('[data-act="del-note"]'); if(!btn) return;
-  DB.notes = DB.notes.filter(n=>n.id!==btn.dataset.id);
-  await saveKey('notes', DB.notes); renderNotes(); renderDashboard();
+  const editBtn = e.target.closest('[data-act="edit-note"]');
+  const delBtn = e.target.closest('[data-act="del-note"]');
+  if(editBtn){
+    const n = DB.notes.find(x=>x.id===editBtn.dataset.id); if(!n) return;
+    editing.note = n.id;
+    document.getElementById('f-note-text').value = n.text || '';
+    document.getElementById('note-form-title').innerHTML = '<i class="fa-solid fa-pen"></i>แก้ไขบันทึก';
+    document.getElementById('btn-add-note').innerHTML = '<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
+    document.getElementById('btn-cancel-note').style.display = 'inline-flex';
+    renderNotes();
+    const ta = document.getElementById('f-note-text');
+    ta.scrollIntoView({behavior:'smooth', block:'center'}); ta.focus();
+    return;
+  }
+  if(delBtn){
+    if(editing.note === delBtn.dataset.id) editing.note = null;
+    DB.notes = DB.notes.filter(n=>n.id!==delBtn.dataset.id);
+    await saveKey('notes', DB.notes);
+    if(!editing.note) clearNoteForm(); else renderNotes();
+    renderDashboard();
+  }
 });
 
 /* ================= TASKS ================= */
@@ -1368,11 +1506,20 @@ document.getElementById('btn-save-task').addEventListener('click', async ()=>{
 document.getElementById('btn-cancel-task').addEventListener('click', clearTaskForm);
 function renderTasks(){
   const host = document.getElementById('tasks-list');
-  const list = [...DB.tasks].sort((a,b)=>{
-    if(!a.deadline) return 1; if(!b.deadline) return -1;
-    return new Date(a.deadline)-new Date(b.deadline);
-  });
-  if(list.length===0){ host.innerHTML=`<div class="empty"><i class="fa-solid fa-list-check"></i><div class="e1">ยังไม่มีงานในลิสต์</div><div class="e2">เพิ่มงานแรกของคุณด้านบน</div></div>`; return; }
+  const q = getQ('f-task-search');
+  let list, tokens=[];
+  if(q){
+    const r = rankSearch(DB.tasks, q, t=>t.title||'', t=>[t.title,t.description,t.assignedBy,t.status,t.priority,t.deadline].filter(Boolean).join(' '));
+    list = r.list; tokens = r.tokens;
+  }else{
+    list = [...DB.tasks].sort((a,b)=>{
+      if(!a.deadline) return 1; if(!b.deadline) return -1;
+      return new Date(a.deadline)-new Date(b.deadline);
+    });
+  }
+  setCount('task-count', !!q, list.length, DB.tasks.length);
+  if(DB.tasks.length===0){ host.innerHTML=`<div class="empty"><i class="fa-solid fa-list-check"></i><div class="e1">ยังไม่มีงานในลิสต์</div><div class="e2">เพิ่มงานแรกของคุณด้านบน</div></div>`; return; }
+  if(list.length===0){ host.innerHTML = noResultHTML('fa-magnifying-glass',q); return; }
   host.innerHTML = list.map(t=>{
     const dl = t.deadline ? daysLeft(t.deadline) : null;
     let cls='';
@@ -1381,15 +1528,15 @@ function renderTasks(){
     else if(dl!==null && dl<=2) cls='urgent';
     return `<div class="panel task-card ${cls}" data-id="${t.id}">
       <div class="task-top">
-        <div class="ttl">${esc(t.title)}</div>
+        <div class="ttl">${highlightText(t.title||'',tokens)}</div>
         <span class="badge" style="background:rgba(255,255,255,.06);color:${t.priority==='ด่วนมาก'?'var(--red)':t.priority==='ด่วน'?'var(--orange)':'var(--text-muted)'}">${esc(t.priority)}</span>
       </div>
       <div class="task-meta">
         <span><i class="fa-solid fa-calendar"></i>${fmtDate(t.deadline)}</span>
-        <span><i class="fa-solid fa-user"></i>${esc(t.assignedBy||'-')}</span>
+        <span><i class="fa-solid fa-user"></i>${t.assignedBy?highlightText(t.assignedBy,tokens):'-'}</span>
         <span><i class="fa-solid fa-circle-half-stroke"></i>${esc(t.status)}</span>
       </div>
-      ${t.description? `<div class="task-desc">${esc(t.description)}</div>`:''}
+      ${t.description? `<div class="task-desc">${highlightText(t.description,tokens)}</div>`:''}
       <div class="card-actions admin-only">
         <button class="btn sm" data-act="edit-task" data-id="${t.id}"><i class="fa-solid fa-pen"></i>แก้ไข</button>
         <button class="btn danger sm" data-act="del-task" data-id="${t.id}"><i class="fa-solid fa-trash"></i>ลบ</button>
@@ -1397,6 +1544,7 @@ function renderTasks(){
     </div>`;
   }).join('');
 }
+document.getElementById('f-task-search').addEventListener('input', renderTasks);
 document.getElementById('tasks-list').addEventListener('click', async e=>{
   const editBtn = e.target.closest('[data-act="edit-task"]');
   const delBtn = e.target.closest('[data-act="del-task"]');
@@ -1570,15 +1718,23 @@ document.getElementById('btn-save-car').addEventListener('click', async ()=>{
 document.getElementById('btn-cancel-car').addEventListener('click', clearCarForm);
 function renderCars(){
   const host = document.getElementById('cars-grid');
-  let list = [...DB.cars].sort((a,b)=>b.createdAt-a.createdAt);
-  if(activeTierFilter!=='all') list = list.filter(c=>c.tier===activeTierFilter);
-  if(list.length===0){ host.innerHTML=`<div class="empty" style="grid-column:1/-1;"><i class="fa-solid fa-car-side"></i><div class="e1">ยังไม่มีรถในหมวดนี้</div><div class="e2">เพิ่มรถใหม่ได้จากฟอร์มด้านบน</div></div>`; return; }
+  const q = getQ('f-car-search');
+  let base = [...DB.cars].sort((a,b)=>b.createdAt-a.createdAt);
+  if(activeTierFilter!=='all') base = base.filter(c=>c.tier===activeTierFilter);
+  let list = base, tokens=[];
+  if(q){
+    const r = rankSearch(base, q, c=>c.name||'', c=>(c.name||'')+' '+(tierInfo(c.tier).label||'')+' '+(c.tier||''));
+    list = r.list; tokens = r.tokens;
+  }
+  setCount('car-count', !!q, list.length, base.length);
+  if(base.length===0){ host.innerHTML=`<div class="empty" style="grid-column:1/-1;"><i class="fa-solid fa-car-side"></i><div class="e1">ยังไม่มีรถในหมวดนี้</div><div class="e2">เพิ่มรถใหม่ได้จากฟอร์มด้านบน</div></div>`; return; }
+  if(list.length===0){ host.innerHTML = noResultHTML('fa-magnifying-glass',q,'style="grid-column:1/-1;"'); return; }
   host.innerHTML = list.map(c=>{
     const ti = tierInfo(c.tier);
     return `<div class="card car-card" style="border-color:${ti.color}55;" data-id="${c.id}">
       ${c.image? `<img class="car-img" src="${esc(c.image)}" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="car-img" style="display:flex;align-items:center;justify-content:center;color:var(--text-faint);"><i class="fa-solid fa-image"></i></div>`}
       <div class="car-body">
-        <div class="car-name">${esc(c.name)}</div>
+        <div class="car-name">${highlightText(c.name||'',tokens)}</div>
         <span class="badge" style="background:${ti.color}22;color:${ti.color};">${ti.label}</span>
         <div class="card-actions admin-only">
           <button class="btn sm" data-act="edit-car" data-id="${c.id}"><i class="fa-solid fa-pen"></i></button>
@@ -1588,6 +1744,7 @@ function renderCars(){
     </div>`;
   }).join('');
 }
+document.getElementById('f-car-search').addEventListener('input', renderCars);
 document.getElementById('cars-grid').addEventListener('click', async e=>{
   const editBtn = e.target.closest('[data-act="edit-car"]');
   const delBtn = e.target.closest('[data-act="del-car"]');
@@ -1691,12 +1848,19 @@ document.getElementById('btn-save-link').addEventListener('click', async ()=>{
 document.getElementById('btn-cancel-link').addEventListener('click', clearLinkForm);
 function renderLinks(){
   const host = document.getElementById('links-list');
-  const list=[...DB.links].sort((a,b)=>b.createdAt-a.createdAt);
+  const q = getQ('f-link-search');
+  let list=[...DB.links].sort((a,b)=>b.createdAt-a.createdAt), tokens=[];
+  if(q){
+    const r = rankSearch(DB.links, q, l=>l.title||'', l=>(l.title||'')+' '+(l.url||''));
+    list = r.list; tokens = r.tokens;
+  }
+  setCount('link-count', !!q, list.length, DB.links.length);
+  if(DB.links.length>0 && list.length===0){ host.innerHTML = noResultHTML('fa-magnifying-glass',q); return; }
   if(list.length===0){ host.innerHTML=`<div class="empty"><i class="fa-solid fa-link"></i><div class="e1">ยังไม่มีลิงก์ที่บันทึกไว้</div><div class="e2">เพิ่มลิงก์แรกจากฟอร์มด้านบน</div></div>`; return; }
   host.innerHTML = list.map(l=>`
     <div class="panel link-row" data-id="${l.id}">
       <div class="lk-badge"><i class="fa-solid fa-globe"></i></div>
-      <div class="lk-body"><div class="ttl" title="${esc(l.url)}">${esc(l.title)}</div></div>
+      <div class="lk-body"><div class="ttl" title="${esc(l.url)}">${highlightText(l.title||'',tokens)}</div></div>
       <div class="lk-actions">
         <a class="btn sm" href="${esc(l.url)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i>เปิด</a>
         <button class="btn sm" data-act="copy-link" data-url="${esc(l.url)}"><i class="fa-regular fa-copy"></i></button>
@@ -1705,6 +1869,7 @@ function renderLinks(){
       </div>
     </div>`).join('');
 }
+document.getElementById('f-link-search').addEventListener('input', renderLinks);
 document.getElementById('links-list').addEventListener('click', async e=>{
   const copyBtn=e.target.closest('[data-act="copy-link"]');
   const editBtn=e.target.closest('[data-act="edit-link"]');
@@ -1748,14 +1913,21 @@ document.getElementById('btn-save-cmd').addEventListener('click', async ()=>{
 document.getElementById('btn-cancel-cmd').addEventListener('click', clearCmdForm);
 function renderCommands(){
   const host = document.getElementById('cmds-list');
-  const list=[...DB.commands].sort((a,b)=>b.createdAt-a.createdAt);
+  const q = getQ('f-cmd-search');
+  let list=[...DB.commands].sort((a,b)=>b.createdAt-a.createdAt), tokens=[];
+  if(q){
+    const r = rankSearch(DB.commands, q, c=>c.title||'', c=>(c.title||'')+' '+(c.code||''));
+    list = r.list; tokens = r.tokens;
+  }
+  setCount('cmd-count', !!q, list.length, DB.commands.length);
+  if(DB.commands.length>0 && list.length===0){ host.innerHTML = noResultHTML('fa-magnifying-glass',q); return; }
   if(list.length===0){ host.innerHTML=`<div class="empty"><i class="fa-solid fa-user-shield"></i><div class="e1">ยังไม่มีคำสั่งที่บันทึกไว้</div><div class="e2">เพิ่มคำสั่งแรกจากฟอร์มด้านบน</div></div>`; return; }
   host.innerHTML = list.map(c=>`
     <div class="cmd-term-row" data-id="${c.id}">
       <div class="cmd-badge"><i class="fa-solid fa-user-shield"></i></div>
       <div class="term-main">
-        <div class="term-title">${esc(c.title)}</div>
-        <div class="term-code" data-act="copy-cmd" data-code="${esc(c.code)}" title="คลิกเพื่อคัดลอก">${esc(c.code)}</div>
+        <div class="term-title">${highlightText(c.title||'',tokens)}</div>
+        <div class="term-code" data-act="copy-cmd" data-code="${esc(c.code)}" title="คลิกเพื่อคัดลอก">${highlightText(c.code||'',tokens)}</div>
       </div>
       <div class="term-actions">
         <button class="btn sm" data-act="copy-cmd" data-code="${esc(c.code)}"><i class="fa-regular fa-copy"></i>คัดลอก</button>
@@ -1764,6 +1936,7 @@ function renderCommands(){
       </div>
     </div>`).join('');
 }
+document.getElementById('f-cmd-search').addEventListener('input', renderCommands);
 document.getElementById('cmds-list').addEventListener('click', async e=>{
   const copyBtn=e.target.closest('[data-act="copy-cmd"]');
   const editBtn=e.target.closest('[data-act="edit-cmd"]');
