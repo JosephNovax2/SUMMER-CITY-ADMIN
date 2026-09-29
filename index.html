@@ -495,7 +495,11 @@
   .oc-row.none::before{background:rgba(255,255,255,.18);}
   .oc-who{flex:1 1 200px;min-width:0;}
   .oc-who .n{font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .oc-who .s{font-size:11.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .oc-who .s{font-size:12.5px;color:var(--text-main);font-weight:500;font-family:'JetBrains Mono',monospace;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .oc-who .s .lb{color:var(--text-muted);font-weight:400;}
+  .oc-who .s .sep{color:var(--text-faint);margin:0 6px;}
+  .oc-name-cell{display:inline-flex;align-items:center;gap:7px;}
+  .oc-name-cell i{font-size:11px;line-height:1;flex:none;}
   .oc-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#fff;min-width:84px;text-align:right;}
   .oc-due{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:9px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;min-width:122px;}
   .oc-row.overdue .oc-due{background:rgba(255,59,92,.16);border-color:rgba(255,59,92,.5);}
@@ -517,6 +521,7 @@
   .oc-table-panel{scrollbar-width:none;-ms-overflow-style:none;} /* ซ่อนแถบเลื่อน แต่ยังเลื่อนได้ */
   .oc-table-panel::-webkit-scrollbar{display:none;width:0;height:0;}
   .oc-pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  #oc-tbl-box table.plist td{vertical-align:middle;}
   #oc-tbl-box{min-height:590px;} /* header + 10 แถว */
   .oc-pager .pg-info{margin-right:auto;font-size:12px;color:var(--text-muted);}
   .oc-pager .pg-mid{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-muted);}
@@ -525,7 +530,13 @@
   .oc-pager input::-webkit-outer-spin-button,.oc-pager input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
   .oc-pager .btn[disabled]{opacity:.35;cursor:not-allowed;pointer-events:none;}
   select.oc-quick{background:var(--bg-panel-2);color:var(--text-main);border:1px solid var(--line-soft);border-radius:8px;padding:5px 6px;font-size:12px;font-family:inherit;}
-  @media(max-width:640px){.oc-amt{text-align:left;min-width:0;}.oc-due,.oc-cd{min-width:0;}}
+  /* คอลัมน์ในบอร์ดกว้างเท่ากันทุกแถว */
+  .oc-row .oc-amt{flex:0 0 118px;box-sizing:border-box;white-space:nowrap;}
+  .oc-row .oc-due{flex:0 0 124px;box-sizing:border-box;white-space:nowrap;}
+  .oc-row .oc-cd{flex:0 0 126px;box-sizing:border-box;white-space:nowrap;}
+  .oc-row .oc-st{flex:0 0 136px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:5px;}
+  .oc-who .s .lb.dash{color:var(--text-faint);}
+  @media(max-width:640px){.oc-amt{text-align:left;min-width:0;}.oc-due,.oc-cd{min-width:0;}.oc-row .oc-amt,.oc-row .oc-due,.oc-row .oc-cd,.oc-row .oc-st{flex:0 1 auto;}}
 
   /* form */
   .form-panel{margin-bottom:18px;}
@@ -1158,6 +1169,9 @@
         <div class="field full"><label>สถานะการชำระ</label>
           <div class="oc-radios" id="f-oc-status"></div>
         </div>
+      </div>
+      <div class="frow">
+        <div class="field full"><div class="oc-radios"><label title="ไม่ติ๊ก = บันทึกเก็บไว้เฉยๆ ไม่ขึ้นบอร์ดแจ้งเตือน"><input type="checkbox" id="f-oc-board" checked><span style="--sc:#4dd8ff"><i class="fa-solid fa-check"></i>ขึ้นบอร์ด</span></label></div></div>
       </div>
       <div class="frow"><div class="field full"><label>หมายเหตุ</label><textarea id="f-oc-note" placeholder="รายละเอียดเคส / ข้อตกลงกับนายก..."></textarea></div></div>
       <div style="display:flex;gap:8px;">
@@ -2112,7 +2126,8 @@ function initOcForm(){
   document.getElementById('f-oc-status').innerHTML = Object.entries(OC_STATUS).map(([k,v],i)=>
     `<label><input type="radio" name="oc-status" value="${k}" ${i===1?'checked':''}><span style="--sc:${v.color}"><i class="fa-solid fa-check"></i>${v.label}</span></label>`).join('');
   document.getElementById('oc-filters').innerHTML = `<button class="tier-chip active" data-oc="all">ทั้งหมด</button>` +
-    Object.entries(OC_STATUS).map(([k,v])=>`<button class="tier-chip" data-oc="${k}" style="--tc:${v.color}">${v.label}</button>`).join('');
+    Object.entries(OC_STATUS).map(([k,v])=>`<button class="tier-chip" data-oc="${k}" style="--tc:${v.color}">${v.label}</button>`).join('') +
+    `<button class="tier-chip" data-oc="hidden" style="--tc:#b9c2ff"><i class="fa-solid fa-bell-slash" style="font-size:11px;margin-right:6px;"></i>ไม่ได้ขึ้นบอร์ด</button>`;
 }
 function ocGetStatus(){ const r=document.querySelector('input[name="oc-status"]:checked'); return r?r.value:'unpaid'; }
 function ocSetStatus(k){ const r=document.querySelector('input[name="oc-status"][value="'+k+'"]'); if(r) r.checked=true; }
@@ -2120,6 +2135,7 @@ function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.get
 function clearOcForm(){
   ['f-oc-name','f-oc-dc','f-oc-steam','f-oc-amount','f-oc-note'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-oc-due').value='';
+  document.getElementById('f-oc-board').checked=true;
   ocSetStatus('unpaid');
   editing.oc=null;
   document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>เพิ่มเคสใหม่';
@@ -2136,6 +2152,7 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
     steam:document.getElementById('f-oc-steam').value.trim(),
     amount:Number(document.getElementById('f-oc-amount').value)||0,
     due:document.getElementById('f-oc-due').value,
+    board:document.getElementById('f-oc-board').checked,
     status,
     note:document.getElementById('f-oc-note').value.trim(),
   };
@@ -2189,7 +2206,7 @@ function ocBoardItem(c){
 }
 function renderOc(){
   /* ---------- บอร์ดแจ้งเตือน: เฉพาะเคสที่ยังไม่จ่าย ---------- */
-  const items = DB.ocCases.filter(c=>c.status!=='paid').map(ocBoardItem)
+  const items = DB.ocCases.filter(c=>c.status!=='paid' && c.board!==false).map(ocBoardItem)
     .sort((a,b)=>{
       if(a.dl===null && b.dl===null) return (a.c.createdAt||0)-(b.c.createdAt||0);
       if(a.dl===null) return 1; if(b.dl===null) return -1;
@@ -2219,7 +2236,7 @@ function renderOc(){
         <div class="alert-icon"><i class="fa-solid ${icon}"></i></div>
         <div class="oc-who">
           <div class="n">${esc(c.name)}</div>
-          <div class="s">${[c.dc&&'DC: '+esc(c.dc), c.steam&&'Steam: '+esc(c.steam)].filter(Boolean).join(' • ')||'-'}</div>
+          <div class="s">${[c.dc&&'<span class="lb">DC:</span> '+esc(c.dc), c.steam&&esc(c.steam)].filter(Boolean).join('<span class="sep">•</span>')||'<span class="lb dash">-</span>'}</div>
         </div>
         <div class="oc-amt">${ocMoney(c.amount)}</div>
         <div class="oc-due"><i class="fa-regular fa-calendar-check"></i>${c.due?fmtDate(c.due):'ไม่ระบุวัน'}</div>
@@ -2233,7 +2250,8 @@ function renderOc(){
   /* ---------- ตารางรายการทั้งหมด ---------- */
   const q = getQ('f-oc-search');
   let base = [...DB.ocCases].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-  if(ocFilter!=='all') base = base.filter(c=>c.status===ocFilter);
+  if(ocFilter==='hidden') base = base.filter(c=>c.board===false && c.status!=='paid');
+  else if(ocFilter!=='all') base = base.filter(c=>c.status===ocFilter);
   let list = base, tokens=[];
   if(q){
     const r = rankSearch(base, q, c=>c.name||'', c=>[c.name,c.dc,c.steam,c.note,ocSt(c.status).label,c.amount].filter(x=>x!==undefined&&x!=='').join(' '));
@@ -2257,12 +2275,12 @@ function renderOc(){
   if(list.length===0){
     tbody.innerHTML='';
     if(ocTFullH) tBox.style.minHeight = ocTFullH+'px';
-    emptyHost.innerHTML = `<div class="empty"><i class="fa-solid fa-hand-holding-dollar"></i><div class="e1">${q?'ไม่พบผลลัพธ์ที่ตรงกับการค้นหา':(DB.ocCases.length?'ไม่มีเคสในสถานะนี้':'ยังไม่มีเคสซื้อขาย OC')}</div><div class="e2">${q?'ลองค้นด้วยคำอื่น':'เพิ่มเคสแรกจากฟอร์มด้านบน'}</div></div>`;
+    emptyHost.innerHTML = `<div class="empty"><i class="fa-solid fa-hand-holding-dollar"></i><div class="e1">${q?'ไม่พบผลลัพธ์ที่ตรงกับการค้นหา':(DB.ocCases.length?(ocFilter==='hidden'?'ไม่มีเคสที่ถูกซ่อนจากบอร์ด':'ไม่มีเคสในสถานะนี้'):'ยังไม่มีเคสซื้อขาย OC')}</div><div class="e2">${q?'ลองค้นด้วยคำอื่น':'เพิ่มเคสแรกจากฟอร์มด้านบน'}</div></div>`;
     return;
   }
   emptyHost.innerHTML='';
   tbody.innerHTML = pageList.map(c=>`<tr>
-    <td>${highlightText(c.name||'',tokens)}</td>
+    <td><span class="oc-name-cell">${highlightText(c.name||'',tokens)}${c.status!=='paid'?(c.board!==false?'<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>':'<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>'):''}</span></td>
     <td class="pid">${c.dc?highlightText(c.dc,tokens):'-'}</td>
     <td class="pid">${c.steam?highlightText(c.steam,tokens):'-'}</td>
     <td class="pid">${ocMoney(c.amount)}</td>
@@ -2303,6 +2321,7 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
     document.getElementById('f-oc-amount').value=c.amount||'';
     document.getElementById('f-oc-due').value=c.due||'';
     document.getElementById('f-oc-note').value=c.note||'';
+    document.getElementById('f-oc-board').checked = c.board!==false;
     ocSetStatus(c.status);
     document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>แก้ไขเคส';
     document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
@@ -2352,6 +2371,9 @@ init();
 (function(){
   const MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
   const SHORT=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  const EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW_EN=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const isOc=el=>el.id==='f-oc-due';
   const DOW=['อา','จ','อ','พ','พฤ','ศ','ส'];
   const proto=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
   const pad=n=>String(n).padStart(2,'0');
@@ -2369,7 +2391,7 @@ init();
     const txt=btn.querySelector('.tdp-txt');
     function paint(){
       const p=parse(proto.get.call(input));
-      if(p){ txt.textContent=p.d+' '+SHORT[p.m]+' '+(p.y+543); txt.classList.remove('ph'); }
+      if(p){ txt.textContent=isOc(input)?(p.d+' '+EN[p.m]+' '+p.y):(p.d+' '+SHORT[p.m]+' '+(p.y+543)); txt.classList.remove('ph'); }
       else { txt.textContent='เลือกวันที่'; txt.classList.add('ph'); }
     }
     Object.defineProperty(input,'value',{configurable:true,get(){return proto.get.call(this);},set(v){proto.set.call(this,v);paint();}});
@@ -2384,8 +2406,8 @@ init();
     function draw(){
       const first=new Date(vy,vm,1).getDay(), days=new Date(vy,vm+1,0).getDate();
       const cs=parse(proto.get.call(input));
-      let h='<div class="tdp-head"><button type="button" class="tdp-nav" data-n="-12" title="ปีก่อน"><i class="fa-solid fa-angles-left"></i></button><button type="button" class="tdp-nav" data-n="-1" title="เดือนก่อน"><i class="fa-solid fa-angle-left"></i></button><div class="tdp-title">'+MONTHS[vm]+' '+(vy+543)+'</div><button type="button" class="tdp-nav" data-n="1" title="เดือนถัดไป"><i class="fa-solid fa-angle-right"></i></button><button type="button" class="tdp-nav" data-n="12" title="ปีถัดไป"><i class="fa-solid fa-angles-right"></i></button></div><div class="tdp-grid">';
-      DOW.forEach(d=>h+='<div class="tdp-dow">'+d+'</div>');
+      let h='<div class="tdp-head"><button type="button" class="tdp-nav" data-n="-12" title="ปีก่อน"><i class="fa-solid fa-angles-left"></i></button><button type="button" class="tdp-nav" data-n="-1" title="เดือนก่อน"><i class="fa-solid fa-angle-left"></i></button><div class="tdp-title">'+(isOc(input)?(EN[vm]+' '+vy):(MONTHS[vm]+' '+(vy+543)))+'</div><button type="button" class="tdp-nav" data-n="1" title="เดือนถัดไป"><i class="fa-solid fa-angle-right"></i></button><button type="button" class="tdp-nav" data-n="12" title="ปีถัดไป"><i class="fa-solid fa-angles-right"></i></button></div><div class="tdp-grid">';
+      (isOc(input)?DOW_EN:DOW).forEach(d=>h+='<div class="tdp-dow">'+d+'</div>');
       for(let i=0;i<first;i++) h+='<div class="tdp-blank"></div>';
       for(let d=1;d<=days;d++){
         let c='tdp-day';
@@ -2393,7 +2415,7 @@ init();
         if(cs&&cs.d===d&&cs.m===vm&&cs.y===vy) c+=' sel';
         h+='<button type="button" class="'+c+'" data-d="'+d+'">'+d+'</button>';
       }
-      h+='</div><div class="tdp-foot"><button type="button" data-a="today">วันนี้</button><button type="button" data-a="clear">ล้างค่า</button></div>';
+      h+='</div><div class="tdp-foot"><button type="button" data-a="today">'+(isOc(input)?'Today':'วันนี้')+'</button><button type="button" data-a="clear">'+(isOc(input)?'Clear':'ล้างค่า')+'</button></div>';
       pop.innerHTML=h;
     }
     function commit(v){ input.value=v; input.dispatchEvent(new Event('change',{bubbles:true})); closePop(); }
