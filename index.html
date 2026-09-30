@@ -644,6 +644,12 @@
   table.plist th{text-align:left;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.06em;color:var(--text-faint);text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line-soft);}
   table.plist td{padding:10px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
   table.plist tr:hover td{background:rgba(255,255,255,.02);}
+  #ocm-detail table.plist th,#ocm-detail table.plist td{text-align:center;}
+  #ocm-detail table.plist td .oc-badge,#ocm-detail table.plist td>span{margin-inline:auto;}
+  #ocm-detail table.plist th{padding:12px 14px 10px;}
+  #ocm-detail table.plist td{padding:16px 14px;vertical-align:middle;line-height:1.5;}
+  #ocm-detail table.plist td>div{line-height:1.5;margin-inline:auto;}
+  #ocm-detail table.plist tbody tr:last-child td{border-bottom:none;}
   .pid{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
   .charge-hit{color:var(--cyan);}
 
@@ -825,6 +831,113 @@
   @keyframes toastin{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
   .req-lock{font-size:12px;color:var(--text-faint);display:flex;align-items:center;gap:6px;padding:10px 14px;}
+  /* ===== OC merchants ===== */
+  .ocm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;max-height:290px;overflow-y:auto;padding:2px;}
+  .ocm-card{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 12px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);}
+  .ocm-card .nm{flex:1;min-width:0;}
+  .ocm-card .ct{font-size:11px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+  .oc-mlink{background:none;border:none;padding:0;cursor:pointer;font:inherit;font-weight:600;color:#fff;text-align:left;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .oc-mlink:hover{color:var(--cyan);text-decoration:underline;}
+  .oc-src{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-faint);margin-top:3px;max-width:100%;}
+  .oc-src i{font-size:10px;color:var(--cyan);opacity:.8;}
+  .oc-src .oc-mlink{font-size:11.5px;font-weight:500;color:var(--text-muted);}
+  .oc-src.none{opacity:.7;font-style:italic;}
+  .oc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;}
+  .oc-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:8px;font-size:11.5px;line-height:1.5;font-weight:500;color:var(--text-main);background:rgba(255,255,255,.05);border:1px solid var(--line-soft);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .oc-chip i{font-size:11.5px;flex:none;}
+  .oc-chip .v{overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;}
+  .oc-chip.copy{cursor:pointer;transition:all .15s;}
+  .oc-chip.copy:hover{border-color:var(--cyan);background:rgba(77,216,255,.1);}
+  .oc-chip.dc i{color:#8b9bff;}
+  .oc-chip.steam i{color:#66c0f4;}
+  .oc-chip.src{color:var(--text-muted);}
+  .oc-chip.src i{color:var(--cyan);}
+  .oc-chip.src .oc-mlink{font-size:11.5px;font-weight:600;color:#fff;}
+  .oc-chip.none{opacity:.6;font-style:italic;}
+  /* เงินจาก (พ่อค้า) = โทนทอง/ส้ม แยกจาก DC/Steam ของคนซื้อ */
+  .oc-chip.src{color:#e8c98a;background:rgba(255,176,60,.10);border:1px dashed rgba(255,176,60,.5);}
+  .oc-chip.src i{color:#ffb03c;}
+  .oc-chip.src .oc-mlink{color:#ffd591;}
+  .oc-chip.src .oc-mlink:hover{color:#fff;}
+  .oc-chip.src.none{color:var(--text-faint);background:rgba(255,176,60,.04);border-color:rgba(255,176,60,.22);}
+  .oc-chip.src.none i{color:rgba(255,176,60,.6);}
+  .ocdd{position:relative;}
+  .ocdd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-deep-2);border:1px solid var(--line-soft);border-radius:var(--r-sm);color:var(--text-main);padding:9px 12px;font-family:'IBM Plex Sans Thai',sans-serif;font-size:13.5px;cursor:pointer;text-align:left;transition:border-color .15s;}
+  .ocdd-btn:hover,.ocdd.open .ocdd-btn{border-color:var(--cyan);}
+  .ocdd-btn .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+  .ocdd-btn .lbl.ph{color:var(--text-faint);font-weight:400;}
+  .ocdd-btn .arr{font-size:11px;color:var(--cyan);transition:transform .18s;flex:none;}
+  .ocdd.open .ocdd-btn .arr{transform:rotate(180deg);}
+  .ocdd-panel{display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:60;background:var(--bg-panel-2);border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 14px 36px rgba(0,0,0,.6);}
+  .ocdd.open .ocdd-panel{display:block;}
+  .ocdd-panel input{margin-bottom:6px;}
+  .ocdd-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+  .ocdd-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--text-main);}
+  .ocdd-item:hover{background:rgba(77,216,255,.1);}
+  .ocdd-item.sel{background:rgba(77,216,255,.16);color:#fff;font-weight:600;}
+  .ocdd-item .ck{width:14px;font-size:11px;color:var(--cyan);flex:none;visibility:hidden;}
+  .ocdd-item.sel .ck{visibility:visible;}
+  .ocdd-item .sub{margin-left:auto;font-size:11px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+  .ocdd-item.none{color:var(--text-muted);font-style:italic;}
+  .ocdd-empty{padding:10px;font-size:12.5px;color:var(--text-faint);}
+
+  .no-sb{scrollbar-width:none;-ms-overflow-style:none;}
+  .no-sb::-webkit-scrollbar{display:none;width:0;height:0;}
+  /* ===== OC merchant book (popup) ===== */
+  .ocm-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .ocm-topbar .form-title{margin:0;}
+  .ocm-open-btn{display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(77,216,255,.14),rgba(160,140,255,.12));color:#fff;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;transition:border-color .15s, box-shadow .15s, background .15s;}
+  .ocm-open-btn:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(77,216,255,.22);}
+  .ocm-open-btn i.bk{color:var(--cyan);font-size:15px;}
+  .ocm-open-btn .cnt{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:#0a1220;background:var(--cyan);border-radius:999px;padding:1px 9px;}
+  .ocm-open-btn .cnt:empty{display:none;}
+  .ocm-compact{margin-bottom:0!important;}
+  .ocm-compact .frow{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:8px;}
+  .ocm-compact .field input{padding:7px 10px;font-size:13px;}
+  .ocm-compact .field label{font-size:11.5px;margin-bottom:3px;}
+  .ocm-compact .btn{padding:7px 14px;font-size:12.5px;}
+
+  .ocmb-back{position:fixed;inset:0;z-index:450;background:rgba(2,6,14,.78);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;}
+  .ocmb-back.open{display:flex;animation:ocmbfade .18s ease;}
+  @keyframes ocmbfade{from{opacity:0;}to{opacity:1;}}
+  .ocmb{position:relative;width:min(880px,100%);max-height:min(82vh,780px);display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg-panel-2),var(--bg-panel));border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(77,216,255,.06),0 0 40px rgba(77,216,255,.08);overflow:hidden;animation:ocmbpop .22s cubic-bezier(.2,1.2,.4,1);}
+  @keyframes ocmbpop{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+  .ocmb::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--lavender),var(--cyan));}
+  .ocmb-head{display:flex;align-items:center;gap:14px;padding:18px 20px 12px;}
+  .ocmb-ic{width:44px;height:44px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:19px;color:#1a1030;background:linear-gradient(135deg,var(--cyan),var(--lavender));box-shadow:0 0 18px rgba(77,216,255,.3);}
+  .ocmb-head h3{margin:0;font-size:17px;font-weight:700;color:#fff;letter-spacing:.01em;}
+  .ocmb-head p{margin:2px 0 0;font-size:12px;color:var(--text-faint);}
+  .ocmb-x{margin-left:auto;width:34px;height:34px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--text-muted);cursor:pointer;font-size:14px;transition:all .15s;}
+  .ocmb-x:hover{color:#fff;border-color:var(--red);background:rgba(255,59,92,.12);}
+  .ocmb-tools{padding:0 20px 12px;}
+  .ocmb-tools .search-bar{margin:0;}
+  .ocmb-body{flex:1;min-height:0;overflow-y:auto;padding:4px 20px 20px;}
+  .ocmb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;}
+  .ocmb-card{position:relative;display:flex;flex-direction:column;gap:9px;padding:12px 12px 10px;border-radius:13px;border:1px solid var(--line-soft);background:rgba(255,255,255,.035);transition:border-color .15s, background .15s, transform .15s;}
+  .ocmb-card:hover{border-color:rgba(77,216,255,.45);background:rgba(77,216,255,.06);transform:translateY(-1px);}
+  .ocmb-top{display:flex;align-items:center;gap:10px;min-width:0;}
+  .ocmb-av{width:36px;height:36px;border-radius:11px;flex:none;display:grid;place-items:center;font-weight:700;font-size:15px;color:#1a1030;background:linear-gradient(135deg,var(--cyan),var(--lavender));}
+  .ocmb-nm{flex:1;min-width:0;}
+  .ocmb-nm .oc-mlink{display:block;font-size:14px;}
+  .ocmb-nm .ct{display:block;font-size:11px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+  .ocmb-chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .ocmb-chips .oc-chip{max-width:100%;font-size:11px;padding:2px 8px;}
+  .ocmb-chips .oc-chip.none{cursor:default;}
+  .ocmb-act{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px dashed var(--line-soft);}
+  .ocmb-act .btn{padding:5px 10px;font-size:11.5px;}
+  .ocmb-act .sp{flex:1;}
+  .ocmb-foot{padding:10px 20px;border-top:1px solid var(--line-soft);font-size:11.5px;color:var(--text-faint);display:flex;justify-content:space-between;gap:10px;}
+  @media(max-width:560px){.ocmb-back{padding:10px;align-items:flex-end;}.ocmb{max-height:88vh;border-radius:16px;}.ocmb-grid{grid-template-columns:1fr;}}
+  .ocm-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line-soft);}
+  .ocm-row:last-of-type{border-bottom:none;}
+  .ocm-row .k{flex:0 0 90px;font-size:12px;color:var(--text-muted);}
+  .ocm-row .k{display:flex;align-items:center;gap:9px;flex:0 0 130px;}
+  .ocm-row .k .ki{width:28px;height:28px;flex:none;border-radius:9px;display:grid;place-items:center;font-size:14px;background:rgba(255,255,255,.05);border:1px solid var(--line-soft);color:var(--cyan);}
+  .ocm-row .k .ki.dc{color:#8b9bff;background:rgba(139,155,255,.12);border-color:rgba(139,155,255,.35);}
+  .ocm-row .k .ki.steam{color:#66c0f4;background:rgba(102,192,244,.12);border-color:rgba(102,192,244,.35);}
+  .ocm-row .k .ki.nm{color:#ffd591;background:rgba(255,176,60,.10);border-color:rgba(255,176,60,.4);}
+  .ocm-row{padding:11px 2px;}
+  .ocm-row .v{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#fff;word-break:break-all;}
 </style>
 </head>
 <body class="dev-mode">
@@ -1017,7 +1130,7 @@
         <button class="btn ghost" id="btn-cancel-punish" style="display:none;">ยกเลิกแก้ไข</button>
       </div>
     </div>
-    <div class="panel bracket" style="padding:6px 10px;overflow-x:auto;">
+    <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
       <table class="plist">
         <thead><tr><th>ชื่อ</th><th>ID</th><th>Discord</th><th>ข้อหา</th><th>โทษ</th><th>วันที่</th><th class="admin-only">จัดการ</th></tr></thead>
@@ -1152,16 +1265,48 @@
       </div>
     </div>
 
+    <div class="panel bracket ocm-compact" style="margin-bottom:16px;">
+      <div class="bl"></div><div class="br"></div>
+      <div class="ocm-topbar">
+        <div class="form-title"><i class="fa-solid fa-user-tag"></i>พ่อค้า OC (ต้นทางเงิน)</div>
+        <button type="button" class="ocm-open-btn" id="btn-ocm-book"><i class="fa-solid fa-book-open bk"></i>สมุดรายชื่อพ่อค้า OC<span class="cnt" id="ocm-count"></span></button>
+      </div>
+      <div class="admin-only">
+        <div class="form-title" id="ocm-form-title" style="font-size:12.5px;margin-bottom:8px;"><i class="fa-solid fa-user-plus"></i>เพิ่มพ่อค้าใหม่</div>
+        <div class="frow">
+          <div class="field"><label>ชื่อพ่อค้า</label><input id="f-ocm-name" placeholder="ชื่อพ่อค้า"></div>
+          <div class="field"><label>ID Discord</label><input id="f-ocm-dc" placeholder="Discord ID"></div>
+          <div class="field"><label>Steam</label><input id="f-ocm-steam" placeholder="Steam ID / ชื่อ Steam"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn primary" id="btn-save-ocm"><i class="fa-solid fa-plus"></i>เพิ่มพ่อค้า</button>
+          <button class="btn ghost" id="btn-cancel-ocm" style="display:none;">ยกเลิกแก้ไข</button>
+        </div>
+      </div>
+    </div>
+
     <div class="search-bar">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input id="f-oc-search" placeholder="ค้นหาเคส (ชื่อ / ID DC / Steam / หมายเหตุ / สถานะ)...">
+      <input id="f-oc-search" placeholder="ค้นหาเคส (ชื่อคนซื้อ / พ่อค้า / ID DC / Steam / หมายเหตุ / สถานะ)...">
     </div>
     <div class="panel form-panel admin-only">
       <div class="form-title" id="oc-form-title"><i class="fa-solid fa-pen"></i>เพิ่มเคสใหม่</div>
+      <div class="frow"><div class="field full"><label>ชื่อคนซื้อ (ชื่อที่จะขึ้นบนบอร์ดแจ้งเตือน)</label>
+        <input id="f-oc-buyer" list="oc-buyer-list" placeholder="ชื่อคนซื้อ" autocomplete="off">
+        <datalist id="oc-buyer-list"></datalist></div></div>
       <div class="frow">
-        <div class="field"><label>ชื่อ</label><input id="f-oc-name" placeholder="ชื่อผู้ซื้อขาย"></div>
-        <div class="field"><label>ID DC</label><input id="f-oc-dc" placeholder="Discord ID"></div>
-        <div class="field"><label>Steam</label><input id="f-oc-steam" placeholder="Steam ID / ชื่อ Steam"></div>
+        <div class="field"><label>ID Discord ของคนซื้อ</label><input id="f-oc-dc" placeholder="Discord ID"></div>
+        <div class="field"><label>Steam ของคนซื้อ</label><input id="f-oc-steam" placeholder="Steam ID / ชื่อ Steam"></div>
+      </div>
+      <div class="frow"><div class="field full"><label>พ่อค้า OC ต้นทางเงิน (ไม่บังคับ — เลือกจากรายชื่อที่บันทึกไว้)</label>
+        <div class="ocdd" id="oc-dd">
+          <button type="button" class="ocdd-btn" id="oc-dd-btn" aria-haspopup="listbox"><span class="lbl ph" id="oc-dd-label">เลือกพ่อค้า (ไม่บังคับ)</span><i class="fa-solid fa-chevron-down arr"></i></button>
+          <div class="ocdd-panel" id="oc-dd-panel">
+            <input id="f-oc-mq" placeholder="ค้นหาพ่อค้า..." autocomplete="off">
+            <div class="ocdd-list" id="f-oc-merchant" role="listbox"></div>
+          </div>
+        </div></div></div>
+      <div class="frow">
         <div class="field"><label>ยอดเงิน</label><input type="number" min="0" step="any" id="f-oc-amount" placeholder="0"></div>
         <div class="field"><label>เวลาที่ได้รับเงิน (กำหนดชำระ)</label><input type="date" id="f-oc-due"></div>
       </div>
@@ -1181,11 +1326,11 @@
     </div>
     <div class="tier-filters" id="oc-filters"></div>
     <div class="note-count" id="oc-count"></div>
-    <div class="panel bracket oc-table-panel" style="padding:6px 10px;overflow-x:auto;">
+    <div class="panel bracket oc-table-panel no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
       <div id="oc-tbl-box">
       <table class="plist">
-        <thead><tr><th>ชื่อ</th><th>ID DC</th><th>Steam</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
         <tbody id="oc-tbody"></tbody>
       </table>
       <div id="oc-empty"></div>
@@ -1198,6 +1343,29 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ OC MERCHANT DETAIL ============ -->
+  <section class="view" id="view-ocm">
+    <div class="view-head">
+      <div><h2><i class="fa-solid fa-user-tag"></i><span id="ocm-d-title">รายละเอียดพ่อค้า</span></h2><p>ข้อมูลติดต่อและเส้นทางเงินของเคสที่มาจากพ่อค้าคนนี้ (แสดงชื่อคนซื้อของแต่ละเคส)</p></div>
+      <button class="btn ghost" id="ocm-back" type="button"><i class="fa-solid fa-arrow-left"></i>กลับ</button>
+    </div>
+    <div id="ocm-detail"></div>
+  </section>
+
+  <!-- ============ OC MERCHANT BOOK POPUP ============ -->
+  <div class="ocmb-back" id="ocmb-back" aria-hidden="true">
+    <div class="ocmb" role="dialog" aria-modal="true" aria-labelledby="ocmb-title">
+      <div class="ocmb-head">
+        <div class="ocmb-ic"><i class="fa-solid fa-book-open"></i></div>
+        <div><h3 id="ocmb-title">สมุดรายชื่อพ่อค้า OC</h3><p id="ocmb-sub">รายชื่อต้นทางเงินทั้งหมด</p></div>
+        <button type="button" class="ocmb-x" id="ocmb-x" title="ปิด"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ocmb-tools"><div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input id="f-ocm-search" placeholder="ค้นหาพ่อค้า (ชื่อ / Discord / Steam)..." autocomplete="off"></div></div>
+      <div class="ocmb-body no-sb"><div class="ocmb-grid" id="ocm-list"></div></div>
+      <div class="ocmb-foot"><span><i class="fa-solid fa-hand-pointer"></i> กดชื่อเพื่อดูรายละเอียดเคส · กดชิปเพื่อคัดลอก</span><span>ESC เพื่อปิด</span></div>
+    </div>
+  </div>
 
 </div>
 
@@ -1284,7 +1452,7 @@ const PENALTIES = {
 };
 
 /* ================= STATE ================= */
-let DB = { tasks:[], notes:[], punishments:[], cars:[], outfits:[], links:[], commands:[], ocCases:[] };
+let DB = { tasks:[], notes:[], punishments:[], cars:[], outfits:[], links:[], commands:[], ocCases:[], ocMerchants:[] };
 let mode = 'dev';
 let editing = { task:null, punish:null, car:null, outfit:null, link:null, cmd:null, note:null };
 let activeTierFilter = 'all';
@@ -1442,7 +1610,7 @@ document.getElementById('tabs').addEventListener('click', e=>{
   if(tabCutsceneActive) return; /* ignore clicks while cutscene is playing */
   const btn = e.target.closest('button[data-tab]');
   if(!btn) return;
-  if(!btn.classList.contains('active')){
+  if(!btn.classList.contains('active') || document.getElementById('view-ocm').classList.contains('active')){
     const icon = btn.querySelector('i');
     const label = btn.textContent.trim();
     playTabCutscene(icon ? icon.className : 'fa-solid fa-gauge-high', label, ()=>{
@@ -2133,7 +2301,8 @@ function ocGetStatus(){ const r=document.querySelector('input[name="oc-status"]:
 function ocSetStatus(k){ const r=document.querySelector('input[name="oc-status"][value="'+k+'"]'); if(r) r.checked=true; }
 function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function clearOcForm(){
-  ['f-oc-name','f-oc-dc','f-oc-steam','f-oc-amount','f-oc-note'].forEach(id=>document.getElementById(id).value='');
+  ['f-oc-amount','f-oc-note','f-oc-mq','f-oc-buyer','f-oc-dc','f-oc-steam'].forEach(id=>document.getElementById(id).value='');
+  ocSelMerchant=null; renderOcPicker();
   document.getElementById('f-oc-due').value='';
   document.getElementById('f-oc-board').checked=true;
   ocSetStatus('unpaid');
@@ -2143,13 +2312,13 @@ function clearOcForm(){
   document.getElementById('btn-cancel-oc').style.display='none';
 }
 document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
-  const name=document.getElementById('f-oc-name').value.trim();
-  if(!name) return toast('กรอกชื่อก่อนบันทึก','error');
+  const buyer = document.getElementById('f-oc-buyer').value.trim();
+  if(!buyer) return toast('กรอกชื่อคนซื้อก่อนบันทึก','error');
+  const m = ocmById(ocSelMerchant); /* พ่อค้า = ต้นทางเงิน (ไม่บังคับ) */
   const status = ocGetStatus();
   const f = {
-    name,
-    dc:document.getElementById('f-oc-dc').value.trim(),
-    steam:document.getElementById('f-oc-steam').value.trim(),
+    buyer, name:buyer, merchantId:m?m.id:'',
+    dc:document.getElementById('f-oc-dc').value.trim(), steam:document.getElementById('f-oc-steam').value.trim(),
     amount:Number(document.getElementById('f-oc-amount').value)||0,
     due:document.getElementById('f-oc-due').value,
     board:document.getElementById('f-oc-board').checked,
@@ -2205,6 +2374,7 @@ function ocBoardItem(c){
   return {c, dl, cat, badge, icon};
 }
 function renderOc(){
+  renderOcMerchants();
   /* ---------- บอร์ดแจ้งเตือน: เฉพาะเคสที่ยังไม่จ่าย ---------- */
   const items = DB.ocCases.filter(c=>c.status!=='paid' && c.board!==false).map(ocBoardItem)
     .sort((a,b)=>{
@@ -2235,8 +2405,8 @@ function renderOc(){
       <div class="oc-row ${cat}">
         <div class="alert-icon"><i class="fa-solid ${icon}"></i></div>
         <div class="oc-who">
-          <div class="n">${esc(c.name)}</div>
-          <div class="s">${[c.dc&&'<span class="lb">DC:</span> '+esc(c.dc), c.steam&&esc(c.steam)].filter(Boolean).join('<span class="sep">•</span>')||'<span class="lb dash">-</span>'}</div>
+          <div class="n">${esc(ocName(c))}</div>
+          ${ocSrcHtml(c)}
         </div>
         <div class="oc-amt">${ocMoney(c.amount)}</div>
         <div class="oc-due"><i class="fa-regular fa-calendar-check"></i>${c.due?fmtDate(c.due):'ไม่ระบุวัน'}</div>
@@ -2254,7 +2424,7 @@ function renderOc(){
   else if(ocFilter!=='all') base = base.filter(c=>c.status===ocFilter);
   let list = base, tokens=[];
   if(q){
-    const r = rankSearch(base, q, c=>c.name||'', c=>[c.name,c.dc,c.steam,c.note,ocSt(c.status).label,c.amount].filter(x=>x!==undefined&&x!=='').join(' '));
+    const r = rankSearch(base, q, c=>ocName(c), c=>[ocName(c),(ocmById(c.merchantId)||{}).name,ocDc(c),ocSteam(c),(ocmById(c.merchantId)||{}).dc,(ocmById(c.merchantId)||{}).steam,c.note,ocSt(c.status).label,c.amount].filter(x=>x!==undefined&&x!=='').join(' '));
     list = r.list; tokens = r.tokens;
   }
   setCount('oc-count', !!q, list.length, base.length);
@@ -2280,9 +2450,7 @@ function renderOc(){
   }
   emptyHost.innerHTML='';
   tbody.innerHTML = pageList.map(c=>`<tr>
-    <td><span class="oc-name-cell">${highlightText(c.name||'',tokens)}${c.status!=='paid'?(c.board!==false?'<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>':'<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>'):''}</span></td>
-    <td class="pid">${c.dc?highlightText(c.dc,tokens):'-'}</td>
-    <td class="pid">${c.steam?highlightText(c.steam,tokens):'-'}</td>
+    <td><div><span class="oc-name-cell"><span style="font-weight:600;color:#fff;">${highlightText(ocName(c),tokens)}</span>${c.status!=='paid'?(c.board!==false?'<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>':'<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>'):''}</span>${ocSrcHtml(c)}</div></td>
     <td class="pid">${ocMoney(c.amount)}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
     <td>${ocStatusBadge(c.status)}</td>
@@ -2315,9 +2483,9 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
   if(editBtn){
     const c = DB.ocCases.find(x=>x.id===editBtn.dataset.id); if(!c) return;
     editing.oc = c.id;
-    document.getElementById('f-oc-name').value=c.name||'';
-    document.getElementById('f-oc-dc').value=c.dc||'';
-    document.getElementById('f-oc-steam').value=c.steam||'';
+    document.getElementById('f-oc-buyer').value=ocName(c)==='-'?'':ocName(c);
+    document.getElementById('f-oc-dc').value=ocDc(c); document.getElementById('f-oc-steam').value=ocSteam(c);
+    ocSelMerchant=(c.merchantId && ocmById(c.merchantId))?c.merchantId:null; document.getElementById('f-oc-mq').value=''; renderOcPicker();
     document.getElementById('f-oc-amount').value=c.amount||'';
     document.getElementById('f-oc-due').value=c.due||'';
     document.getElementById('f-oc-note').value=c.note||'';
@@ -2326,7 +2494,7 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
     document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>แก้ไขเคส';
     document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
     document.getElementById('btn-cancel-oc').style.display='inline-flex';
-    document.getElementById('f-oc-name').scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('f-oc-buyer').scrollIntoView({behavior:'smooth', block:'center'});
   }
   if(delBtn){
     DB.ocCases = DB.ocCases.filter(x=>x.id!==delBtn.dataset.id);
@@ -2337,6 +2505,216 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
 window.addEventListener('resize', ()=>{ ocFullH = 0; ocTFullH = 0; try{ renderOc(); }catch(e){} });
 setInterval(()=>{ try{ if(document.activeElement!==document.getElementById('oc-pg-input') && document.activeElement!==document.getElementById('oc-tpg-input')) renderOc(); }catch(e){} }, 60000);
 
+/* ================= OC MERCHANTS ================= */
+let ocSelMerchant = null, ocmCur = null;
+function ocmById(id){ return DB.ocMerchants.find(m=>m.id===id); }
+function ocmCases(id){ return DB.ocCases.filter(c=>c.merchantId===id); }
+/* ชื่อที่ขึ้นบอร์ด = ชื่อ "คนซื้อ" (แยกจากพ่อค้าต้นทางเงินแล้ว) */
+function ocName(c){ return (c.buyer||c.name||'').trim() || '-'; }
+/* DC / Steam ของคนซื้อ (เคสเก่าที่ไม่มีค่า → ดึงจากพ่อค้าที่ชื่อเดียวกับคนซื้อ ซึ่งเคยถูกสร้างอัตโนมัติจากเคสเดิม) */
+function ocSameNameMerchant(c){ const n=ocName(c).toLowerCase(); return DB.ocMerchants.find(m=>(m.name||'').trim().toLowerCase()===n); }
+function ocDc(c){ return (c.dc!==undefined&&c.dc!==''?c.dc:((ocSameNameMerchant(c)||{}).dc||'')); }
+function ocSteam(c){ return (c.steam!==undefined&&c.steam!==''?c.steam:((ocSameNameMerchant(c)||{}).steam||'')); }
+function ocSrcHtml(c){
+  const m=ocmById(c.merchantId), dc=ocDc(c), st=ocSteam(c);
+  const chip=(cls,ic,lbl,v)=>`<span class="oc-chip copy ${cls}" data-act="ocm-copy" data-v="${esc(v)}" title="คลิกเพื่อคัดลอก ${lbl}"><i class="${ic}"></i><span class="v">${esc(v)}</span></span>`;
+  return `<div class="oc-meta">`
+    + (dc?chip('dc','fa-brands fa-discord','Discord',dc):'')
+    + (st?chip('steam','fa-brands fa-steam','Steam',st):'')
+    + (m?`<span class="oc-chip src"><i class="fa-solid fa-route"></i>เงินจาก <button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียดพ่อค้า">${esc(m.name)}</button></span>`
+        :`<span class="oc-chip src none"><i class="fa-solid fa-route"></i>ไม่ระบุพ่อค้า</span>`)
+    + `</div>`;
+}
+function renderOcBuyerList(){
+  const dl=document.getElementById('oc-buyer-list'); if(!dl) return;
+  const names=[...new Set(DB.ocCases.map(c=>ocName(c)).filter(n=>n&&n!=='-'))].sort((a,b)=>a.localeCompare(b,'th'));
+  dl.innerHTML=names.map(n=>`<option value="${esc(n)}"></option>`).join('');
+}
+/* เคสเก่า: ชื่อที่เคยบันทึกไว้คือชื่อคนซื้อ → เก็บลงช่อง buyer (ไม่สร้างพ่อค้าให้อัตโนมัติอีกต่อไป) */
+function migrateOcMerchants(){
+  let changed=false;
+  DB.ocCases.forEach(c=>{
+    if(c.buyer!==undefined) return;
+    c.buyer=(c.name||'').trim(); changed=true;
+  });
+  return changed;
+}
+function sortedMerchants(){ return [...DB.ocMerchants].sort((a,b)=>(a.name||'').localeCompare(b.name||'','th')); }
+function renderOcPicker(){
+  const host=document.getElementById('f-oc-merchant'); if(!host) return;
+  const q=getQ('f-oc-mq');
+  const list=sortedMerchants().filter(m=>!q||[m.name,m.dc,m.steam].join(' ').toLowerCase().includes(q));
+  const cur=ocmById(ocSelMerchant);
+  const lbl=document.getElementById('oc-dd-label');
+  if(lbl){ lbl.textContent = cur ? cur.name : 'เลือกพ่อค้า (ไม่บังคับ)'; lbl.classList.toggle('ph', !cur); }
+  const none=`<div class="ocdd-item none ${cur?'':'sel'}" data-id="" role="option"><i class="fa-solid fa-check ck"></i>ไม่ระบุพ่อค้า</div>`;
+  host.innerHTML = none + (list.length
+    ? list.map(m=>`<div class="ocdd-item ${m.id===ocSelMerchant?'sel':''}" data-id="${m.id}" role="option"><i class="fa-solid fa-check ck"></i><span>${esc(m.name)}</span><span class="sub">${ocmCases(m.id).length} เคส</span></div>`).join('')
+    : `<div class="ocdd-empty">${DB.ocMerchants.length?'ไม่พบพ่อค้าที่ค้นหา':'ยังไม่มีรายชื่อพ่อค้า — เพิ่มได้จากฟอร์ม "รายชื่อพ่อค้า OC" ด้านบน'}</div>`);
+}
+function ocDdOpen(open){
+  const dd=document.getElementById('oc-dd'); if(!dd) return;
+  dd.classList.toggle('open', open);
+  if(open){ const q=document.getElementById('f-oc-mq'); q.value=''; renderOcPicker(); setTimeout(()=>q.focus(),0);
+    const sel=dd.querySelector('.ocdd-item.sel'); if(sel) sel.scrollIntoView({block:'nearest'}); }
+}
+function renderOcMerchantList(){
+  const host=document.getElementById('ocm-list'); if(!host) return;
+  const q=getQ('f-ocm-search');
+  const list=sortedMerchants().filter(m=>!q||[m.name,m.dc,m.steam].join(' ').toLowerCase().includes(q));
+  const total=DB.ocMerchants.length;
+  const cnt=document.getElementById('ocm-count'); if(cnt) cnt.textContent = total ? String(total) : '';
+  const sub=document.getElementById('ocmb-sub'); if(sub) sub.textContent = total ? (q?('พบ '+list.length+' จาก '+total+' คน'):('ทั้งหมด '+total+' คน')) : 'ยังไม่มีรายชื่อ';
+  const chip=(cls,ic,v)=> v ? `<span class="oc-chip copy ${cls}" data-act="ocm-copy" data-v="${esc(v)}" title="คัดลอก"><i class="${ic}"></i><span class="v">${esc(v)}</span></span>` : '';
+  host.innerHTML = list.length ? list.map(m=>{
+    const n=ocmCases(m.id).length, ch=chip('dc','fa-brands fa-discord',m.dc)+chip('steam','fa-brands fa-steam',m.steam);
+    return `<div class="ocmb-card">
+      <div class="ocmb-top">
+        <div class="ocmb-av">${esc((m.name||'?').trim().charAt(0).toUpperCase())}</div>
+        <div class="ocmb-nm"><button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียด">${esc(m.name)}</button><span class="ct">${n} เคส</span></div>
+      </div>
+      <div class="ocmb-chips">${ch||'<span class="oc-chip none"><i class="fa-solid fa-circle-minus"></i>ยังไม่มีข้อมูลติดต่อ</span>'}</div>
+      <div class="ocmb-act">
+        <button type="button" class="btn sm" data-act="ocm-open" data-id="${m.id}"><i class="fa-solid fa-folder-open"></i>ดูเคส</button>
+        <span class="sp"></span>
+        <span class="admin-only" style="display:inline-flex;gap:5px;">
+          <button type="button" class="btn sm" data-act="edit-ocm" data-id="${m.id}" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="btn danger sm" data-act="del-ocm" data-id="${m.id}" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+        </span>
+      </div></div>`;}).join('')
+    : `<div class="empty" style="grid-column:1/-1;padding:24px;"><div class="e1">${q?'ไม่พบพ่อค้าที่ค้นหา':'ยังไม่มีรายชื่อพ่อค้า OC'}</div></div>`;
+}
+function ocmBookOpen(open){
+  const el=document.getElementById('ocmb-back'); if(!el) return;
+  el.classList.toggle('open',!!open); el.setAttribute('aria-hidden',open?'false':'true');
+  if(open){ const q=document.getElementById('f-ocm-search'); q.value=''; renderOcMerchantList(); setTimeout(()=>{ try{q.focus({preventScroll:true});}catch(e){} },60); }
+}
+function renderOcMerchants(){
+  renderOcMerchantList(); renderOcPicker(); renderOcBuyerList();
+  if(ocmCur && document.getElementById('view-ocm').classList.contains('active')) renderOcMerchantDetail();
+}
+function renderOcMerchantDetail(){
+  const host=document.getElementById('ocm-detail'), m=ocmById(ocmCur);
+  if(!m){ host.innerHTML=''; return; }
+  document.getElementById('ocm-d-title').textContent=m.name;
+  const cs=ocmCases(m.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const open=cs.filter(c=>c.status!=='paid'), paid=cs.filter(c=>c.status==='paid');
+  const sum=a=>a.reduce((s,c)=>s+(Number(c.amount)||0),0);
+  const info=(lbl,val,ic,cls)=>`<div class="ocm-row"><span class="k"><span class="ki ${cls||''}"><i class="${ic||'fa-solid fa-circle'}"></i></span>${lbl}</span><span class="v">${val?esc(val):'-'}</span>${val?`<i class="fa-regular fa-copy copy-ic" data-act="ocm-copy" data-v="${esc(val)}" title="คัดลอก"></i>`:''}</div>`;
+  const stat=(n,l,ic)=>`<div class="panel stat"><span class="n">${n}</span><div class="l">${l}</div><i class="fa-solid ${ic}"></i></div>`;
+  host.innerHTML = `
+    <div class="grid-cols cols-4" style="margin-bottom:16px;">
+      ${stat(cs.length,'เคสทั้งหมด','fa-folder-open')}${stat(open.length,'เคสค้างจ่าย','fa-hourglass-half')}
+      ${stat(ocMoney(sum(open)),'ยอดค้างรวม','fa-sack-dollar')}${stat(ocMoney(sum(paid)),'จ่ายแล้วรวม','fa-circle-check')}
+    </div>
+    <div class="panel bracket" style="margin-bottom:16px;">
+      <div class="bl"></div><div class="br"></div>
+      <div class="form-title"><i class="fa-solid fa-address-card"></i>ข้อมูลติดต่อ</div>
+      ${info('ชื่อพ่อค้า',m.name,'fa-solid fa-user-tag','nm')}${info('ID Discord',m.dc,'fa-brands fa-discord','dc')}${info('Steam',m.steam,'fa-brands fa-steam','steam')}
+      <span class="admin-only"><button class="btn sm" data-act="ocm-edit-detail" style="margin-top:10px;"><i class="fa-solid fa-pen"></i>แก้ไขข้อมูลพ่อค้า</button></span>
+    </div>
+    <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
+      <div class="bl"></div><div class="br"></div>
+      ${cs.length?`<table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead><tbody>${cs.map(c=>`<tr>
+        <td style="font-weight:600;color:#fff;">${esc(ocName(c))}</td>
+        <td class="pid">${ocMoney(c.amount)}</td>
+        <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
+        <td>${ocStatusBadge(c.status)}</td>
+        <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:320px;white-space:pre-wrap;">${esc(c.note)}</div>`:'-'}</td>
+      </tr>`).join('')}</tbody></table>`
+      :`<div class="empty"><i class="fa-solid fa-hand-holding-dollar"></i><div class="e1">ยังไม่มีเคสของพ่อค้าคนนี้</div></div>`}
+    </div>`;
+}
+function ocmSwitchView(id, icon, label, after){
+  if(tabCutsceneActive) return;
+  playTabCutscene(icon, label, ()=>{
+    document.querySelectorAll('section.view').forEach(v=>v.classList.toggle('active', v.id===id));
+    window.scrollTo(0,0);
+    if(after) after();
+  });
+}
+function openOcMerchant(id){
+  const m=ocmById(id); if(!m) return;
+  ocmCur=id; renderOcMerchantDetail();
+  ocmSwitchView('view-ocm','fa-solid fa-user-tag',m.name);
+}
+function closeOcMerchant(after){ ocmSwitchView('view-oc','fa-solid fa-hand-holding-dollar','เคสซื้อขาย OC',after); }
+function clearOcmForm(){
+  ['f-ocm-name','f-ocm-dc','f-ocm-steam'].forEach(id=>document.getElementById(id).value='');
+  editing.merchant=null;
+  document.getElementById('ocm-form-title').innerHTML='<i class="fa-solid fa-user-plus"></i>เพิ่มพ่อค้าใหม่';
+  document.getElementById('btn-save-ocm').innerHTML='<i class="fa-solid fa-plus"></i>เพิ่มพ่อค้า';
+  document.getElementById('btn-cancel-ocm').style.display='none';
+}
+function editOcMerchant(id){
+  const m=ocmById(id); if(!m) return;
+  editing.merchant=id;
+  document.getElementById('f-ocm-name').value=m.name||'';
+  document.getElementById('f-ocm-dc').value=m.dc||'';
+  document.getElementById('f-ocm-steam').value=m.steam||'';
+  document.getElementById('ocm-form-title').innerHTML='<i class="fa-solid fa-pen"></i>แก้ไขพ่อค้า';
+  document.getElementById('btn-save-ocm').innerHTML='<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
+  document.getElementById('btn-cancel-ocm').style.display='inline-flex';
+  document.getElementById('f-ocm-name').scrollIntoView({behavior:'smooth', block:'center'});
+}
+document.getElementById('btn-save-ocm').addEventListener('click', async ()=>{
+  const name=document.getElementById('f-ocm-name').value.trim();
+  if(!name) return toast('กรอกชื่อพ่อค้าก่อนบันทึก','error');
+  if(DB.ocMerchants.some(m=>m.id!==editing.merchant && (m.name||'').trim().toLowerCase()===name.toLowerCase())) return toast('มีชื่อพ่อค้านี้อยู่แล้ว','error');
+  const f={name, dc:document.getElementById('f-ocm-dc').value.trim(), steam:document.getElementById('f-ocm-steam').value.trim()};
+  const cur=editing.merchant ? ocmById(editing.merchant) : null;
+  if(cur) Object.assign(cur,f); else DB.ocMerchants.push({id:uid(), ...f, createdAt:Date.now()});
+  const ok=await saveKey('oc_merchants', DB.ocMerchants);
+  if(!ok) return;
+  clearOcmForm(); renderOc();
+});
+document.getElementById('btn-cancel-ocm').addEventListener('click', clearOcmForm);
+document.getElementById('f-ocm-search').addEventListener('input', renderOcMerchantList);
+document.getElementById('f-oc-mq').addEventListener('input', renderOcPicker);
+document.getElementById('f-oc-buyer').addEventListener('change', ()=>{ /* เลือกคนซื้อเดิม → เติม DC / Steam ให้อัตโนมัติถ้ายังว่าง */
+  const n=document.getElementById('f-oc-buyer').value.trim().toLowerCase(); if(!n) return;
+  const prev=DB.ocCases.find(c=>ocName(c).toLowerCase()===n && (ocDc(c)||ocSteam(c))); if(!prev) return;
+  const dc=document.getElementById('f-oc-dc'), st=document.getElementById('f-oc-steam');
+  if(!dc.value) dc.value=ocDc(prev); if(!st.value) st.value=ocSteam(prev);
+});
+document.getElementById('oc-dd-btn').addEventListener('click', ()=>ocDdOpen(!document.getElementById('oc-dd').classList.contains('open')));
+document.getElementById('f-oc-merchant').addEventListener('click', e=>{
+  const it=e.target.closest('.ocdd-item'); if(!it) return;
+  ocSelMerchant = it.dataset.id || null;
+  ocDdOpen(false); renderOcPicker();
+});
+document.addEventListener('click', e=>{ const dd=document.getElementById('oc-dd'); if(dd && dd.classList.contains('open') && !dd.contains(e.target)) ocDdOpen(false); });
+document.getElementById('oc-dd').addEventListener('keydown', e=>{ if(e.key==='Escape'){ ocDdOpen(false); document.getElementById('oc-dd-btn').focus(); } });
+document.getElementById('ocm-back').addEventListener('click', ()=>closeOcMerchant());
+async function ocmActions(e){
+  const cp=e.target.closest('[data-act="ocm-copy"]');
+  if(cp){ copyText(cp.dataset.v); return; }
+  const open=e.target.closest('[data-act="ocm-open"]');
+  if(open){ if(open.dataset.id){ ocmBookOpen(false); openOcMerchant(open.dataset.id); } return; }
+  const ed=e.target.closest('[data-act="edit-ocm"]');
+  if(ed){ ocmBookOpen(false); editOcMerchant(ed.dataset.id); return; }
+  const del=e.target.closest('[data-act="del-ocm"]');
+  if(del){
+    const id=del.dataset.id, linked=ocmCases(id);
+    if(linked.length && !confirm('พ่อค้าคนนี้ผูกอยู่กับ '+linked.length+' เคส\nลบแล้วเคสจะยังอยู่ (ชื่อคนซื้อไม่หาย) แค่ไม่มีพ่อค้าต้นทางเงิน\nลบเลยไหม?')) return;
+    DB.ocMerchants=DB.ocMerchants.filter(m=>m.id!==id);
+    if(editing.merchant===id) clearOcmForm();
+    if(linked.length){ linked.forEach(c=>{ if(c.buyer===undefined) c.buyer=c.name||''; c.merchantId=''; }); await saveKey('oc_cases', DB.ocCases); }
+    await saveKey('oc_merchants', DB.ocMerchants); renderOc();
+  }
+}
+document.getElementById('view-oc').addEventListener('click', ocmActions);
+document.getElementById('ocmb-back').addEventListener('click', e=>{ if(e.target.id==='ocmb-back'){ ocmBookOpen(false); return; } ocmActions(e); });
+document.getElementById('btn-ocm-book').addEventListener('click', ()=>ocmBookOpen(true));
+document.getElementById('ocmb-x').addEventListener('click', ()=>ocmBookOpen(false));
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && document.getElementById('ocmb-back').classList.contains('open')) ocmBookOpen(false); });
+
+document.getElementById('ocm-detail').addEventListener('click', e=>{
+  const cp=e.target.closest('[data-act="ocm-copy"]');
+  if(cp){ copyText(cp.dataset.v); return; }
+  if(e.target.closest('[data-act="ocm-edit-detail"]')){ const id=ocmCur; closeOcMerchant(()=>editOcMerchant(id)); }
+});
+
 /* ================= INIT ================= */
 async function init(){
  try{
@@ -2344,7 +2722,7 @@ async function init(){
   initCarTierSelect();
   initTierFilters();
   initOcForm();
-  const [tasks, notes, punishments, cars, outfits, links, commands, ocCases, uiMode, bgImageUrl] = await Promise.all([
+  const [tasks, notes, punishments, cars, outfits, links, commands, ocCases, ocMerchants, uiMode, bgImageUrl] = await Promise.all([
     loadKey('tasks', []),
     loadKey('notes', []),
     loadKey('punishments', []),
@@ -2353,10 +2731,14 @@ async function init(){
     loadKey('links', []),
     loadKey('commands', []),
     loadKey('oc_cases', []),
+    loadKey('oc_merchants', []),
     loadKey('ui_mode', 'dev'),
     loadKey('bg_image_url', ''),
   ]);
-  DB = { tasks, notes, punishments, cars, outfits, links, commands, ocCases };
+  DB = { tasks, notes, punishments, cars, outfits, links, commands, ocCases, ocMerchants };
+  if(!LOAD_FAILED.has('oc_cases') && !LOAD_FAILED.has('oc_merchants') && migrateOcMerchants() && uiMode==='dev'){
+    if(await saveKey('oc_merchants', DB.ocMerchants)) await saveKey('oc_cases', DB.ocCases);
+  }
   await setMode(uiMode, false);
   if(bgImageUrl){ document.getElementById('f-bgimg-url').value = bgImageUrl; applyBgImage(bgImageUrl); }
   [renderDashboard, renderNotes, renderTasks, renderPunishments, renderCars, renderOutfits, renderLinks, renderCommands, renderOc]
