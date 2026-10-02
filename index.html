@@ -527,6 +527,65 @@
   .oc-row.near .oc-cd{color:var(--orange);background:rgba(255,140,66,.16);border-color:rgba(255,140,66,.4);}
   .oc-row.wait .oc-cd{color:var(--yellow);background:rgba(255,210,63,.13);border-color:rgba(255,210,63,.4);}
   .oc-st{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  /* สองวันที่บนบอร์ด: วันที่รับเงิน + วันที่ตกลงคืน */
+  .oc-row .oc-dates{flex:0 0 236px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;}
+  .oc-dl{display:flex;align-items:center;gap:8px;padding:3px 10px;border-radius:9px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);}
+  .oc-dl i{font-size:11px;flex:none;width:13px;text-align:center;}
+  .oc-dl .lb{font-size:10.5px;font-weight:600;color:var(--text-muted);flex:0 0 66px;letter-spacing:.01em;}
+  .oc-dl .v{font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .oc-dl.recv i{color:var(--cyan);}
+  .oc-dl.recv.none .v,.oc-dl.due.none .v{color:var(--text-faint);font-weight:500;}
+  .oc-dl.due i{color:var(--yellow);}
+  .oc-row.overdue .oc-dl.due{background:rgba(255,59,92,.16);border-color:rgba(255,59,92,.5);}
+  .oc-row.overdue .oc-dl.due i{color:var(--red);}
+  .oc-row.near .oc-dl.due{background:rgba(255,140,66,.16);border-color:rgba(255,140,66,.5);}
+  .oc-row.near .oc-dl.due i{color:var(--orange);}
+  .oc-row.wait .oc-dl.due{background:rgba(255,210,63,.12);border-color:rgba(255,210,63,.4);}
+  .td-dates{display:flex;flex-direction:column;gap:2px;}
+  /* ===== ปรับขนาดบนบอร์ด: วันที่กระชับ / ยอดเงินอ่านง่าย / ชิปเล็กลง ===== */
+  .oc-row .oc-dates{flex:0 0 192px;}
+  .oc-dl{gap:6px;padding:3px 8px;}
+  .oc-dl .lb{flex:0 0 58px;}
+  #oc-board .oc-row .oc-amt{flex:0 0 128px;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:0;text-align:right;}
+  #oc-board .oc-amt .lb{font-family:inherit;font-size:10.5px;font-weight:600;color:var(--text-muted);letter-spacing:.02em;white-space:nowrap;}
+  #oc-board .oc-amt .lb em{font-style:normal;color:var(--cyan);font-weight:700;}
+  #oc-board .oc-amt .n{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;color:#fff;line-height:1.15;white-space:nowrap;letter-spacing:.01em;}
+  #oc-board .oc-amt .n small{font-size:12px;font-weight:700;color:var(--cyan);margin-right:3px;}
+  #oc-board .oc-who .oc-meta{gap:5px;}
+  #oc-board .oc-who .oc-chip{padding:1px 8px;font-size:10.5px;gap:5px;border-radius:7px;}
+  #oc-board .oc-who .oc-chip i{font-size:10.5px;}
+  #oc-board .oc-who .oc-chip .oc-mlink{font-size:10.5px;}
+  /* กล่องยอดเงิน: ป้ายซ้าย-คำอ่านย่อขวา / ฿ ชิดซ้าย-ตัวเลขชิดขวา → เรียงตรงกันทุกการ์ด */
+  #oc-board .oc-row .oc-amt{flex:0 0 162px;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:2px;padding:5px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);text-align:left;}
+  #oc-board .oc-amt .lb{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  #oc-board .oc-amt .lb em{font-style:normal;color:var(--cyan);font-weight:700;}
+  #oc-board .oc-amt .n{display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
+  #oc-board .oc-amt .n small{margin:0;}
+  #oc-board .oc-amt .n b{font-weight:800;font-variant-numeric:tabular-nums;}
+  /* ชิป DC / Steam / เงินจาก ใหญ่ขึ้นอีกนิด */
+  #oc-board .oc-who .oc-chip{padding:3px 10px;font-size:11.5px;gap:6px;border-radius:8px;}
+  #oc-board .oc-who .oc-chip i{font-size:11.5px;}
+  #oc-board .oc-who .oc-chip .oc-mlink{font-size:11.5px;}
+  /* ตัวเลขเล็กลง + ฿ ติดหน้าตัวเลข (ชิดขวาไปด้วยกัน) */
+  #oc-board .oc-amt .n{justify-content:flex-end;gap:0;font-size:15px;}
+  #oc-board .oc-amt .n small{font-size:11.5px;margin-right:3px;}
+  #oc-board .oc-amt .n b{font-size:15px;}
+  @media(max-width:640px){#oc-board .oc-row .oc-amt{flex:1 1 100%;}}
+  /* ป้ายนับถอยหลัง + สถานะ ซ้อนกันเป็นคอลัมน์เดียว */
+  .oc-row .oc-stack{flex:0 0 140px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;}
+  .oc-row .oc-stack .oc-cd,.oc-row .oc-stack .oc-st{flex:0 0 auto;width:100%;min-width:0;box-sizing:border-box;}
+  .oc-row .oc-stack .oc-cd{padding:4px 8px;}
+  .oc-row .oc-stack .oc-st{padding:5px 8px;}
+  @media(max-width:640px){.oc-row .oc-stack{flex:1 1 100%;flex-direction:row;}.oc-row .oc-stack .oc-cd,.oc-row .oc-stack .oc-st{flex:1 1 0;width:auto;}}
+  /* ===== ล็อกขนาดการ์ดบนบอร์ดให้เท่ากันทุกใบ (จอกว้าง) ===== */
+  @media(min-width:901px){
+    #oc-board{min-height:422px;} /* 5 แถว x 78px + ช่องว่าง 4 x 8px */
+    #oc-board .oc-row{height:78px;min-height:78px;flex-wrap:nowrap;padding-top:8px;padding-bottom:8px;}
+    #oc-board .oc-who{flex:1 1 0;min-width:0;}
+    #oc-board .oc-who .oc-meta{flex-wrap:nowrap;overflow:hidden;margin-top:5px;}
+    #oc-board .oc-who .oc-chip{flex:0 1 auto;min-width:0;}
+    #oc-board .oc-row .alert-icon,#oc-board .oc-row .oc-amt,#oc-board .oc-row .oc-dates,#oc-board .oc-row .oc-stack{flex-shrink:0;}
+  }
   .oc-radios{display:flex;flex-wrap:wrap;gap:8px;}
   .oc-radios label{margin:0;cursor:pointer;}
   .oc-radios input{position:absolute;opacity:0;pointer-events:none;width:0;height:0;}
@@ -588,7 +647,7 @@
   .oc-row .oc-cd{flex:0 0 126px;box-sizing:border-box;white-space:nowrap;}
   .oc-row .oc-st{flex:0 0 136px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:5px;}
   .oc-who .s .lb.dash{color:var(--text-faint);}
-  @media(max-width:640px){.oc-amt{text-align:left;min-width:0;}.oc-due,.oc-cd{min-width:0;}.oc-row .oc-amt,.oc-row .oc-due,.oc-row .oc-cd,.oc-row .oc-st{flex:0 1 auto;}}
+  @media(max-width:640px){.oc-amt{text-align:left;min-width:0;}.oc-due,.oc-cd{min-width:0;}.oc-row .oc-amt,.oc-row .oc-due,.oc-row .oc-cd,.oc-row .oc-st{flex:0 1 auto;}.oc-row .oc-dates{flex:1 1 100%;}}
 
   /* form */
   .form-panel{margin-bottom:18px;}
@@ -1438,7 +1497,8 @@
         </div></div></div>
       <div class="frow">
         <div class="field"><label>ยอดเงิน</label><input type="number" min="0" step="any" id="f-oc-amount" placeholder="0"></div>
-        <div class="field"><label>เวลาที่ได้รับเงิน (กำหนดชำระ)</label><input type="date" id="f-oc-due"></div>
+        <div class="field"><label><i class="fa-solid fa-hand-holding-dollar" style="color:var(--cyan);margin-right:6px;"></i>วันที่คนซื้อได้รับเงินมา</label><input type="date" id="f-oc-recv"></div>
+        <div class="field"><label><i class="fa-solid fa-handshake" style="color:var(--yellow);margin-right:6px;"></i>วันที่ตกลงว่าจะคืนภายใน (กำหนดชำระ)</label><input type="date" id="f-oc-due"></div>
       </div>
       <div class="frow">
         <div class="field full"><label>สถานะการชำระ</label>
@@ -1460,7 +1520,7 @@
       <div class="bl"></div><div class="br"></div>
       <div id="oc-tbl-box">
       <table class="plist">
-        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
         <tbody id="oc-tbody"></tbody>
       </table>
       <div id="oc-empty"></div>
@@ -2600,6 +2660,8 @@ let ocTFullH = 0;
 let ocFullH = 0; /* ความสูงบอร์ดตอนเต็ม 5 แถว วัดจริง */
 const OC_PAGE_SIZE = 5;
 function ocMoney(n){ n = Number(n)||0; return '฿' + n.toLocaleString('th-TH'); }
+function ocShort(n){ n=Number(n)||0; const f=(v,u)=>String(+v.toFixed(2))+' '+u;
+  if(n>=1e6) return f(n/1e6,'ล้าน'); if(n>=1e5) return f(n/1e5,'แสน'); if(n>=1e4) return f(n/1e4,'หมื่น'); return ''; }
 function ocSt(k){ return OC_STATUS[k] || OC_STATUS.unpaid; }
 function ocStatusBadge(k){
   const st = ocSt(k);
@@ -2618,7 +2680,7 @@ function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.get
 function clearOcForm(){
   ['f-oc-amount','f-oc-note','f-oc-mq','f-oc-buyer','f-oc-dc','f-oc-steam'].forEach(id=>document.getElementById(id).value='');
   ocSelMerchant=null; renderOcPicker();
-  document.getElementById('f-oc-due').value='';
+  document.getElementById('f-oc-due').value=''; document.getElementById('f-oc-recv').value='';
   document.getElementById('f-oc-board').checked=true;
   ocSetStatus('unpaid');
   editing.oc=null;
@@ -2630,11 +2692,14 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
   const buyer = document.getElementById('f-oc-buyer').value.trim();
   if(!buyer) return toast('กรอกชื่อคนซื้อก่อนบันทึก','error');
   const m = ocmById(ocSelMerchant); /* พ่อค้า = ต้นทางเงิน (ไม่บังคับ) */
+  { const r=document.getElementById('f-oc-recv').value, d=document.getElementById('f-oc-due').value;
+    if(r && d && d<r) return toast('วันที่ตกลงคืนต้องไม่ก่อนวันที่ได้รับเงิน','error'); }
   const status = ocGetStatus();
   const f = {
     buyer, name:buyer, merchantId:m?m.id:'',
     dc:document.getElementById('f-oc-dc').value.trim(), steam:document.getElementById('f-oc-steam').value.trim(),
     amount:Number(document.getElementById('f-oc-amount').value)||0,
+    recv:document.getElementById('f-oc-recv').value,
     due:document.getElementById('f-oc-due').value,
     board:document.getElementById('f-oc-board').checked,
     status,
@@ -2723,10 +2788,18 @@ function renderOc(){
           <div class="n">${esc(ocName(c))}</div>
           ${ocSrcHtml(c)}
         </div>
-        <div class="oc-amt">${ocMoney(c.amount)}</div>
-        <div class="oc-due"><i class="fa-regular fa-calendar-check"></i>${c.due?fmtDate(c.due):'ไม่ระบุวัน'}</div>
-        <div class="oc-cd">${badge}</div>
-        ${ocStatusBadge(c.status)}
+        <div class="oc-amt">
+          <span class="lb"><span>ยอดเงิน</span><em>${ocShort(c.amount)||''}</em></span>
+          <span class="n"><small>฿</small><b>${(Number(c.amount)||0).toLocaleString('th-TH')}</b></span>
+        </div>
+        <div class="oc-dates">
+          <div class="oc-dl recv ${c.recv?'':'none'}" title="วันที่คนซื้อได้รับเงินมา"><i class="fa-solid fa-hand-holding-dollar"></i><span class="lb">ได้รับเงิน</span><span class="v">${c.recv?fmtDate(c.recv):'ไม่ระบุ'}</span></div>
+          <div class="oc-dl due ${c.due?'':'none'}" title="วันที่ตกลงว่าจะคืนภายใน"><i class="fa-regular fa-calendar-check"></i><span class="lb">คืนภายใน</span><span class="v">${c.due?fmtDate(c.due):'ไม่ระบุ'}</span></div>
+        </div>
+        <div class="oc-stack">
+          <div class="oc-cd">${badge}</div>
+          ${ocStatusBadge(c.status)}
+        </div>
       </div>`).join('');
   /* ล็อกความสูงบอร์ดให้เท่ากับตอนมี 5 รายชื่อเสมอ */
   if(pageItems.length >= OC_PAGE_SIZE){ board.style.minHeight=''; ocFullH = board.offsetHeight; }
@@ -2767,6 +2840,7 @@ function renderOc(){
   tbody.innerHTML = pageList.map(c=>`<tr>
     <td><div><span class="oc-name-cell"><span style="font-weight:600;color:#fff;">${highlightText(ocName(c),tokens)}</span>${c.status!=='paid'?(c.board!==false?'<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>':'<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>'):''}</span>${ocSrcHtml(c)}</div></td>
     <td class="pid">${ocMoney(c.amount)}</td>
+    <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
     <td>${ocStatusBadge(c.status)}</td>
     <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:260px;white-space:pre-wrap;">${highlightText(c.note,tokens)}</div>`:'-'}</td>
@@ -2802,6 +2876,7 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
     document.getElementById('f-oc-dc').value=ocDc(c); document.getElementById('f-oc-steam').value=ocSteam(c);
     ocSelMerchant=(c.merchantId && ocmById(c.merchantId))?c.merchantId:null; document.getElementById('f-oc-mq').value=''; renderOcPicker();
     document.getElementById('f-oc-amount').value=c.amount||'';
+    document.getElementById('f-oc-recv').value=c.recv||'';
     document.getElementById('f-oc-due').value=c.due||'';
     document.getElementById('f-oc-note').value=c.note||'';
     document.getElementById('f-oc-board').checked = c.board!==false;
@@ -2930,10 +3005,11 @@ function renderOcMerchantDetail(){
     </div>
     <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
-      ${cs.length?`<table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>กำหนดรับเงิน</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead><tbody>${cs.map(c=>`<tr>
+      ${cs.length?`<table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead><tbody>${cs.map(c=>`<tr>
         <td style="font-weight:600;color:#fff;">${esc(ocName(c))}</td>
         <td class="pid">${ocMoney(c.amount)}</td>
-        <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
+        <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
+    <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
         <td>${ocStatusBadge(c.status)}</td>
         <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:320px;white-space:pre-wrap;">${esc(c.note)}</div>`:'-'}</td>
       </tr>`).join('')}</tbody></table>`
@@ -3082,7 +3158,7 @@ init();
   const SHORT=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
   const EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const DOW_EN=['Su','Mo','Tu','We','Th','Fr','Sa'];
-  const isOc=el=>el.id==='f-oc-due';
+  const isOc=el=>el.id==='f-oc-due'||el.id==='f-oc-recv';
   const DOW=['อา','จ','อ','พ','พฤ','ศ','ส'];
   const proto=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
   const pad=n=>String(n).padStart(2,'0');
