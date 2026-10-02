@@ -1056,6 +1056,23 @@
   .ocm-row .k .ki.nm{color:#ffd591;background:rgba(255,176,60,.10);border-color:rgba(255,176,60,.4);}
   .ocm-row{padding:11px 2px;}
   .ocm-row .v{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#fff;word-break:break-all;}
+
+  /* ===== ตารางเคส OC: จัดเรียงให้เท่ากันทุกแถว ===== */
+  #oc-tbl-box table.plist{table-layout:auto;width:100%;}
+  #oc-tbl-box table.plist th,#oc-tbl-box table.plist td{white-space:nowrap;vertical-align:middle;}
+  #oc-tbl-box table.plist th:nth-child(1){width:auto;}
+  #oc-tbl-box table.plist th:nth-child(2),#oc-tbl-box table.plist td:nth-child(2){width:120px;}
+  /* วันที่ได้รับเงิน: แคบลงให้ชิดคอลัมน์ครบกำหนดชำระ (เหลือช่องว่างพอรองรับข้อความยาว) */
+  #oc-tbl-box table.plist th:nth-child(3),#oc-tbl-box table.plist td:nth-child(3){width:118px;min-width:118px;padding-right:4px;}
+  #oc-tbl-box table.plist th:nth-child(4),#oc-tbl-box table.plist td:nth-child(4){width:150px;min-width:150px;padding-left:4px;}
+  #oc-tbl-box table.plist th:nth-child(5),#oc-tbl-box table.plist td:nth-child(5){width:110px;}
+  #oc-tbl-box table.plist th:nth-child(6),#oc-tbl-box table.plist td:nth-child(6){width:190px;}
+  #oc-tbl-box table.plist tbody tr{height:72px;}
+  #oc-tbl-box .oc-meta{flex-wrap:nowrap;gap:5px;margin-top:5px;}
+  #oc-tbl-box .oc-chip{padding:2px 8px;font-size:10.5px;gap:5px;border-radius:7px;white-space:nowrap;flex:0 0 auto;}
+  #oc-tbl-box .oc-chip i{font-size:10.5px;}
+  #oc-tbl-box .oc-chip .oc-mlink{font-size:10.5px;}
+  #oc-tbl-box select.oc-quick{width:110px;}
 </style>
 </head>
 <body class="dev-mode">
@@ -1520,7 +1537,7 @@
       <div class="bl"></div><div class="br"></div>
       <div id="oc-tbl-box">
       <table class="plist">
-        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>หมายเหตุ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>วันที่ครบกำหนดชำระ</th><th>สถานะ</th><th class="admin-only">จัดการ</th></tr></thead>
         <tbody id="oc-tbody"></tbody>
       </table>
       <div id="oc-empty"></div>
@@ -2716,7 +2733,12 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
   }
   const ok = await saveKey('oc_cases', DB.ocCases);
   if(!ok) return;
-  clearOcForm(); renderOc();
+  clearOcForm();
+  /* ล้างตัวค้นหา/ตัวกรอง เพื่อให้เคสที่เพิ่งเพิ่ม/แก้ไขขึ้นในตารางด้านล่างทันที */
+  document.getElementById('f-oc-search').value='';
+  ocFilter='all'; ocTPage=1;
+  document.querySelectorAll('#oc-filters .tier-chip').forEach(c=>c.classList.toggle('active', c.dataset.oc==='all'));
+  renderOc();
 });
 document.getElementById('btn-cancel-oc').addEventListener('click', clearOcForm);
 document.getElementById('f-oc-search').addEventListener('input', ()=>{ ocTPage=1; renderOc(); });
@@ -2843,8 +2865,7 @@ function renderOc(){
     <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
     <td>${ocStatusBadge(c.status)}</td>
-    <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:260px;white-space:pre-wrap;">${highlightText(c.note,tokens)}</div>`:'-'}</td>
-    <td class="admin-only"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+    <td class="admin-only"><div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap;">
       <select class="oc-quick" data-act="oc-quick" data-id="${c.id}" title="เปลี่ยนสถานะเร็ว">
         ${Object.entries(OC_STATUS).map(([k,v])=>`<option value="${k}" ${k===c.status?'selected':''}>${v.label}</option>`).join('')}
       </select>
