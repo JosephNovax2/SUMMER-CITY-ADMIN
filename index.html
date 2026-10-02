@@ -16,7 +16,7 @@
     --bg-panel:#0a1220;
     --bg-panel-2:#0d1728;
     --bg-panel-3:#132038;
-    --line:rgba(77,208,255,.2);
+    --line:rgba(var(--acc-rgb),.2);
     --line-soft:rgba(255,255,255,.07);
     --cyan:#4dd8ff;
     --cyan-dim:#1c86b0;
@@ -36,9 +36,21 @@
     --void:#0b1522;
     --lavender:#b9c2ff;
     --pink:#ffb3d9;
+    --acc-rgb:77,216,255;
+    --acc2-rgb:143,233,255;
     --r-sm:10px;
     --r-md:16px;
     --r-lg:24px;
+  }
+  /* ===== ธีมเหลืองทอง: ใช้ตอนอยู่ในหน้าเส้นเงินพ่อค้า OC ===== */
+  body.theme-gold{
+    --bg-deep:#0d0a05; --bg-deep-2:#120d06;
+    --bg-panel:#150f08; --bg-panel-2:#1b140b; --bg-panel-3:#2a2012;
+    --line:rgba(255,200,60,.24);
+    --cyan:#ffd23f; --cyan-dim:#b8860b; --violet:#ffe27a; --magenta:#fff0b3;
+    --text-main:#fff6e0; --text-muted:#c9ae70; --text-faint:#80693c;
+    --sky:#ffe9a6; --steel:#e0c27f;
+    --acc-rgb:255,210,63; --acc2-rgb:255,236,160;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:#000;}
@@ -55,7 +67,7 @@
     position:relative;
     overflow-x:hidden;
   }
-  ::selection{background:rgba(77,216,255,.3);color:#fff;}
+  ::selection{background:rgba(var(--acc-rgb),.3);color:#fff;}
   a{color:inherit;}
   button,input,textarea,select{font-family:inherit;font-weight:inherit;}
   html.scroll-lock, html.scroll-lock body{overflow:hidden!important;}
@@ -69,8 +81,8 @@
   .bg-grid{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background-image:
-      linear-gradient(rgba(77,216,255,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(77,216,255,.05) 1px, transparent 1px);
+      linear-gradient(rgba(var(--acc-rgb),.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--acc-rgb),.05) 1px, transparent 1px);
     background-size:42px 42px;
     mask-image:radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 90%);
   }
@@ -117,7 +129,7 @@
   #boot .boot-avatar-wrap{
     width:112px;height:112px;border-radius:22px;overflow:hidden;
     border:1px solid rgba(185,194,255,.4);
-    box-shadow:0 0 34px rgba(185,194,255,.3), 0 0 0 1px rgba(77,216,255,.08) inset;
+    box-shadow:0 0 34px rgba(185,194,255,.3), 0 0 0 1px rgba(var(--acc-rgb),.08) inset;
   }
   #boot .boot-avatar-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
   #boot .boot-text{font-family:'IBM Plex Sans Thai',sans-serif;letter-spacing:.25em;font-size:12px;color:var(--cyan);text-transform:uppercase;}
@@ -144,7 +156,7 @@
   .tab-fx-icon{
     width:64px;height:64px;border-radius:16px;
     display:flex;align-items:center;justify-content:center;
-    background:rgba(77,216,255,.1);border:1px solid rgba(77,216,255,.35);
+    background:rgba(var(--acc-rgb),.1);border:1px solid rgba(var(--acc-rgb),.35);
     color:var(--cyan);font-size:24px;
     opacity:0;
   }
@@ -166,9 +178,9 @@
   #tabCutscene.show{transition:none;}
   #tabCutscene .cs-icon-wrap{
     width:112px;height:112px;border-radius:26px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(140deg, rgba(77,216,255,.2), rgba(126,232,250,.14));
-    border:2px solid rgba(77,216,255,.4);color:var(--cyan);font-size:38px;overflow:hidden;
-    box-shadow:0 0 34px rgba(77,216,255,.3), 0 0 0 1px rgba(77,216,255,.08) inset;
+    background:linear-gradient(140deg, rgba(var(--acc-rgb),.2), rgba(var(--acc2-rgb),.14));
+    border:2px solid rgba(var(--acc-rgb),.4);color:var(--cyan);font-size:38px;overflow:hidden;
+    box-shadow:0 0 34px rgba(var(--acc-rgb),.3), 0 0 0 1px rgba(var(--acc-rgb),.08) inset;
     transform:scale(.85);opacity:0;transition:transform .12s cubic-bezier(.5,1.8,.5,1), opacity .12s ease;
   }
   #tabCutscene .cs-avatar-img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated;}
@@ -209,13 +221,13 @@
   .brand{display:flex;align-items:center;gap:12px;}
   .brand-icon{
     width:44px;height:44px;border-radius:16px 16px 20px 20px/20px 20px 24px 24px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(140deg, rgba(77,216,255,.22), rgba(126,232,250,.16));
+    background:linear-gradient(140deg, rgba(var(--acc-rgb),.22), rgba(var(--acc2-rgb),.16));
     border:1px solid var(--line);color:var(--cyan);font-size:18px;
-    box-shadow:0 0 18px rgba(77,216,255,.18) inset;
+    box-shadow:0 0 18px rgba(var(--acc-rgb),.18) inset;
     transition:transform .25s cubic-bezier(.5,1.8,.5,1);
   }
   .brand-icon:hover{transform:scale(1.12) rotate(-6deg);}
-  .brand-avatar{overflow:hidden;padding:0;box-shadow:0 0 0 2px var(--bg-panel-2), 0 0 16px rgba(77,216,255,.4);}
+  .brand-avatar{overflow:hidden;padding:0;box-shadow:0 0 0 2px var(--bg-panel-2), 0 0 16px rgba(var(--acc-rgb),.4);}
   .brand-avatar-img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated;}
   .brand-text .t1{font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#fff;}
   .brand-text .t1 span{color:var(--cyan);}
@@ -228,14 +240,14 @@
   .mode-toggle{display:flex;align-items:center;gap:9px;}
   .mode-toggle .lbl{font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.1em;color:var(--text-faint);}
   .mode-toggle .lbl.active-visitor{color:var(--text-muted);}
-  .mode-toggle .lbl.active-dev{color:var(--cyan);text-shadow:0 0 10px rgba(77,216,255,.5);}
+  .mode-toggle .lbl.active-dev{color:var(--cyan);text-shadow:0 0 10px rgba(var(--acc-rgb),.5);}
   .switch{
     width:52px;height:26px;border-radius:20px;background:var(--void);border:1px solid var(--line);
     position:relative;cursor:pointer;flex:none;
   }
   .switch .knob{
     position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
-    background:var(--cyan);box-shadow:0 0 12px rgba(77,216,255,.7);
+    background:var(--cyan);box-shadow:0 0 12px rgba(var(--acc-rgb),.7);
     transition:transform .22s ease, background .22s ease, box-shadow .22s ease;
   }
   .switch.visitor .knob{transform:translateX(26px);background:var(--text-faint);box-shadow:none;}
@@ -249,7 +261,7 @@
   }
   .hero .bg-photo{
     position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;
-    opacity:0;transition:opacity .5s ease;pointer-events:none;
+    opacity:0;transition:opacity .5s ease, filter .5s ease;pointer-events:none;
   }
   .hero .bg-photo.on{opacity:1;}
   .hero::after{
@@ -266,10 +278,10 @@
   /* ---------- icon button + bg image popover ---------- */
   .icon-btn{
     width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-    background:rgba(77,216,255,.06);border:1px solid var(--line);color:var(--cyan);
+    background:rgba(var(--acc-rgb),.06);border:1px solid var(--line);color:var(--cyan);
     cursor:pointer;transition:all .18s ease;flex:none;position:relative;font-size:14px;
   }
-  .icon-btn:hover{background:rgba(77,216,255,.16);box-shadow:0 0 14px rgba(77,216,255,.2);}
+  .icon-btn:hover{background:rgba(var(--acc-rgb),.16);box-shadow:0 0 14px rgba(var(--acc-rgb),.2);}
   .icon-btn.has-bg{color:var(--sky);border-color:var(--sky);}
   .bgimg-pop{
     position:fixed;width:300px;z-index:200;
@@ -293,9 +305,9 @@
   .bgimg-pop .pos-ctrl{display:flex;align-items:center;gap:8px;}
   .bgimg-pop .pos-btn{
     width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;
-    background:rgba(77,216,255,.06);border:1px solid var(--line);color:var(--cyan);cursor:pointer;font-size:13px;transition:all .15s ease;
+    background:rgba(var(--acc-rgb),.06);border:1px solid var(--line);color:var(--cyan);cursor:pointer;font-size:13px;transition:all .15s ease;
   }
-  .bgimg-pop .pos-btn:hover{background:rgba(77,216,255,.16);}
+  .bgimg-pop .pos-btn:hover{background:rgba(var(--acc-rgb),.16);}
   .bgimg-pop .pos-btn:active{transform:scale(.94);}
   .bgimg-pop input[type=range]{flex:1;margin:0;padding:0;height:6px;background:var(--bg-deep-2);border:1px solid var(--line-soft);border-radius:6px;accent-color:var(--cyan);cursor:pointer;}
   .bgimg-pop .pos-hint{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim,#7f8da3);margin-top:6px;}
@@ -601,9 +613,9 @@
   .bgimg-pop{width:280px !important;}
   .bgimg-pop .pt{margin-bottom:8px;}
   .bg-tabs{display:flex;gap:6px;margin-bottom:10px;}
-  .bg-tab{flex:1;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(77,216,255,.05);border:1px solid var(--line-soft);color:var(--text-muted);cursor:pointer;font-size:13px;transition:all .15s ease;}
+  .bg-tab{flex:1;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(var(--acc-rgb),.05);border:1px solid var(--line-soft);color:var(--text-muted);cursor:pointer;font-size:13px;transition:all .15s ease;}
   .bg-tab:hover{color:var(--cyan);border-color:var(--line);}
-  .bg-tab.active{color:var(--cyan);background:rgba(77,216,255,.16);border-color:var(--cyan);}
+  .bg-tab.active{color:var(--cyan);background:rgba(var(--acc-rgb),.16);border-color:var(--cyan);}
   .bg-panes{height:178px;overflow-y:auto;scrollbar-width:none;}
   .bg-panes::-webkit-scrollbar{display:none;}
   .bg-pane{display:none;}
@@ -679,29 +691,29 @@
   .tdp-head{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:10px;}
   .tdp-title{flex:1;text-align:center;font-weight:700;font-size:14px;color:#fff;}
   .tdp-nav{width:30px;height:30px;border-radius:8px;border:1px solid var(--line-soft);background:rgba(255,255,255,.04);color:var(--cyan);cursor:pointer;font-size:12px;}
-  .tdp-nav:hover{border-color:var(--cyan);background:rgba(77,216,255,.1);}
+  .tdp-nav:hover{border-color:var(--cyan);background:rgba(var(--acc-rgb),.1);}
   .tdp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
   .tdp-dow{text-align:center;font-size:11.5px;font-weight:600;color:var(--text-muted);padding:4px 0;}
   .tdp-day{height:34px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--text-main);font-family:inherit;font-size:13px;font-weight:inherit;cursor:pointer;}
-  .tdp-day:hover{background:rgba(77,216,255,.14);border-color:rgba(77,216,255,.35);}
+  .tdp-day:hover{background:rgba(var(--acc-rgb),.14);border-color:rgba(var(--acc-rgb),.35);}
   .tdp-day.today{border-color:var(--cyan);color:var(--cyan);}
   .tdp-day.sel{background:var(--cyan);color:#04121a;font-weight:700;border-color:var(--cyan);}
   .tdp-blank{height:34px;}
   .tdp-foot{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft);}
   .tdp-foot button{background:none;border:none;color:var(--cyan);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;padding:4px 6px;border-radius:6px;}
-  .tdp-foot button:hover{background:rgba(77,216,255,.1);}
+  .tdp-foot button:hover{background:rgba(var(--acc-rgb),.1);}
 
   .field.full{grid-column:1/-1;}
   .btn{
     display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;
-    border:1px solid var(--line);background:rgba(77,216,255,.08);color:var(--cyan);
+    border:1px solid var(--line);background:rgba(var(--acc-rgb),.08);color:var(--cyan);
     font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.03em;cursor:pointer;
     transition:background .15s, box-shadow .15s, border-color .15s, transform .18s cubic-bezier(.5,1.8,.5,1);
   }
-  .btn:hover{background:rgba(77,216,255,.18);box-shadow:0 0 14px rgba(77,216,255,.2);transform:scale(1.04);}
+  .btn:hover{background:rgba(var(--acc-rgb),.18);box-shadow:0 0 14px rgba(var(--acc-rgb),.2);transform:scale(1.04);}
   .btn:active{transform:scale(.96);}
   .btn.primary{background:linear-gradient(120deg,var(--cyan),var(--lavender));color:#1a1030;border-color:transparent;}
-  .btn.primary:hover{box-shadow:0 0 18px rgba(77,216,255,.4);}
+  .btn.primary:hover{box-shadow:0 0 18px rgba(var(--acc-rgb),.4);}
   .btn.ghost{background:transparent;color:var(--text-muted);border-color:var(--line-soft);}
   .btn.ghost:hover{color:var(--text-main);border-color:var(--line);}
   .btn.danger{background:rgba(255,59,92,.08);color:var(--red);border-color:rgba(255,59,92,.3);}
@@ -809,7 +821,7 @@
     content:"";position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;
     background:radial-gradient(circle, rgba(185,194,255,.16), transparent 70%);pointer-events:none;
   }
-  .link-row:hover{border-color:rgba(143,233,255,.45);box-shadow:0 0 22px rgba(77,216,255,.12);}
+  .link-row:hover{border-color:rgba(var(--acc2-rgb),.45);box-shadow:0 0 22px rgba(var(--acc-rgb),.12);}
   .link-row .lk-badge{
     flex:none;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;
     font-size:17px;color:#1a1030;position:relative;z-index:1;
@@ -870,7 +882,7 @@
     border:1px solid var(--line);border-top:none;
     border-radius:0 0 var(--r-md) var(--r-md);
     padding:14px 16px 18px;margin-bottom:18px;
-    box-shadow:0 0 0 1px rgba(77,216,255,.04) inset;
+    box-shadow:0 0 0 1px rgba(var(--acc-rgb),.04) inset;
   }
   .term-body .term-desc{
     font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);
@@ -965,7 +977,7 @@
   .oc-chip i{font-size:11.5px;flex:none;}
   .oc-chip .v{overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;}
   .oc-chip.copy{cursor:pointer;transition:all .15s;}
-  .oc-chip.copy:hover{border-color:var(--cyan);background:rgba(77,216,255,.1);}
+  .oc-chip.copy:hover{border-color:var(--cyan);background:rgba(var(--acc-rgb),.1);}
   .oc-chip.dc i{color:#8b9bff;}
   .oc-chip.steam i{color:#66c0f4;}
   .oc-chip.src{color:var(--text-muted);}
@@ -991,8 +1003,8 @@
   .ocdd-panel input{margin-bottom:6px;}
   .ocdd-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
   .ocdd-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--text-main);}
-  .ocdd-item:hover{background:rgba(77,216,255,.1);}
-  .ocdd-item.sel{background:rgba(77,216,255,.16);color:#fff;font-weight:600;}
+  .ocdd-item:hover{background:rgba(var(--acc-rgb),.1);}
+  .ocdd-item.sel{background:rgba(var(--acc-rgb),.16);color:#fff;font-weight:600;}
   .ocdd-item .ck{width:14px;font-size:11px;color:var(--cyan);flex:none;visibility:hidden;}
   .ocdd-item.sel .ck{visibility:visible;}
   .ocdd-item .sub{margin-left:auto;font-size:11px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
@@ -1004,8 +1016,8 @@
   /* ===== OC merchant book (popup) ===== */
   .ocm-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
   .ocm-topbar .form-title{margin:0;}
-  .ocm-open-btn{display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(77,216,255,.14),rgba(160,140,255,.12));color:#fff;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;transition:border-color .15s, box-shadow .15s, background .15s;}
-  .ocm-open-btn:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(77,216,255,.22);}
+  .ocm-open-btn{display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(var(--acc-rgb),.14),rgba(160,140,255,.12));color:#fff;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;transition:border-color .15s, box-shadow .15s, background .15s;}
+  .ocm-open-btn:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(var(--acc-rgb),.22);}
   .ocm-open-btn i.bk{color:var(--cyan);font-size:15px;}
   .ocm-open-btn .cnt{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:#0a1220;background:var(--cyan);border-radius:999px;padding:1px 9px;}
   .ocm-open-btn .cnt:empty{display:none;}
@@ -1018,11 +1030,11 @@
   .ocmb-back{position:fixed;inset:0;z-index:450;background:rgba(2,6,14,.78);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;}
   .ocmb-back.open{display:flex;animation:ocmbfade .18s ease;}
   @keyframes ocmbfade{from{opacity:0;}to{opacity:1;}}
-  .ocmb{position:relative;width:min(880px,100%);max-height:min(82vh,780px);display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg-panel-2),var(--bg-panel));border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(77,216,255,.06),0 0 40px rgba(77,216,255,.08);overflow:hidden;animation:ocmbpop .22s cubic-bezier(.2,1.2,.4,1);}
+  .ocmb{position:relative;width:min(880px,100%);max-height:min(82vh,780px);display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg-panel-2),var(--bg-panel));border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(var(--acc-rgb),.06),0 0 40px rgba(var(--acc-rgb),.08);overflow:hidden;animation:ocmbpop .22s cubic-bezier(.2,1.2,.4,1);}
   @keyframes ocmbpop{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
   .ocmb::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--lavender),var(--cyan));}
   .ocmb-head{display:flex;align-items:center;gap:14px;padding:18px 20px 12px;}
-  .ocmb-ic{width:44px;height:44px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:19px;color:#1a1030;background:linear-gradient(135deg,var(--cyan),var(--lavender));box-shadow:0 0 18px rgba(77,216,255,.3);}
+  .ocmb-ic{width:44px;height:44px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:19px;color:#1a1030;background:linear-gradient(135deg,var(--cyan),var(--lavender));box-shadow:0 0 18px rgba(var(--acc-rgb),.3);}
   .ocmb-head h3{margin:0;font-size:17px;font-weight:700;color:#fff;letter-spacing:.01em;}
   .ocmb-head p{margin:2px 0 0;font-size:12px;color:var(--text-faint);}
   .ocmb-x{margin-left:auto;width:34px;height:34px;border-radius:10px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--text-muted);cursor:pointer;font-size:14px;transition:all .15s;}
@@ -1032,7 +1044,7 @@
   .ocmb-body{flex:1;min-height:0;overflow-y:auto;padding:4px 20px 20px;}
   .ocmb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;}
   .ocmb-card{position:relative;display:flex;flex-direction:column;gap:9px;padding:12px 12px 10px;border-radius:13px;border:1px solid var(--line-soft);background:rgba(255,255,255,.035);transition:border-color .15s, background .15s, transform .15s;}
-  .ocmb-card:hover{border-color:rgba(77,216,255,.45);background:rgba(77,216,255,.06);transform:translateY(-1px);}
+  .ocmb-card:hover{border-color:rgba(var(--acc-rgb),.45);background:rgba(var(--acc-rgb),.06);transform:translateY(-1px);}
   .ocmb-top{display:flex;align-items:center;gap:10px;min-width:0;}
   .ocmb-av{width:36px;height:36px;border-radius:11px;flex:none;display:grid;place-items:center;font-weight:700;font-size:15px;color:#1a1030;background:linear-gradient(135deg,var(--cyan),var(--lavender));}
   .ocmb-nm{flex:1;min-width:0;}
@@ -1064,7 +1076,7 @@
   #oc-tbl-box table.plist th:nth-child(2),#oc-tbl-box table.plist td:nth-child(2){width:120px;}
   /* วันที่ได้รับเงิน: แคบลงให้ชิดคอลัมน์ครบกำหนดชำระ (เหลือช่องว่างพอรองรับข้อความยาว) */
   #oc-tbl-box table.plist th:nth-child(3),#oc-tbl-box table.plist td:nth-child(3){width:118px;min-width:118px;padding-right:4px;}
-  #oc-tbl-box table.plist th:nth-child(4),#oc-tbl-box table.plist td:nth-child(4){width:150px;min-width:150px;padding-left:4px;}
+  #oc-tbl-box table.plist th:nth-child(4),#oc-tbl-box table.plist td:nth-child(4){width:150px;min-width:150px;padding-left:4px;text-align:center;}
   #oc-tbl-box table.plist th:nth-child(5),#oc-tbl-box table.plist td:nth-child(5){width:110px;}
   #oc-tbl-box table.plist th:nth-child(6),#oc-tbl-box table.plist td:nth-child(6){width:190px;}
   #oc-tbl-box table.plist tbody tr{height:72px;}
@@ -1073,6 +1085,65 @@
   #oc-tbl-box .oc-chip i{font-size:10.5px;}
   #oc-tbl-box .oc-chip .oc-mlink{font-size:10.5px;}
   #oc-tbl-box select.oc-quick{width:110px;}
+
+  /* ===== เคสแบบ "ซื้อไอเทม" ===== */
+  /* บรรทัดชื่อ: ชื่อกว้างคงที่ → ป้าย/กระดิ่งอยู่ตำแหน่งเดียวกันทุกแถว */
+  #oc-tbl-box .oc-cg{display:grid;grid-template-columns:168px 182px max-content;column-gap:5px;row-gap:5px;align-items:center;}
+  #oc-tbl-box .oc-cg-name{grid-column:1 / 3;display:flex;align-items:center;gap:7px;min-width:0;}
+  #oc-tbl-box .oc-cg-name .oc-nm{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#fff;}
+  #oc-tbl-box .oc-cg-name .oc-bell{flex:none;font-size:11px;line-height:1;}
+  #oc-tbl-box .oc-cg-x{grid-column:3;display:flex;align-items:center;gap:5px;}
+  #oc-tbl-box .oc-cg-dc,#oc-tbl-box .oc-cg-st{min-width:0;display:flex;}
+  #oc-tbl-box .oc-cg-dc .oc-chip,#oc-tbl-box .oc-cg-st .oc-chip{max-width:100%;min-width:0;flex:0 1 auto;}
+  .oc-nameline{display:flex;align-items:center;gap:8px;min-width:0;}
+  .oc-nameline .oc-nm{flex:0 1 260px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#fff;}
+  .oc-nameline .oc-bell{flex:0 0 14px;text-align:center;font-size:11px;line-height:1;}
+  .oc-nameline .oc-chip{flex:0 0 auto;}
+  #oc-board .oc-nameline .oc-nm{flex-basis:230px;font-size:14.5px;}
+  #oc-board .oc-nameline{overflow:hidden;}
+  .oc-chip.xfer{color:#fff;font-weight:700;background:rgba(255,64,200,.22);border:1px solid rgba(255,64,200,.75);box-shadow:0 0 10px rgba(255,64,200,.28);max-width:220px;}
+  .oc-chip.xfer i{color:#ff6ad5;}
+  .oc-chip.xfer .v{font-family:inherit;}
+  .oc-chip.item{color:#c9f5dd;background:rgba(51,255,176,.08);border:1px solid rgba(51,255,176,.35);max-width:200px;}
+  .oc-chip.item i{color:#33ffb0;}
+  .oc-chip.item .v{font-family:inherit;}
+  #f-oc-items-wrap{display:none;}
+  #f-oc-items-wrap.show{display:block;}
+  #f-oc-items{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+  .oc-item-row{display:grid;grid-template-columns:minmax(0,1fr) 90px 38px;gap:8px;align-items:center;}
+  .oc-item-row input{width:100%;min-width:0;}
+  @media(max-width:620px){ .oc-item-row{grid-template-columns:minmax(0,1fr) 70px 38px;} }
+
+  /* ===== เส้นเงินพ่อค้า: ตารางเคสล็อก 5 แถว/หน้า ===== */
+  #ocm-detail .ocm-tbl-box table.plist th:first-child,#ocm-detail .ocm-tbl-box table.plist td:first-child{text-align:left;}
+  #ocm-detail .ocm-tbl-box table.plist td:first-child>div{margin-inline:0;}
+  .cols-5{grid-template-columns:repeat(5,1fr);}
+  @media(max-width:1100px){.cols-5{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:700px){.cols-5{grid-template-columns:repeat(2,1fr);}}
+  .panel.stat .l .stat-sub{display:block;font-size:11px;font-weight:400;opacity:.65;margin-top:2px;}
+  .ocm-chk{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin:0;}
+  .ocm-chk input{position:absolute;opacity:0;pointer-events:none;width:0;height:0;}
+  .ocm-chk span{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--text-faint);display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:transparent;background:rgba(255,255,255,.03);transition:all .15s;}
+  .ocm-chk:hover span{border-color:#33ffb0;}
+  .ocm-chk input:checked + span{background:#33ffb0;border-color:#33ffb0;color:#0a1220;box-shadow:0 0 12px rgba(51,255,176,.4);}
+  .ocm-chk input:focus-visible + span{outline:2px solid var(--cyan);outline-offset:2px;}
+  body.visitor-mode .ocm-chk{pointer-events:none;cursor:default;}
+  .panel.stat .n[data-k]{font-variant-numeric:tabular-nums;display:inline-block;transform-origin:left center;}
+  .panel.stat .n.num-up{animation:numPopUp .7s ease-out;}
+  .panel.stat .n.num-down{animation:numPopDown .7s ease-out;}
+  @keyframes numPopUp{0%{transform:scale(1);filter:brightness(1);}25%{transform:scale(1.07);filter:brightness(1.5) drop-shadow(0 0 8px currentColor);}100%{transform:scale(1);filter:brightness(1);}}
+  @keyframes numPopDown{0%{transform:scale(1);filter:brightness(1);}25%{transform:scale(.94);filter:brightness(.75);}100%{transform:scale(1);filter:brightness(1);}}
+  .ocm-tbl-box.locked{min-height:calc(48px + 5 * 86px);}
+  #ocm-detail .ocm-tbl-box table.plist tbody tr{height:86px;}
+  #ocm-detail .ocm-tbl-box .ocm-note{font-size:12px;color:var(--text-muted);max-width:320px;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-inline:auto;}
+  #ocm-detail .ocm-tbl-box .oc-chip.item{margin-top:4px;}
+  .ocm-pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;padding:0 6px 8px;flex-wrap:wrap;}
+  .ocm-pager .pg-info{margin-right:auto;font-size:12px;color:var(--text-muted);}
+  .ocm-pager .pg-mid{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-muted);}
+  .ocm-pager input{width:56px;text-align:center;background:var(--bg-panel-2);color:var(--text-main);border:1px solid var(--line-soft);border-radius:8px;padding:6px 4px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;-moz-appearance:textfield;}
+  .ocm-pager input:focus{border-color:var(--cyan);}
+  .ocm-pager input::-webkit-outer-spin-button,.ocm-pager input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .ocm-pager .btn[disabled]{opacity:.35;cursor:not-allowed;pointer-events:none;}
 </style>
 </head>
 <body class="dev-mode">
@@ -1512,8 +1583,16 @@
             <div class="ocdd-list" id="f-oc-merchant" role="listbox"></div>
           </div>
         </div></div></div>
+      <div class="frow"><div class="field full"><label>ประเภทเคส</label>
+        <div class="oc-radios" id="f-oc-type"></div></div></div>
+      <div id="f-oc-items-wrap">
+        <div class="frow"><div class="field full"><label><i class="fa-solid fa-box-open" style="color:#33ffb0;margin-right:6px;"></i>รายการไอเทมที่ซื้อ (เพิ่มได้หลายชิ้น)</label>
+          <div id="f-oc-items"></div>
+          <button type="button" class="btn sm" id="btn-oc-add-item"><i class="fa-solid fa-plus"></i>เพิ่มไอเทม</button>
+        </div></div>
+      </div>
       <div class="frow">
-        <div class="field"><label>ยอดเงิน</label><input type="number" min="0" step="any" id="f-oc-amount" placeholder="0"></div>
+        <div class="field" id="f-oc-amount-field"><label id="oc-amt-label">ยอดเงิน</label><input type="number" min="0" step="any" id="f-oc-amount" placeholder="0"></div>
         <div class="field"><label><i class="fa-solid fa-hand-holding-dollar" style="color:var(--cyan);margin-right:6px;"></i>วันที่คนซื้อได้รับเงินมา</label><input type="date" id="f-oc-recv"></div>
         <div class="field"><label><i class="fa-solid fa-handshake" style="color:var(--yellow);margin-right:6px;"></i>วันที่ตกลงว่าจะคืนภายใน (กำหนดชำระ)</label><input type="date" id="f-oc-due"></div>
       </div>
@@ -1523,7 +1602,7 @@
         </div>
       </div>
       <div class="frow">
-        <div class="field full"><div class="oc-radios"><label title="ไม่ติ๊ก = บันทึกเก็บไว้เฉยๆ ไม่ขึ้นบอร์ดแจ้งเตือน"><input type="checkbox" id="f-oc-board" checked><span style="--sc:#4dd8ff"><i class="fa-solid fa-check"></i>ขึ้นบอร์ด</span></label></div></div>
+        <div class="field full"><div class="oc-radios"><label title="ไม่ติ๊ก = บันทึกเก็บไว้เฉยๆ ไม่ขึ้นบอร์ดแจ้งเตือน"><input type="checkbox" id="f-oc-board" checked><span style="--sc:#4dd8ff"><i class="fa-solid fa-check"></i>ขึ้นบอร์ด</span></label><label title="ติ๊กเมื่อคนนี้เป็นคนโอนเงินให้พ่อค้า (ไม่บังคับ)"><input type="checkbox" id="f-oc-xfer"><span style="--sc:#ff40c8"><i class="fa-solid fa-check"></i>เป็นคนโอนเงินให้</span></label></div></div>
       </div>
       <div class="frow"><div class="field full"><label>หมายเหตุ</label><textarea id="f-oc-note" placeholder="รายละเอียดเคส / ข้อตกลงกับนายก..."></textarea></div></div>
       <div style="display:flex;gap:8px;">
@@ -1991,6 +2070,7 @@ document.getElementById('tabs').addEventListener('click', e=>{
     playTabCutscene(icon ? icon.className : 'fa-solid fa-gauge-high', label, ()=>{
       document.querySelectorAll('nav.tabs button[data-tab]').forEach(b=>b.classList.toggle('active', b===btn));
       document.querySelectorAll('section.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+btn.dataset.tab));
+      document.body.classList.remove('theme-gold');
     });
   }
 });
@@ -2687,9 +2767,59 @@ function ocStatusBadge(k){
 function initOcForm(){
   document.getElementById('f-oc-status').innerHTML = Object.entries(OC_STATUS).map(([k,v],i)=>
     `<label><input type="radio" name="oc-status" value="${k}" ${i===1?'checked':''}><span style="--sc:${v.color}"><i class="fa-solid fa-check"></i>${v.label}</span></label>`).join('');
+  document.getElementById('f-oc-type').innerHTML = Object.entries(OC_TYPES).map(([k,v],i)=>
+    `<label><input type="radio" name="oc-type" value="${k}" ${i===0?'checked':''}><span style="--sc:${v.color}"><i class="fa-solid fa-check"></i>${v.label}</span></label>`).join('');
+  ocResetItemRows(); ocSetType('money');
   document.getElementById('oc-filters').innerHTML = `<button class="tier-chip active" data-oc="all">ทั้งหมด</button>` +
     Object.entries(OC_STATUS).map(([k,v])=>`<button class="tier-chip" data-oc="${k}" style="--tc:${v.color}">${v.label}</button>`).join('') +
+    Object.entries(OC_TYPES).map(([k,v])=>`<button class="tier-chip" data-oc="type:${k}" style="--tc:${v.color}"><i class="fa-solid ${v.icon}" style="font-size:11px;margin-right:6px;"></i>${v.label}</button>`).join('') +
     `<button class="tier-chip" data-oc="hidden" style="--tc:#b9c2ff"><i class="fa-solid fa-bell-slash" style="font-size:11px;margin-right:6px;"></i>ไม่ได้ขึ้นบอร์ด</button>`;
+}
+/* ----- ประเภทเคส: money = ซื้อเงิน (ค่าเริ่มต้น) / item = ซื้อไอเทม (หลายชิ้นได้) ----- */
+const OC_TYPES = {
+  money:{label:'ซื้อเงิน',  color:'#ffd24d', icon:'fa-coins'},
+  item: {label:'ซื้อไอเทม', color:'#33ffb0', icon:'fa-box-open'},
+};
+function ocType(c){ return c && c.type==='item' ? 'item' : 'money'; }
+function ocItems(c){ return Array.isArray(c&&c.items) ? c.items.filter(i=>i&&String(i.name||'').trim()) : []; }
+function ocItemLine(i){ return String(i.name).trim() + ' ×' + (Number(i.qty)||1); }
+function ocXferHtml(c){
+  if(!c || !c.transfer) return '';
+  const m=ocmById(c.merchantId), txt = m ? 'โอนเงินให้ '+m.name : 'คนโอนเงินให้';
+  return `<span class="oc-chip xfer" title="${esc(txt)}"><i class="fa-solid fa-money-bill-transfer"></i><span class="v">${esc(txt)}</span></span>`;
+}
+function ocItemQty(c){ return ocItems(c).reduce((a,i)=>a+(Number(i.qty)||1),0); }
+function ocAmtText(c){ return ocType(c)==='item' ? '-' : ocMoney(c.amount); }
+function ocItemsHtml(c){
+  if(ocType(c)!=='item') return '';
+  const its = ocItems(c);
+  const txt = its.length ? (ocItemLine(its[0]) + (its.length>1 ? ' +'+(its.length-1) : '')) : 'ไม่ระบุรายการ';
+  const tip = its.length ? its.map(i=>esc(ocItemLine(i))).join('&#10;') : 'ยังไม่ได้ระบุรายการไอเทม';
+  return `<span class="oc-chip item" title="${tip}"><i class="fa-solid fa-box-open"></i><span class="v">${esc(txt)}</span></span>`;
+}
+function ocGetType(){ const r=document.querySelector('input[name="oc-type"]:checked'); return r?r.value:'money'; }
+function ocSetType(t){
+  const r=document.querySelector('input[name="oc-type"][value="'+t+'"]'); if(r) r.checked=true;
+  document.getElementById('f-oc-items-wrap').classList.toggle('show', t==='item');
+  document.getElementById('f-oc-amount-field').style.display = t==='item' ? 'none' : '';
+  if(t==='item' && !document.querySelector('#f-oc-items .oc-item-row')) ocAddItemRow();
+}
+function ocAddItemRow(it){
+  const row=document.createElement('div'); row.className='oc-item-row';
+  row.innerHTML='<input class="oi-name" placeholder="ชื่อไอเทม" maxlength="80" autocomplete="off"><input class="oi-qty" type="number" min="1" step="1" placeholder="จำนวน"><button type="button" class="btn danger sm" data-act="oi-del" title="ลบรายการนี้"><i class="fa-solid fa-xmark"></i></button>';
+  row.querySelector('.oi-name').value = (it&&it.name)||'';
+  row.querySelector('.oi-qty').value = (it&&it.qty)||1;
+  document.getElementById('f-oc-items').appendChild(row);
+}
+function ocResetItemRows(list){
+  document.getElementById('f-oc-items').innerHTML='';
+  (list&&list.length?list:[null]).forEach(i=>ocAddItemRow(i));
+}
+function ocReadItems(){
+  return [...document.querySelectorAll('#f-oc-items .oc-item-row')].map(r=>({
+    name:r.querySelector('.oi-name').value.trim(),
+    qty:Math.max(1,parseInt(r.querySelector('.oi-qty').value,10)||1),
+  })).filter(i=>i.name);
 }
 function ocGetStatus(){ const r=document.querySelector('input[name="oc-status"]:checked'); return r?r.value:'unpaid'; }
 function ocSetStatus(k){ const r=document.querySelector('input[name="oc-status"][value="'+k+'"]'); if(r) r.checked=true; }
@@ -2699,7 +2829,9 @@ function clearOcForm(){
   ocSelMerchant=null; renderOcPicker();
   document.getElementById('f-oc-due').value=''; document.getElementById('f-oc-recv').value='';
   document.getElementById('f-oc-board').checked=true;
+  document.getElementById('f-oc-xfer').checked=false;
   ocSetStatus('unpaid');
+  ocResetItemRows(); ocSetType('money');
   editing.oc=null;
   document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>เพิ่มเคสใหม่';
   document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-plus"></i>เพิ่มเคส';
@@ -2712,13 +2844,17 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
   { const r=document.getElementById('f-oc-recv').value, d=document.getElementById('f-oc-due').value;
     if(r && d && d<r) return toast('วันที่ตกลงคืนต้องไม่ก่อนวันที่ได้รับเงิน','error'); }
   const status = ocGetStatus();
+  const type = ocGetType(), items = type==='item' ? ocReadItems() : [];
+  if(type==='item' && !items.length) return toast('เพิ่มไอเทมอย่างน้อย 1 รายการก่อนบันทึก','error');
   const f = {
+    type, items,
     buyer, name:buyer, merchantId:m?m.id:'',
     dc:document.getElementById('f-oc-dc').value.trim(), steam:document.getElementById('f-oc-steam').value.trim(),
-    amount:Number(document.getElementById('f-oc-amount').value)||0,
+    amount: type==='item' ? 0 : (Number(document.getElementById('f-oc-amount').value)||0),
     recv:document.getElementById('f-oc-recv').value,
     due:document.getElementById('f-oc-due').value,
     board:document.getElementById('f-oc-board').checked,
+    transfer:document.getElementById('f-oc-xfer').checked,
     status,
     note:document.getElementById('f-oc-note').value.trim(),
   };
@@ -2760,6 +2896,14 @@ document.getElementById('oc-pg-next').addEventListener('click', ()=>{ ocPage++; 
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
   inp.addEventListener('focus', ()=>inp.select());
 })();
+document.getElementById('f-oc-type').addEventListener('change', ()=>ocSetType(ocGetType()));
+document.getElementById('btn-oc-add-item').addEventListener('click', ()=>{ ocAddItemRow(); const r=document.querySelectorAll('#f-oc-items .oi-name'); r[r.length-1].focus(); });
+document.getElementById('f-oc-items').addEventListener('click', e=>{
+  const b=e.target.closest('[data-act="oi-del"]'); if(!b) return;
+  const rows=document.querySelectorAll('#f-oc-items .oc-item-row');
+  if(rows.length<=1){ rows[0].querySelectorAll('input').forEach((i,n)=>i.value = n===1?1:''); }
+  else b.closest('.oc-item-row').remove();
+});
 document.getElementById('oc-filters').addEventListener('click', e=>{
   const b = e.target.closest('.tier-chip'); if(!b) return;
   ocFilter = b.dataset.oc; ocTPage = 1;
@@ -2807,12 +2951,14 @@ function renderOc(){
       <div class="oc-row ${cat}">
         <div class="alert-icon"><i class="fa-solid ${icon}"></i></div>
         <div class="oc-who">
-          <div class="n">${esc(ocName(c))}</div>
+          <div class="n oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>
           ${ocSrcHtml(c)}
         </div>
         <div class="oc-amt">
-          <span class="lb"><span>ยอดเงิน</span><em>${ocShort(c.amount)||''}</em></span>
-          <span class="n"><small>฿</small><b>${(Number(c.amount)||0).toLocaleString('th-TH')}</b></span>
+          ${ocType(c)==='item'
+            ? `<span class="lb"><span>ไอเทม</span></span><span class="n"><b>${ocItemQty(c)}</b><small style="margin-left:4px;">ชิ้น</small></span>`
+            : `<span class="lb"><span>ยอดเงิน</span><em>${ocShort(c.amount)||''}</em></span>
+          <span class="n"><small>฿</small><b>${(Number(c.amount)||0).toLocaleString('th-TH')}</b></span>`}
         </div>
         <div class="oc-dates">
           <div class="oc-dl recv ${c.recv?'':'none'}" title="วันที่คนซื้อได้รับเงินมา"><i class="fa-solid fa-hand-holding-dollar"></i><span class="lb">ได้รับเงิน</span><span class="v">${c.recv?fmtDate(c.recv):'ไม่ระบุ'}</span></div>
@@ -2831,10 +2977,11 @@ function renderOc(){
   const q = getQ('f-oc-search');
   let base = [...DB.ocCases].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
   if(ocFilter==='hidden') base = base.filter(c=>c.board===false && c.status!=='paid');
+  else if(ocFilter.startsWith('type:')) base = base.filter(c=>ocType(c)===ocFilter.slice(5));
   else if(ocFilter!=='all') base = base.filter(c=>c.status===ocFilter);
   let list = base, tokens=[];
   if(q){
-    const r = rankSearch(base, q, c=>ocName(c), c=>[ocName(c),(ocmById(c.merchantId)||{}).name,ocDc(c),ocSteam(c),(ocmById(c.merchantId)||{}).dc,(ocmById(c.merchantId)||{}).steam,c.note,ocSt(c.status).label,c.amount].filter(x=>x!==undefined&&x!=='').join(' '));
+    const r = rankSearch(base, q, c=>ocName(c), c=>[ocName(c),(ocmById(c.merchantId)||{}).name,ocDc(c),ocSteam(c),(ocmById(c.merchantId)||{}).dc,(ocmById(c.merchantId)||{}).steam,c.note,ocSt(c.status).label,c.amount,OC_TYPES[ocType(c)].label,c.transfer?'คนโอนเงินให้ โอนเงินให้':'',ocItems(c).map(i=>i.name).join(' ')].filter(x=>x!==undefined&&x!=='').join(' '));
     list = r.list; tokens = r.tokens;
   }
   setCount('oc-count', !!q, list.length, base.length);
@@ -2860,8 +3007,8 @@ function renderOc(){
   }
   emptyHost.innerHTML='';
   tbody.innerHTML = pageList.map(c=>`<tr>
-    <td><div><span class="oc-name-cell"><span style="font-weight:600;color:#fff;">${highlightText(ocName(c),tokens)}</span>${c.status!=='paid'?(c.board!==false?'<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>':'<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>'):''}</span>${ocSrcHtml(c)}</div></td>
-    <td class="pid">${ocMoney(c.amount)}</td>
+    <td>${ocNameCellHtml(c,tokens)}</td>
+    <td class="pid">${ocAmtText(c)}</td>
     <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
     <td>${ocStatusBadge(c.status)}</td>
@@ -2896,11 +3043,13 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
     document.getElementById('f-oc-buyer').value=ocName(c)==='-'?'':ocName(c);
     document.getElementById('f-oc-dc').value=ocDc(c); document.getElementById('f-oc-steam').value=ocSteam(c);
     ocSelMerchant=(c.merchantId && ocmById(c.merchantId))?c.merchantId:null; document.getElementById('f-oc-mq').value=''; renderOcPicker();
+    ocResetItemRows(ocItems(c)); ocSetType(ocType(c));
     document.getElementById('f-oc-amount').value=c.amount||'';
     document.getElementById('f-oc-recv').value=c.recv||'';
     document.getElementById('f-oc-due').value=c.due||'';
     document.getElementById('f-oc-note').value=c.note||'';
     document.getElementById('f-oc-board').checked = c.board!==false;
+    document.getElementById('f-oc-xfer').checked = !!c.transfer;
     ocSetStatus(c.status);
     document.getElementById('oc-form-title').innerHTML='<i class="fa-solid fa-pen"></i>แก้ไขเคส';
     document.getElementById('btn-save-oc').innerHTML='<i class="fa-solid fa-check"></i>บันทึกการแก้ไข';
@@ -2914,10 +3063,11 @@ document.getElementById('oc-tbody').addEventListener('click', async e=>{
 });
 /* รีเฟรชบอร์ดทุกนาที + ตอนข้ามเที่ยงคืน เพื่อให้จำนวนวันที่เหลืออัปเดตเอง */
 window.addEventListener('resize', ()=>{ ocFullH = 0; ocTFullH = 0; try{ renderOc(); }catch(e){} });
-setInterval(()=>{ try{ if(document.activeElement!==document.getElementById('oc-pg-input') && document.activeElement!==document.getElementById('oc-tpg-input')) renderOc(); }catch(e){} }, 60000);
+setInterval(()=>{ try{ if(document.activeElement!==document.getElementById('oc-pg-input') && document.activeElement!==document.getElementById('oc-tpg-input') && document.activeElement.id!=='ocm-pg-input') renderOc(); }catch(e){} }, 60000);
 
 /* ================= OC MERCHANTS ================= */
-let ocSelMerchant = null, ocmCur = null;
+let ocSelMerchant = null, ocmCur = null, ocmPage = 1;
+const OCM_PAGE_SIZE = 5;
 function ocmById(id){ return DB.ocMerchants.find(m=>m.id===id); }
 function ocmCases(id){ return DB.ocCases.filter(c=>c.merchantId===id); }
 /* ชื่อที่ขึ้นบอร์ด = ชื่อ "คนซื้อ" (แยกจากพ่อค้าต้นทางเงินแล้ว) */
@@ -2926,15 +3076,33 @@ function ocName(c){ return (c.buyer||c.name||'').trim() || '-'; }
 function ocSameNameMerchant(c){ const n=ocName(c).toLowerCase(); return DB.ocMerchants.find(m=>(m.name||'').trim().toLowerCase()===n); }
 function ocDc(c){ return (c.dc!==undefined&&c.dc!==''?c.dc:((ocSameNameMerchant(c)||{}).dc||'')); }
 function ocSteam(c){ return (c.steam!==undefined&&c.steam!==''?c.steam:((ocSameNameMerchant(c)||{}).steam||'')); }
-function ocSrcHtml(c){
+function ocChipParts(c){
   const m=ocmById(c.merchantId), dc=ocDc(c), st=ocSteam(c);
   const chip=(cls,ic,lbl,v)=>`<span class="oc-chip copy ${cls}" data-act="ocm-copy" data-v="${esc(v)}" title="คลิกเพื่อคัดลอก ${lbl}"><i class="${ic}"></i><span class="v">${esc(v)}</span></span>`;
-  return `<div class="oc-meta">`
-    + (dc?chip('dc','fa-brands fa-discord','Discord',dc):'')
-    + (st?chip('steam','fa-brands fa-steam','Steam',st):'')
-    + (m?`<span class="oc-chip src"><i class="fa-solid fa-route"></i>เงินจาก <button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียดพ่อค้า">${esc(m.name)}</button></span>`
-        :`<span class="oc-chip src none"><i class="fa-solid fa-route"></i>ไม่ระบุพ่อค้า</span>`)
-    + `</div>`;
+  return {
+    item: ocItemsHtml(c),
+    dc: dc?chip('dc','fa-brands fa-discord','Discord',dc):'',
+    steam: st?chip('steam','fa-brands fa-steam','Steam',st):'',
+    src: m?`<span class="oc-chip src"><i class="fa-solid fa-route"></i>เส้นเงิน <button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียดพ่อค้า">${esc(m.name)}</button></span>`
+         :`<span class="oc-chip src none"><i class="fa-solid fa-route"></i>ไม่ระบุพ่อค้า</span>`,
+  };
+}
+function ocSrcHtml(c){
+  const p=ocChipParts(c);
+  return `<div class="oc-meta">` + p.item + p.dc + p.steam + p.src + `</div>`;
+}
+/* ช่องชื่อในตารางรายการทั้งหมด: จัดเป็นตาราง 3 ช่องคงที่ (DC | Steam | เส้นเงิน)
+   → ป้าย "โอนเงินให้" อยู่ตรงกับป้าย "เส้นเงิน" ด้านล่างทุกแถว ไม่ว่าชื่อหรือ ID จะยาวสั้นแค่ไหน */
+function ocNameCellHtml(c, tokens){
+  const p=ocChipParts(c);
+  const bell = c.status!=='paid' ? (c.board!==false
+    ? '<i class="fa-solid fa-bell" style="color:var(--cyan);" title="แสดงเตือนบนบอร์ด"></i>'
+    : '<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>') : '';
+  return `<div class="oc-cg">
+    <div class="oc-cg-name"><span class="oc-nm" title="${esc(ocName(c))}">${highlightText(ocName(c),tokens)}</span><span class="oc-bell">${bell}</span></div>
+    <div class="oc-cg-x">${ocXferHtml(c)}${p.item}</div>
+    <div class="oc-cg-dc">${p.dc}</div><div class="oc-cg-st">${p.steam}</div><div class="oc-cg-src">${p.src}</div>
+  </div>`;
 }
 function renderOcBuyerList(){
   const dl=document.getElementById('oc-buyer-list'); if(!dl) return;
@@ -3004,19 +3172,26 @@ function renderOcMerchants(){
   renderOcMerchantList(); renderOcPicker(); renderOcBuyerList();
   if(ocmCur && document.getElementById('view-ocm').classList.contains('active')) renderOcMerchantDetail();
 }
-function renderOcMerchantDetail(){
+function renderOcMerchantDetailRaw(){
   const host=document.getElementById('ocm-detail'), m=ocmById(ocmCur);
   if(!m){ host.innerHTML=''; return; }
   document.getElementById('ocm-d-title').textContent=m.name;
   const cs=ocmCases(m.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
   const open=cs.filter(c=>c.status!=='paid'), paid=cs.filter(c=>c.status==='paid');
+  const xfer=cs.filter(c=>c.transfer);
+  const pages=Math.max(1,Math.ceil(cs.length/OCM_PAGE_SIZE));
+  if(ocmPage>pages) ocmPage=pages; if(ocmPage<1) ocmPage=1;
+  const pStart=(ocmPage-1)*OCM_PAGE_SIZE, pageCs=cs.slice(pStart,pStart+OCM_PAGE_SIZE);
   const sum=a=>a.reduce((s,c)=>s+(Number(c.amount)||0),0);
   const info=(lbl,val,ic,cls)=>`<div class="ocm-row"><span class="k"><span class="ki ${cls||''}"><i class="${ic||'fa-solid fa-circle'}"></i></span>${lbl}</span><span class="v">${val?esc(val):'-'}</span>${val?`<i class="fa-regular fa-copy copy-ic" data-act="ocm-copy" data-v="${esc(val)}" title="คัดลอก"></i>`:''}</div>`;
-  const stat=(n,l,ic)=>`<div class="panel stat"><span class="n">${n}</span><div class="l">${l}</div><i class="fa-solid ${ic}"></i></div>`;
+  const stat=(v,l,ic,sub,col,money)=>`<div class="panel stat"><span class="n" data-k="${esc(l)}" data-v="${Number(v)||0}" data-money="${money?1:0}"${col?` style="color:${col};"`:''}>${money?ocMoney(v):(Number(v)||0).toLocaleString('th-TH')}</span><div class="l">${l}${sub?`<span class="stat-sub">${sub}</span>`:''}</div><i class="fa-solid ${ic}"></i></div>`;
   host.innerHTML = `
-    <div class="grid-cols cols-4" style="margin-bottom:16px;">
+    <div class="grid-cols cols-3" style="margin-bottom:16px;">
       ${stat(cs.length,'เคสทั้งหมด','fa-folder-open')}${stat(open.length,'เคสค้างจ่าย','fa-hourglass-half')}
-      ${stat(ocMoney(sum(open)),'ยอดค้างรวม','fa-sack-dollar')}${stat(ocMoney(sum(paid)),'จ่ายแล้วรวม','fa-circle-check')}
+      ${stat(sum(xfer),'พ่อค้าซื้อมาทั้งหมด','fa-money-bill-transfer','รวมจาก '+xfer.length+' รายชื่อที่ติดแท็ก "โอนเงินให้"',null,true)}
+      ${stat(sum(cs),'ขายไปทั้งหมด','fa-hand-holding-dollar','ยอดรวมของทุกเคส','#ff8a00',true)}
+      ${stat(sum(paid),'ได้รับกลับมาแล้ว','fa-circle-check','เฉพาะเคสที่จ่ายแล้ว','#3dff7a',true)}
+      ${stat(sum(open),'ยังไม่ได้รับ','fa-sack-dollar','เคสที่ยังค้างจ่ายอยู่','#ff1f3d',true)}
     </div>
     <div class="panel bracket" style="margin-bottom:16px;">
       <div class="bl"></div><div class="br"></div>
@@ -3026,29 +3201,89 @@ function renderOcMerchantDetail(){
     </div>
     <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
-      ${cs.length?`<table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead><tbody>${cs.map(c=>`<tr>
-        <td style="font-weight:600;color:#fff;">${esc(ocName(c))}</td>
-        <td class="pid">${ocMoney(c.amount)}</td>
+      ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
+        <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsHtml(c)}</td>
+        <td class="pid">${ocAmtText(c)}</td>
         <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
         <td>${ocStatusBadge(c.status)}</td>
-        <td>${c.note?`<div style="font-size:12px;color:var(--text-muted);max-width:320px;white-space:pre-wrap;">${esc(c.note)}</div>`:'-'}</td>
-      </tr>`).join('')}</tbody></table>`
+        <td><label class="ocm-chk" title="ติ๊กเมื่อคนนี้จ่ายเงินแล้ว — ยอดด้านบนจะอัปเดตทันที"><input type="checkbox" data-act="ocm-paid" data-id="${c.id}" ${c.status==='paid'?'checked':''}><span><i class="fa-solid fa-check"></i></span></label></td>
+      </tr>`).join('')}</tbody></table></div>${cs.length>OCM_PAGE_SIZE?`
+      <div class="ocm-pager">
+        <span class="pg-info">แสดง ${pStart+1}-${pStart+pageCs.length} จาก ${cs.length} เคส</span>
+        <button class="btn sm" type="button" data-act="ocm-pg-prev" ${ocmPage<=1?'disabled':''}><i class="fa-solid fa-angle-left"></i>กลับ</button>
+        <span class="pg-mid"><input type="number" id="ocm-pg-input" min="1" max="${pages}" value="${ocmPage}" aria-label="เลขหน้า"><span>/ <b>${pages}</b></span></span>
+        <button class="btn sm" type="button" data-act="ocm-pg-next" ${ocmPage>=pages?'disabled':''}>ถัดไป<i class="fa-solid fa-angle-right"></i></button>
+      </div>`:''}`
       :`<div class="empty"><i class="fa-solid fa-hand-holding-dollar"></i><div class="e1">ยังไม่มีเคสของพ่อค้าคนนี้</div></div>`}
     </div>`;
 }
+(function(){
+  const host=document.getElementById('ocm-detail');
+  host.addEventListener('click', e=>{
+    const pv=e.target.closest('[data-act="ocm-pg-prev"]'), nx=e.target.closest('[data-act="ocm-pg-next"]');
+    if(pv){ ocmPage--; renderOcMerchantDetail(); } else if(nx){ ocmPage++; renderOcMerchantDetail(); }
+  });
+  host.addEventListener('change', e=>{
+    if(e.target.id!=='ocm-pg-input') return;
+    const v=parseInt(e.target.value,10); if(!isNaN(v)) ocmPage=v; renderOcMerchantDetail();
+  });
+  host.addEventListener('change', async e=>{
+    const cb=e.target.closest('[data-act="ocm-paid"]'); if(!cb) return;
+    if(document.body.classList.contains('visitor-mode')){ cb.checked=!cb.checked; return; }
+    const c=DB.ocCases.find(x=>x.id===cb.dataset.id); if(!c) return;
+    const prev={status:c.status, paidAt:c.paidAt, prevStatus:c.prevStatus};
+    if(cb.checked){ if(c.status!=='paid') c.prevStatus=c.status; c.status='paid'; c.paidAt=c.paidAt||todayISO(); }
+    else { c.status=(c.prevStatus && c.prevStatus!=='paid')?c.prevStatus:'unpaid'; c.paidAt=''; }
+    renderOc(); /* คำนวณยอดด้านบนใหม่ทันที */
+    const ok=await saveKey('oc_cases', DB.ocCases);
+    if(!ok){ c.status=prev.status; c.paidAt=prev.paidAt; c.prevStatus=prev.prevStatus; renderOc(); }
+  });
+  host.addEventListener('keydown', e=>{ if(e.target.id==='ocm-pg-input' && e.key==='Enter'){ e.preventDefault(); e.target.blur(); } });
+  host.addEventListener('focusin', e=>{ if(e.target.id==='ocm-pg-input') e.target.select(); });
+})();
+/* ===== อนิเมชั่นตัวเลขวิ่งขึ้น/ลงเร็ว ๆ ตอนยอดเปลี่ยน ===== */
+const ocmNum = {}; /* key -> {from,to,t0,shown,running} จำค่าที่แสดงอยู่ แม้หน้าถูกวาดใหม่ระหว่างวิ่ง */
+const OCM_NUM_DUR = 900;
+function ocmRunNum(el, st, money){
+  const fmt = v => money ? ocMoney(Math.round(v)) : Math.round(v).toLocaleString('th-TH');
+  const cls = st.to>st.from ? 'num-up' : 'num-down';
+  el.classList.remove('num-up','num-down'); void el.offsetWidth; el.classList.add(cls);
+  (function tick(){
+    if(!el.isConnected) return; /* ถูกวาดใหม่ → ตัวใหม่รับช่วงต่อ */
+    const k = Math.min(1, (performance.now()-st.t0)/OCM_NUM_DUR), e = 1 - Math.pow(1-k, 4);
+    st.shown = st.from + (st.to-st.from)*e;
+    el.textContent = fmt(st.shown);
+    if(k<1) requestAnimationFrame(tick);
+    else { st.running=false; st.shown=st.to; el.textContent=fmt(st.to); setTimeout(()=>el.classList.remove('num-up','num-down'), 300); }
+  })();
+}
+function ocmAnimateStats(){
+  document.querySelectorAll('#ocm-detail .panel.stat .n[data-k]').forEach(el=>{
+    const key = ocmCur+':'+el.dataset.k, to = Number(el.dataset.v), money = el.dataset.money==='1';
+    let st = ocmNum[key];
+    if(!st){ st = ocmNum[key] = {from:0,to:0,t0:0,shown:0,running:false}; }
+    if(st.to===to && !st.running && st.t0) return;          /* ค่าเดิม ไม่ต้องวิ่ง */
+    if(st.to===to && st.running){ ocmRunNum(el, st, money); return; } /* วาดใหม่ระหว่างวิ่ง → วิ่งต่อ */
+    st.from = st.t0 ? st.shown : 0; st.to = to; st.t0 = performance.now(); st.shown = st.from; st.running = true;
+    if(st.from===st.to){ st.running=false; st.shown=to; return; }
+    ocmRunNum(el, st, money);
+  });
+}
+function renderOcMerchantDetail(){ renderOcMerchantDetailRaw(); ocmAnimateStats(); }
 function ocmSwitchView(id, icon, label, after){
   if(tabCutsceneActive) return;
   playTabCutscene(icon, label, ()=>{
     document.querySelectorAll('section.view').forEach(v=>v.classList.toggle('active', v.id===id));
+    document.body.classList.toggle('theme-gold', id==='view-ocm'); /* หน้าเส้นเงินพ่อค้า = ธีมเหลือง */
     window.scrollTo(0,0);
     if(after) after();
   });
 }
 function openOcMerchant(id){
   const m=ocmById(id); if(!m) return;
-  ocmCur=id; renderOcMerchantDetail();
-  ocmSwitchView('view-ocm','fa-solid fa-user-tag',m.name);
+  ocmCur=id; ocmPage=1; Object.keys(ocmNum).forEach(k=>{ if(k.startsWith(id+':')) delete ocmNum[k]; }); renderOcMerchantDetailRaw();
+  ocmSwitchView('view-ocm','fa-solid fa-user-tag',m.name, ()=>renderOcMerchantDetail()); /* วิ่งจาก 0 หลังหน้าเปิดให้เห็นแล้ว */
 }
 function closeOcMerchant(after){ ocmSwitchView('view-oc','fa-solid fa-hand-holding-dollar','เคสซื้อขาย OC',after); }
 function clearOcmForm(){
