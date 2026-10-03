@@ -1150,6 +1150,35 @@
   body.visitor-mode .ocm-chk{pointer-events:none;cursor:default;}
   .panel.stat .n[data-k]{font-variant-numeric:tabular-nums;display:inline-block;transform-origin:left center;}
   #ocm-detail .panel.stat .n[data-k="รวมมูลค่าความเสียหาย"]{font-size:40px;}
+  /* ===== สรุปรายคน (ไล่ยึดเงิน) ===== */
+  .ocm-sumbtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;margin-bottom:16px;border-radius:var(--r-md);border:1px solid rgba(255,210,63,.55);background:linear-gradient(90deg,rgba(255,210,63,.16),rgba(255,210,63,.05));color:var(--text-main);cursor:pointer;font-size:14px;font-weight:700;text-align:left;}
+  .ocm-sumbtn:hover{box-shadow:0 0 16px rgba(255,210,63,.25);}
+  .ocm-sumbtn .t{display:flex;align-items:center;gap:10px;color:var(--yellow);font-size:15px;}
+  .ocm-sumbtn .c{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--text-muted);font-weight:600;}
+  .ocm-sumbtn .c b{color:#fff;}
+  .ocm-sum{margin-bottom:16px;}
+  .ocm-sum-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .ocm-sum-tab{padding:8px 14px;border-radius:999px;border:1px solid var(--line-soft);background:transparent;color:var(--text-muted);cursor:pointer;font-size:13px;font-weight:700;}
+  .ocm-sum-tab.on{color:#06130d;background:var(--yellow);border-color:var(--yellow);}
+  .ocm-sum-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px;}
+  .ocm-sum-card{border:1px solid var(--line-soft);border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.025);}
+  .ocm-sum-card .n{display:block;font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+  .ocm-sum-card .l{font-size:12px;color:var(--text-muted);}
+  .ocm-sum-note{font-size:12px;color:var(--text-muted);margin:0 0 10px;}
+  .ocm-sum-scroll{max-height:480px;overflow:auto;border:1px solid var(--line-soft);border-radius:12px;}
+  .ocm-sum-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+  .ocm-sum-tbl th{position:sticky;top:0;background:var(--bg-panel-2);text-align:left;padding:9px 12px;font-size:12px;color:var(--text-muted);z-index:1;white-space:nowrap;}
+  .ocm-sum-tbl td{padding:9px 12px;border-top:1px solid var(--line-soft);vertical-align:top;}
+  .ocm-sum-tbl td.num{font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+  .ocm-sum-tbl .rd{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(255,255,255,.08);}
+  .ocm-sum-tbl .rd.many{background:rgba(255,210,63,.2);color:var(--yellow);}
+  .ocm-sum-tbl .ids{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+  .ocm-sum-tbl tr.both td{background:rgba(179,136,255,.07);}
+  .ocm-sum-tbl tr.both td:first-child{box-shadow:inset 3px 0 0 #b388ff;}
+  .ocm-both{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;margin:5px 5px 0 0;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#7b4dff,#c04dff);border:1px solid #d9b8ff;box-shadow:0 0 10px rgba(179,136,255,.45);}
+  .ocm-both small{font-weight:600;font-size:11.5px;color:#f0e4ff;}
+  .ocm-sum-tbl .ids .ocm-both{margin:0;}
+  .ocm-sum-tbl .its{font-size:12px;color:var(--text-muted);line-height:1.6;max-width:420px;overflow-wrap:anywhere;}
   .panel.stat.stat-cases .cases-pair{display:flex;align-items:flex-start;gap:26px;}
   .panel.stat.stat-cases .cases-sep{align-self:stretch;width:1px;background:var(--line-soft);}
   .panel.stat .n.num-up{animation:numPopUp .7s ease-out;}
@@ -3144,7 +3173,7 @@ window.addEventListener('resize', ()=>{ ocFullH = 0; ocTFullH = 0; try{ renderOc
 setInterval(()=>{ try{ if(document.activeElement!==document.getElementById('oc-pg-input') && document.activeElement!==document.getElementById('oc-tpg-input') && document.activeElement.id!=='ocm-pg-input') renderOc(); }catch(e){} }, 60000);
 
 /* ================= OC MERCHANTS ================= */
-let ocSelMerchant = null, ocmCur = null, ocmPage = 1;
+let ocSelMerchant = null, ocmCur = null, ocmPage = 1, ocmSumOpen = false, ocmSumTab = 'buy';
 const OCM_PAGE_SIZE = 5;
 function ocmById(id){ return DB.ocMerchants.find(m=>m.id===id); }
 function ocmCases(id){ return DB.ocCases.filter(c=>c.merchantId===id); }
@@ -3251,6 +3280,76 @@ function renderOcMerchants(){
   renderOcMerchantList(); renderOcPicker(); renderOcBuyerList();
   if(ocmCur && document.getElementById('view-ocm').classList.contains('active')) renderOcMerchantDetail();
 }
+/* รวมเคสเป็นรายคน (ยึด DC > Steam > ชื่อ) — ซื้อหลายรอบจะถูกรวมเป็นบรรทัดเดียว */
+function ocmGroupPeople(list){
+  const map=new Map();
+  list.forEach(c=>{
+    const dc=ocDc(c), st=ocSteam(c), nm=ocName(c);
+    const key=String(dc||st||nm.toLowerCase());
+    let g=map.get(key);
+    if(!g){ g={name:nm,dc:'',steam:'',rounds:0,openRounds:0,total:0,paid:0,owed:0,items:{},qty:0,dcs:new Set(),sts:new Set(),nms:new Set()}; map.set(key,g); }
+    if(dc) g.dcs.add(String(dc)); if(st) g.sts.add(String(st)); g.nms.add(nm.toLowerCase());
+    if(!g.dc&&dc) g.dc=dc; if(!g.steam&&st) g.steam=st;
+    g.rounds++; if(c.status!=='paid') g.openRounds++;
+    const a=Number(c.amount)||0; g.total+=a; if(c.status==='paid') g.paid+=a; else g.owed+=a;
+    ocItems(c).forEach(i=>{ const n=String(i.name).trim(), q=Number(i.qty)||1; g.items[n]=(g.items[n]||0)+q; g.qty+=q; });
+  });
+  return [...map.values()];
+}
+/* คนเดียวกันอยู่คนละกลุ่มไหม: ตรงกันที่ DC หรือ Steam; ชื่อซ้ำนับเมื่ออีกฝั่งไม่มี DC/Steam */
+function ocmSamePerson(a,b){
+  for(const d of a.dcs) if(b.dcs.has(d)) return true;
+  for(const t of a.sts) if(b.sts.has(t)) return true;
+  const noId=x=>!x.dcs.size && !x.sts.size;
+  if(noId(a)||noId(b)){ for(const n of a.nms) if(b.nms.has(n)) return true; }
+  return false;
+}
+function ocmSummaryHtml(cs){
+  const sell=cs.filter(c=>c.transfer);
+  const buy =cs.filter(c=>!c.transfer && ocType(c)==='money');
+  const itm =cs.filter(c=>!c.transfer && ocType(c)==='item');
+  const G={ buy:ocmGroupPeople(buy), sell:ocmGroupPeople(sell), item:ocmGroupPeople(itm) };
+  G.buy.sort((a,b)=>b.owed-a.owed||b.total-a.total); G.sell.sort((a,b)=>b.owed-a.owed||b.total-a.total);
+  G.item.sort((a,b)=>b.openRounds-a.openRounds||b.qty-a.qty);
+  const C={buy,sell,item:itm}, N=x=>x.toLocaleString('th-TH');
+  const tabs=[['buy','ลูกค้าซื้อเงิน','fa-hand-holding-dollar'],['sell','คนขายให้พ่อค้า','fa-money-bill-transfer'],['item','คนซื้อไอเทม','fa-box-open']];
+  const people=G[ocmSumTab], list=C[ocmSumTab], isItem=ocmSumTab==='item';
+  const LBL={buy:'ซื้อเงิน',sell:'ขายให้พ่อค้า',item:'ซื้อไอเทม'};
+  const others=p=>['buy','sell','item'].filter(k=>k!==ocmSumTab).map(k=>{ const h=G[k].find(x=>ocmSamePerson(p,x)); return h?{k,h}:null; }).filter(Boolean);
+  const bothTag=p=>others(p).map(({k,h})=>`<span class="ocm-both" title="คนนี้อยู่ในกลุ่ม ${LBL[k]} ด้วย"><i class="fa-solid fa-right-left"></i>${LBL[k]}ด้วย<small>${k==='item'?N(h.qty)+' ชิ้น':ocMoney(h.total)} · ${h.rounds} รอบ</small></span>`).join('');
+  const bothCount=people.filter(p=>others(p).length).length;
+  const sm=k=>list.reduce((s,c)=>s+(Number(c.amount)||0),0);
+  const paidSum=list.filter(c=>c.status==='paid').reduce((s,c)=>s+(Number(c.amount)||0),0);
+  const owedSum=sm()-paidSum, repeat=people.filter(p=>p.rounds>1).length;
+  const card=(n,l,col)=>`<div class="ocm-sum-card"><span class="n"${col?` style="color:${col}"`:''}>${n}</span><span class="l">${l}</span></div>`;
+  const ids=(p,extra)=>(p.dc||p.steam||extra)?`<div class="ids">${p.dc?`<span class="oc-chip copy dc" data-act="ocm-copy" data-v="${esc(p.dc)}" title="คลิกเพื่อคัดลอก Discord"><i class="fa-brands fa-discord"></i><span class="v">${esc(p.dc)}</span></span>`:''}${p.steam?`<span class="oc-chip copy steam" data-act="ocm-copy" data-v="${esc(p.steam)}" title="คลิกเพื่อคัดลอก Steam"><i class="fa-brands fa-steam"></i><span class="v">${esc(p.steam)}</span></span>`:''}${extra||''}</div>`:'';
+  const nameCell=(p,i)=>`<td class="num" style="color:var(--text-faint)">${i+1}</td><td><b>${esc(p.name)}</b>${ids(p, bothTag(p))}</td><td><span class="rd ${p.rounds>1?'many':''}">${p.rounds} รอบ</span></td>`;
+  let head, rows;
+  if(isItem){
+    head='<th>#</th><th>คนซื้อ</th><th>จำนวนรอบ</th><th>ไอเทมที่ซื้อทั้งหมด</th><th>รวม</th><th>ค้างจ่าย</th>';
+    rows=people.map((p,i)=>`<tr class="${others(p).length?'both':''}">${nameCell(p,i)}<td class="its">${Object.entries(p.items).map(([n,q])=>esc(n)+' <b style="color:var(--green)">×'+N(q)+'</b>').join(' · ')}</td><td class="num">${N(p.qty)} ชิ้น</td><td class="num" style="color:${p.openRounds?'#CC0000':'var(--green)'};font-weight:800">${p.openRounds?p.openRounds+' รอบ':'จ่ายครบ'}</td></tr>`).join('');
+  } else {
+    head='<th>#</th><th>ชื่อ</th><th>จำนวนรอบ</th><th>ยอดรวม</th><th>จ่ายแล้ว</th><th>ค้างจ่าย</th>';
+    rows=people.map((p,i)=>`<tr class="${others(p).length?'both':''}">${nameCell(p,i)}<td class="num" style="color:#ff8a00;font-weight:800">${ocMoney(p.total)}</td><td class="num" style="color:#3dff7a">${ocMoney(p.paid)}</td><td class="num" style="color:${p.owed?'#CC0000':'var(--green)'};font-weight:800">${p.owed?ocMoney(p.owed):'จ่ายครบ'}</td></tr>`).join('');
+  }
+  const cards = isItem
+    ? card(N(people.length),'จำนวนคน')+card(N(bothCount),'คนที่อยู่หลายกลุ่ม (ซื้อ+ขาย)','#c9a4ff')+card(N(list.length),'จำนวนรอบที่ซื้อ')+card(N(people.reduce((s,p)=>s+p.qty,0)),'ไอเทมรวม (ชิ้น)','var(--green)')+card(N(list.filter(c=>c.status!=='paid').length),'รอบที่ยังค้างจ่าย','#CC0000')
+    : card(N(people.length),'จำนวนคน')+card(N(bothCount),'คนที่อยู่หลายกลุ่ม (ซื้อ+ขาย)','#c9a4ff')+card(N(repeat),'คนที่ซื้อ/ขายซ้ำหลายรอบ','var(--yellow)')+card(ocMoney(sm()),'ยอดรวมทั้งหมด','#ff8a00')+card(ocMoney(paidSum),'จ่ายแล้ว','#3dff7a')+card(ocMoney(owedSum),'ค้างจ่าย (ต้องไล่เก็บ)','#CC0000');
+  const note = ocmSumTab==='buy' ? 'เฉพาะคนที่ซื้อเงินจากเส้นเงินนี้ (ไม่รวมคนที่ติดแท็ก "โอนเงินให้" ซึ่งอยู่ในแท็บคนขายให้พ่อค้า) — ซื้อหลายรอบจะรวมเป็นบรรทัดเดียว'
+              : ocmSumTab==='sell' ? 'คนที่ติดแท็ก "โอนเงินให้" พ่อค้า — ยอดรวมตรงกับการ์ด "พ่อค้าซื้อมาทั้งหมด" ด้านบน'
+              : 'คนที่ซื้อไอเทม แยกจากคนซื้อเงิน — รวมไอเทมชนิดเดียวกันที่ซื้อหลายรอบ';
+  return `<div class="panel bracket ocm-sum"><div class="bl"></div><div class="br"></div>
+    <div class="ocm-sum-tabs">${tabs.map(t=>`<button type="button" class="ocm-sum-tab ${ocmSumTab===t[0]?'on':''}" data-act="ocm-sum-tab" data-tab="${t[0]}"><i class="fa-solid ${t[2]}"></i> ${t[1]} (${N(G[t[0]].length)} คน)</button>`).join('')}</div>
+    <div class="ocm-sum-cards">${cards}</div>
+    <p class="ocm-sum-note">${note}<br>ป้ายม่วง <b style="color:#c9a4ff">⇄</b> = คนนี้อยู่ในกลุ่มอื่นด้วย (เช่น ซื้อเงินด้วย และขายให้พ่อค้าด้วย) พร้อมยอดฝั่งนั้น แถวจะมีแถบม่วงด้านซ้าย<br>ตรวจนับ: เคสทั้งหมด ${N(cs.length)} = ซื้อเงิน ${N(buy.length)} + ขายให้พ่อค้า ${N(sell.length)} + ซื้อไอเทม ${N(itm.length)}</p>
+    ${people.length?`<div class="ocm-sum-scroll"><table class="ocm-sum-tbl"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="ocm-sum-note">ไม่มีรายการในกลุ่มนี้</div>'}
+  </div>`;
+}
+function ocmSumButtonHtml(cs){
+  const sell=cs.filter(c=>c.transfer), buy=cs.filter(c=>!c.transfer&&ocType(c)==='money'), itm=cs.filter(c=>!c.transfer&&ocType(c)==='item');
+  const n=l=>ocmGroupPeople(l).length;
+  return `<button type="button" class="ocm-sumbtn" data-act="ocm-sum-toggle"><span class="t"><i class="fa-solid fa-list-check"></i>สรุปรายคน (สำหรับไล่เก็บเงิน)</span><span class="c"><span>ซื้อเงิน <b>${n(buy)}</b> คน</span><span>ขายให้พ่อค้า <b>${n(sell)}</b> คน</span><span>ซื้อไอเทม <b>${n(itm)}</b> คน</span><i class="fa-solid ${ocmSumOpen?'fa-chevron-up':'fa-chevron-down'}"></i></span></button>${ocmSumOpen?ocmSummaryHtml(cs):''}`;
+}
 function renderOcMerchantDetailRaw(){
   const host=document.getElementById('ocm-detail'), m=ocmById(ocmCur);
   if(!m){ host.innerHTML=''; return; }
@@ -3258,6 +3357,8 @@ function renderOcMerchantDetailRaw(){
   const cs=ocmCases(m.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
   const open=cs.filter(c=>c.status!=='paid'), paid=cs.filter(c=>c.status==='paid');
   const xfer=cs.filter(c=>c.transfer);
+  /* ยอด "ที่พ่อค้าขายไป" = เฉพาะเคสที่ไม่ได้ติดแท็กโอนเงินให้ */
+  const sold=cs.filter(c=>!c.transfer), soldPaid=sold.filter(c=>c.status==='paid'), soldOpen=sold.filter(c=>c.status!=='paid');
   const pages=Math.max(1,Math.ceil(cs.length/OCM_PAGE_SIZE));
   if(ocmPage>pages) ocmPage=pages; if(ocmPage<1) ocmPage=1;
   const pStart=(ocmPage-1)*OCM_PAGE_SIZE, pageCs=cs.slice(pStart,pStart+OCM_PAGE_SIZE);
@@ -3266,7 +3367,7 @@ function renderOcMerchantDetailRaw(){
   const stat=(v,l,ic,sub,col,money)=>`<div class="panel stat"><span class="n" data-k="${esc(l)}" data-v="${Number(v)||0}" data-money="${money?1:0}"${col?` style="color:${col};"`:''}>${money?ocMoney(v):(Number(v)||0).toLocaleString('th-TH')}</span><div class="l">${l}${sub?`<span class="stat-sub">${sub}</span>`:''}</div><i class="fa-solid ${ic}"></i></div>`;
   host.innerHTML = `
     <div class="grid-cols cols-3" style="margin-bottom:16px;">
-      ${stat(sum(cs)+sum(xfer),'รวมมูลค่าความเสียหาย','fa-triangle-exclamation','ขายไปทั้งหมด + พ่อค้าซื้อมาทั้งหมด','#FFFF00',true)}
+      ${stat(sum(sold)+sum(xfer),'รวมมูลค่าความเสียหาย','fa-triangle-exclamation','ขายไปทั้งหมด + พ่อค้าซื้อมาทั้งหมด','#FFFF00',true)}
       <div class="panel stat stat-cases">
         <div class="cases-pair">
           <div><span class="n" data-k="เคสทั้งหมด" data-v="${cs.length}" data-money="0">${cs.length.toLocaleString('th-TH')}</span><div class="l">เคสทั้งหมด</div></div>
@@ -3276,10 +3377,11 @@ function renderOcMerchantDetailRaw(){
         <i class="fa-solid fa-folder-open"></i>
       </div>
       ${stat(sum(xfer),'พ่อค้าซื้อมาทั้งหมด','fa-money-bill-transfer','รวมจาก '+xfer.length+' รายชื่อที่ติดแท็ก "โอนเงินให้"',null,true)}
-      ${stat(sum(cs),'ขายไปทั้งหมด','fa-hand-holding-dollar','ยอดรวมของทุกเคส','#ff8a00',true)}
-      ${stat(sum(paid),'ได้รับกลับมาแล้ว','fa-circle-check','เฉพาะเคสที่จ่ายแล้ว','#3dff7a',true)}
-      ${stat(sum(open),'ยังไม่ได้รับ','fa-sack-dollar','เคสที่ยังค้างจ่ายอยู่','#CC0000',true)}
+      ${stat(sum(sold),'ขายไปทั้งหมด','fa-hand-holding-dollar','ไม่รวมรายชื่อที่ติดแท็ก "โอนเงินให้"','#ff8a00',true)}
+      ${stat(sum(soldPaid),'ได้รับกลับมาแล้ว','fa-circle-check','จากยอดที่ขายไป (เคสที่จ่ายแล้ว)','#3dff7a',true)}
+      ${stat(sum(soldOpen),'ยังไม่ได้รับ','fa-sack-dollar','จากยอดที่ขายไป (เคสที่ยังค้างจ่าย)','#CC0000',true)}
     </div>
+    ${ocmSumButtonHtml(cs)}
     <div class="panel bracket" style="margin-bottom:16px;">
       <div class="bl"></div><div class="br"></div>
       <div class="form-title"><i class="fa-solid fa-address-card"></i>ข้อมูลติดต่อ</div>
@@ -3310,6 +3412,11 @@ function renderOcMerchantDetailRaw(){
   host.addEventListener('click', e=>{
     const pv=e.target.closest('[data-act="ocm-pg-prev"]'), nx=e.target.closest('[data-act="ocm-pg-next"]');
     if(pv){ ocmPage--; renderOcMerchantDetail(); } else if(nx){ ocmPage++; renderOcMerchantDetail(); }
+  });
+  host.addEventListener('click', e=>{
+    if(e.target.closest('[data-act="ocm-sum-toggle"]')){ ocmSumOpen=!ocmSumOpen; renderOcMerchantDetail(); return; }
+    const tb=e.target.closest('[data-act="ocm-sum-tab"]');
+    if(tb){ ocmSumTab=tb.dataset.tab; renderOcMerchantDetail(); }
   });
   host.addEventListener('change', e=>{
     if(e.target.id!=='ocm-pg-input') return;
@@ -3369,7 +3476,7 @@ function ocmSwitchView(id, icon, label, after){
 }
 function openOcMerchant(id){
   const m=ocmById(id); if(!m) return;
-  ocmCur=id; ocmPage=1; Object.keys(ocmNum).forEach(k=>{ if(k.startsWith(id+':')) delete ocmNum[k]; }); renderOcMerchantDetailRaw();
+  ocmCur=id; ocmPage=1; ocmSumOpen=false; ocmSumTab='buy'; Object.keys(ocmNum).forEach(k=>{ if(k.startsWith(id+':')) delete ocmNum[k]; }); renderOcMerchantDetailRaw();
   ocmSwitchView('view-ocm','fa-solid fa-user-tag',m.name, ()=>renderOcMerchantDetail()); /* วิ่งจาก 0 หลังหน้าเปิดให้เห็นแล้ว */
 }
 function closeOcMerchant(after){ ocmSwitchView('view-oc','fa-solid fa-hand-holding-dollar','เคสซื้อขาย OC',after); }
