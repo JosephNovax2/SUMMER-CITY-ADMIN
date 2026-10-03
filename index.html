@@ -1108,10 +1108,22 @@
   .oc-chip.item i{color:#33ffb0;}
   .oc-chip.item .v{font-family:inherit;}
   /* ===== แสดงไอเทมทีละชิ้น (ใหม่) ===== */
-  .oc-items{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
-  .oc-items .oc-chip.item{max-width:240px;gap:7px;}
-  .oc-items .oc-chip.item .nm{overflow:hidden;text-overflow:ellipsis;}
+  .oc-items{display:flex;flex-wrap:nowrap;gap:5px;align-items:center;min-width:0;}
+  .oc-items .oc-chip.item{max-width:150px;gap:7px;flex:0 1 auto;min-width:0;}
+  .oc-items .oc-chip.item .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .oc-items .oc-chip.item .q{flex:none;font-weight:800;color:#33ffb0;background:rgba(51,255,176,.16);border-radius:6px;padding:0 6px;}
+  .oc-items .oc-chip.item.more{flex:none;cursor:pointer;font-weight:800;color:#06130d;background:#33ffb0;border-color:#33ffb0;font-family:inherit;}
+  .oc-items .oc-chip.item.more:hover{filter:brightness(1.12);box-shadow:0 0 10px rgba(51,255,176,.45);}
+  #oc-board .oc-who .oc-items .oc-chip.item{max-width:120px;}
+  .oc-pop{position:fixed;z-index:99999;min-width:240px;max-width:min(360px,calc(100vw - 20px));max-height:min(60vh,420px);display:flex;flex-direction:column;border-radius:14px;background:var(--bg-deep-2,#0b1220);border:1px solid rgba(51,255,176,.4);box-shadow:0 14px 40px rgba(0,0,0,.65),0 0 18px rgba(51,255,176,.15);overflow:hidden;font-family:'IBM Plex Sans Thai',sans-serif;}
+  .oc-pop .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line-soft);font-weight:700;font-size:13px;color:#33ffb0;}
+  .oc-pop .ph b{color:#fff;font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px;}
+  .oc-pop .pb{overflow-y:auto;padding:4px 6px;}
+  .oc-pop .pr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 8px;border-radius:8px;font-size:13px;color:var(--text-main);}
+  .oc-pop .pr:nth-child(odd){background:rgba(255,255,255,.03);}
+  .oc-pop .pr .pn{min-width:0;overflow-wrap:anywhere;}
+  .oc-pop .pr .pq{flex:none;font-weight:800;color:#33ffb0;font-family:'JetBrains Mono',monospace;}
+  .oc-pop .pf{display:flex;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--text-muted);}
   #oc-tbl-box .oc-cg-it{grid-column:1 / -1;}
   .oc-amt-item{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.25;color:#33ffb0;font-weight:700;}
   .oc-amt-item small{font-weight:500;color:var(--text-faint);font-size:10.5px;}
@@ -2807,16 +2819,46 @@ function ocItemsHtml(c){
   const tip = its.length ? its.map(i=>esc(ocItemLine(i))).join('&#10;') : 'ยังไม่ได้ระบุรายการไอเทม';
   return `<span class="oc-chip item" title="${tip}"><i class="fa-solid fa-box-open"></i><span class="v">${esc(txt)}</span></span>`;
 }
-function ocItemsListHtml(c){
+function ocItemsListHtml(c, lim){
   if(ocType(c)!=='item') return '';
   const its = ocItems(c);
   if(!its.length) return ocItemsHtml(c);
-  const chips = its.map(i=>{
+  lim = (lim===undefined) ? 2 : lim;   /* 0 = แสดงเฉพาะปุ่ม +N */
+  const chip = i=>{
     const nm=String(i.name).trim(), q=(Number(i.qty)||1).toLocaleString('th-TH');
     return `<span class="oc-chip item" title="${esc(nm)} ×${q}"><i class="fa-solid fa-box-open"></i><span class="nm">${esc(nm)}</span><span class="q">×${q}</span></span>`;
-  }).join('');
-  return `<div class="oc-items">${chips}</div>`;
+  };
+  const shown = its.slice(0, lim).map(chip).join('');
+  const rest = its.length - lim;
+  const more = rest>0 ? `<button type="button" class="oc-chip item more" data-act="oc-items-more" data-id="${esc(c.id)}" title="ดูไอเทมทั้งหมด ${its.length} รายการ">+${rest} รายการ</button>` : '';
+  return `<div class="oc-items">${shown}${more}</div>`;
 }
+/* popover แสดงไอเทมทั้งหมด (ลอยทับ ไม่ดันความสูงแถว/การ์ด) */
+function ocItemsPopClose(){ const p=document.getElementById('oc-items-pop'); if(p) p.remove(); }
+document.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-act="oc-items-more"]');
+  const inPop=e.target.closest('#oc-items-pop');
+  if(!btn){ if(!inPop) ocItemsPopClose(); return; }
+  e.preventDefault(); e.stopPropagation();
+  const had=document.getElementById('oc-items-pop');
+  const same=had && had.dataset.id===btn.dataset.id;
+  ocItemsPopClose(); if(same) return;
+  const c=DB.ocCases.find(x=>String(x.id)===String(btn.dataset.id)); if(!c) return;
+  const its=ocItems(c);
+  const pop=document.createElement('div');
+  pop.className='oc-pop'; pop.id='oc-items-pop'; pop.dataset.id=btn.dataset.id;
+  pop.innerHTML=`<div class="ph"><span><i class="fa-solid fa-box-open"></i> ไอเทมทั้งหมด (${its.length})</span><b title="${esc(ocName(c))}">${esc(ocName(c))}</b></div>
+    <div class="pb">${its.map(i=>`<div class="pr"><span class="pn">${esc(String(i.name).trim())}</span><span class="pq">×${(Number(i.qty)||1).toLocaleString('th-TH')}</span></div>`).join('')}</div>
+    <div class="pf"><span>รวมทั้งหมด</span><b>${ocItemQty(c).toLocaleString('th-TH')} ชิ้น</b></div>`;
+  document.body.appendChild(pop);
+  const r=btn.getBoundingClientRect(), w=pop.offsetWidth, h=pop.offsetHeight;
+  let left=Math.min(Math.max(10, r.left), window.innerWidth-w-10);
+  let top=r.bottom+6; if(top+h>window.innerHeight-10) top=Math.max(10, r.top-h-6);
+  pop.style.left=left+'px'; pop.style.top=top+'px';
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') ocItemsPopClose(); });
+window.addEventListener('resize', ocItemsPopClose);
+window.addEventListener('scroll', ocItemsPopClose, true);
 function ocAmtCellHtml(c){
   if(ocType(c)!=='item') return ocAmtText(c);
   const its=ocItems(c);
@@ -3109,11 +3151,11 @@ function ocName(c){ return (c.buyer||c.name||'').trim() || '-'; }
 function ocSameNameMerchant(c){ const n=ocName(c).toLowerCase(); return DB.ocMerchants.find(m=>(m.name||'').trim().toLowerCase()===n); }
 function ocDc(c){ return (c.dc!==undefined&&c.dc!==''?c.dc:((ocSameNameMerchant(c)||{}).dc||'')); }
 function ocSteam(c){ return (c.steam!==undefined&&c.steam!==''?c.steam:((ocSameNameMerchant(c)||{}).steam||'')); }
-function ocChipParts(c){
+function ocChipParts(c, lim){
   const m=ocmById(c.merchantId), dc=ocDc(c), st=ocSteam(c);
   const chip=(cls,ic,lbl,v)=>`<span class="oc-chip copy ${cls}" data-act="ocm-copy" data-v="${esc(v)}" title="คลิกเพื่อคัดลอก ${lbl}"><i class="${ic}"></i><span class="v">${esc(v)}</span></span>`;
   return {
-    item: ocItemsListHtml(c),
+    item: ocItemsListHtml(c, lim),
     dc: dc?chip('dc','fa-brands fa-discord','Discord',dc):'',
     steam: st?chip('steam','fa-brands fa-steam','Steam',st):'',
     src: m?`<span class="oc-chip src"><i class="fa-solid fa-route"></i>เส้นเงิน <button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียดพ่อค้า">${esc(m.name)}</button></span>`
@@ -3121,7 +3163,7 @@ function ocChipParts(c){
   };
 }
 function ocSrcHtml(c){
-  const p=ocChipParts(c);
+  const p=ocChipParts(c, 1);
   return `<div class="oc-meta">` + p.item + p.dc + p.steam + p.src + `</div>`;
 }
 /* ช่องชื่อในตารางรายการทั้งหมด: จัดเป็นตาราง 3 ช่องคงที่ (DC | Steam | เส้นเงิน)
@@ -3236,7 +3278,7 @@ function renderOcMerchantDetailRaw(){
     <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
       ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับ</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
-        <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsListHtml(c)}</td>
+        <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsListHtml(c, 0)}</td>
         <td class="pid">${ocAmtCellHtml(c)}</td>
         <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
