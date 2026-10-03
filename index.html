@@ -1626,7 +1626,7 @@
       <div class="bl"></div><div class="br"></div>
       <div id="oc-tbl-box">
       <table class="plist">
-        <thead><tr><th>ชื่อคนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับเงิน</th><th>วันที่ครบกำหนดชำระ</th><th>สถานะ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <thead><tr><th>ชื่อคนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับ</th><th>วันที่ครบกำหนดชำระ</th><th>สถานะ</th><th class="admin-only">จัดการ</th></tr></thead>
         <tbody id="oc-tbody"></tbody>
       </table>
       <div id="oc-empty"></div>
@@ -3235,7 +3235,7 @@ function renderOcMerchantDetailRaw(){
     </div>
     <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
-      ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
+      ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับ</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
         <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsListHtml(c)}</td>
         <td class="pid">${ocAmtCellHtml(c)}</td>
         <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
