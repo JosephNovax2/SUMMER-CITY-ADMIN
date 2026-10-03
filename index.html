@@ -1149,6 +1149,9 @@
   .ocm-chk input:focus-visible + span{outline:2px solid var(--cyan);outline-offset:2px;}
   body.visitor-mode .ocm-chk{pointer-events:none;cursor:default;}
   .panel.stat .n[data-k]{font-variant-numeric:tabular-nums;display:inline-block;transform-origin:left center;}
+  #ocm-detail .panel.stat .n[data-k="รวมมูลค่าความเสียหาย"]{font-size:40px;}
+  .panel.stat.stat-cases .cases-pair{display:flex;align-items:flex-start;gap:26px;}
+  .panel.stat.stat-cases .cases-sep{align-self:stretch;width:1px;background:var(--line-soft);}
   .panel.stat .n.num-up{animation:numPopUp .7s ease-out;}
   .panel.stat .n.num-down{animation:numPopDown .7s ease-out;}
   @keyframes numPopUp{0%{transform:scale(1);filter:brightness(1);}25%{transform:scale(1.07);filter:brightness(1.5) drop-shadow(0 0 8px currentColor);}100%{transform:scale(1);filter:brightness(1);}}
@@ -3263,11 +3266,19 @@ function renderOcMerchantDetailRaw(){
   const stat=(v,l,ic,sub,col,money)=>`<div class="panel stat"><span class="n" data-k="${esc(l)}" data-v="${Number(v)||0}" data-money="${money?1:0}"${col?` style="color:${col};"`:''}>${money?ocMoney(v):(Number(v)||0).toLocaleString('th-TH')}</span><div class="l">${l}${sub?`<span class="stat-sub">${sub}</span>`:''}</div><i class="fa-solid ${ic}"></i></div>`;
   host.innerHTML = `
     <div class="grid-cols cols-3" style="margin-bottom:16px;">
-      ${stat(cs.length,'เคสทั้งหมด','fa-folder-open')}${stat(open.length,'เคสค้างจ่าย','fa-hourglass-half')}
+      ${stat(sum(cs)+sum(xfer),'รวมมูลค่าความเสียหาย','fa-triangle-exclamation','ขายไปทั้งหมด + พ่อค้าซื้อมาทั้งหมด','#FFFF00',true)}
+      <div class="panel stat stat-cases">
+        <div class="cases-pair">
+          <div><span class="n" data-k="เคสทั้งหมด" data-v="${cs.length}" data-money="0">${cs.length.toLocaleString('th-TH')}</span><div class="l">เคสทั้งหมด</div></div>
+          <span class="cases-sep"></span>
+          <div><span class="n" data-k="เคสค้างจ่าย" data-v="${open.length}" data-money="0" style="color:#ff1f3d;">${open.length.toLocaleString('th-TH')}</span><div class="l">เคสค้างจ่าย</div></div>
+        </div>
+        <i class="fa-solid fa-folder-open"></i>
+      </div>
       ${stat(sum(xfer),'พ่อค้าซื้อมาทั้งหมด','fa-money-bill-transfer','รวมจาก '+xfer.length+' รายชื่อที่ติดแท็ก "โอนเงินให้"',null,true)}
       ${stat(sum(cs),'ขายไปทั้งหมด','fa-hand-holding-dollar','ยอดรวมของทุกเคส','#ff8a00',true)}
       ${stat(sum(paid),'ได้รับกลับมาแล้ว','fa-circle-check','เฉพาะเคสที่จ่ายแล้ว','#3dff7a',true)}
-      ${stat(sum(open),'ยังไม่ได้รับ','fa-sack-dollar','เคสที่ยังค้างจ่ายอยู่','#ff1f3d',true)}
+      ${stat(sum(open),'ยังไม่ได้รับ','fa-sack-dollar','เคสที่ยังค้างจ่ายอยู่','#CC0000',true)}
     </div>
     <div class="panel bracket" style="margin-bottom:16px;">
       <div class="bl"></div><div class="br"></div>
