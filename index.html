@@ -1133,6 +1133,8 @@
   .panel.stat .n.num-down{animation:numPopDown .7s ease-out;}
   @keyframes numPopUp{0%{transform:scale(1);filter:brightness(1);}25%{transform:scale(1.07);filter:brightness(1.5) drop-shadow(0 0 8px currentColor);}100%{transform:scale(1);filter:brightness(1);}}
   @keyframes numPopDown{0%{transform:scale(1);filter:brightness(1);}25%{transform:scale(.94);filter:brightness(.75);}100%{transform:scale(1);filter:brightness(1);}}
+  @keyframes ocRowFlash{0%,100%{background:transparent;}30%{background:rgba(var(--acc-rgb),.18);}}
+  #oc-tbody tr.oc-row-flash td{animation:ocRowFlash 1.6s ease;}
   .ocm-tbl-box.locked{min-height:calc(48px + 5 * 86px);}
   #ocm-detail .ocm-tbl-box table.plist tbody tr{height:86px;}
   #ocm-detail .ocm-tbl-box .ocm-note{font-size:12px;color:var(--text-muted);max-width:320px;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-inline:auto;}
@@ -2844,6 +2846,7 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
   { const r=document.getElementById('f-oc-recv').value, d=document.getElementById('f-oc-due').value;
     if(r && d && d<r) return toast('วันที่ตกลงคืนต้องไม่ก่อนวันที่ได้รับเงิน','error'); }
   const status = ocGetStatus();
+  const wasEdit = !!editing.oc, editedId = editing.oc; /* จำไว้ก่อน clearOcForm เคลียร์ค่า */
   const type = ocGetType(), items = type==='item' ? ocReadItems() : [];
   if(type==='item' && !items.length) return toast('เพิ่มไอเทมอย่างน้อย 1 รายการก่อนบันทึก','error');
   const f = {
@@ -2870,11 +2873,18 @@ document.getElementById('btn-save-oc').addEventListener('click', async ()=>{
   const ok = await saveKey('oc_cases', DB.ocCases);
   if(!ok) return;
   clearOcForm();
-  /* ล้างตัวค้นหา/ตัวกรอง เพื่อให้เคสที่เพิ่งเพิ่ม/แก้ไขขึ้นในตารางด้านล่างทันที */
-  document.getElementById('f-oc-search').value='';
-  ocFilter='all'; ocTPage=1;
-  document.querySelectorAll('#oc-filters .tier-chip').forEach(c=>c.classList.toggle('active', c.dataset.oc==='all'));
+  if(!wasEdit){
+    /* เพิ่มเคสใหม่: ล้างตัวค้นหา/ตัวกรอง กลับหน้าแรก เพื่อให้เคสใหม่ขึ้นบนสุดทันที */
+    document.getElementById('f-oc-search').value='';
+    ocFilter='all'; ocTPage=1;
+    document.querySelectorAll('#oc-filters .tier-chip').forEach(c=>c.classList.toggle('active', c.dataset.oc==='all'));
+  }
+  /* แก้ไขเคส: คงหน้า/ตัวกรอง/คำค้นหาเดิมไว้ ไม่เด้งกลับหน้าแรก */
   renderOc();
+  if(wasEdit){
+    const row = document.querySelector('#oc-tbody tr[data-id="'+editedId+'"]');
+    if(row){ row.scrollIntoView({behavior:'smooth', block:'center'}); row.classList.add('oc-row-flash'); setTimeout(()=>row.classList.remove('oc-row-flash'), 1600); }
+  }
 });
 document.getElementById('btn-cancel-oc').addEventListener('click', clearOcForm);
 document.getElementById('f-oc-search').addEventListener('input', ()=>{ ocTPage=1; renderOc(); });
@@ -3006,7 +3016,7 @@ function renderOc(){
     return;
   }
   emptyHost.innerHTML='';
-  tbody.innerHTML = pageList.map(c=>`<tr>
+  tbody.innerHTML = pageList.map(c=>`<tr data-id="${c.id}">
     <td>${ocNameCellHtml(c,tokens)}</td>
     <td class="pid">${ocAmtText(c)}</td>
     <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
