@@ -1107,6 +1107,14 @@
   .oc-chip.item{color:#c9f5dd;background:rgba(51,255,176,.08);border:1px solid rgba(51,255,176,.35);max-width:200px;}
   .oc-chip.item i{color:#33ffb0;}
   .oc-chip.item .v{font-family:inherit;}
+  /* ===== แสดงไอเทมทีละชิ้น (ใหม่) ===== */
+  .oc-items{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+  .oc-items .oc-chip.item{max-width:240px;gap:7px;}
+  .oc-items .oc-chip.item .nm{overflow:hidden;text-overflow:ellipsis;}
+  .oc-items .oc-chip.item .q{flex:none;font-weight:800;color:#33ffb0;background:rgba(51,255,176,.16);border-radius:6px;padding:0 6px;}
+  #oc-tbl-box .oc-cg-it{grid-column:1 / -1;}
+  .oc-amt-item{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.25;color:#33ffb0;font-weight:700;}
+  .oc-amt-item small{font-weight:500;color:var(--text-faint);font-size:10.5px;}
   #f-oc-items-wrap{display:none;}
   #f-oc-items-wrap.show{display:block;}
   #f-oc-items{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
@@ -1618,7 +1626,7 @@
       <div class="bl"></div><div class="br"></div>
       <div id="oc-tbl-box">
       <table class="plist">
-        <thead><tr><th>ชื่อคนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>วันที่ครบกำหนดชำระ</th><th>สถานะ</th><th class="admin-only">จัดการ</th></tr></thead>
+        <thead><tr><th>ชื่อคนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับเงิน</th><th>วันที่ครบกำหนดชำระ</th><th>สถานะ</th><th class="admin-only">จัดการ</th></tr></thead>
         <tbody id="oc-tbody"></tbody>
       </table>
       <div id="oc-empty"></div>
@@ -2799,6 +2807,21 @@ function ocItemsHtml(c){
   const tip = its.length ? its.map(i=>esc(ocItemLine(i))).join('&#10;') : 'ยังไม่ได้ระบุรายการไอเทม';
   return `<span class="oc-chip item" title="${tip}"><i class="fa-solid fa-box-open"></i><span class="v">${esc(txt)}</span></span>`;
 }
+function ocItemsListHtml(c){
+  if(ocType(c)!=='item') return '';
+  const its = ocItems(c);
+  if(!its.length) return ocItemsHtml(c);
+  const chips = its.map(i=>{
+    const nm=String(i.name).trim(), q=(Number(i.qty)||1).toLocaleString('th-TH');
+    return `<span class="oc-chip item" title="${esc(nm)} ×${q}"><i class="fa-solid fa-box-open"></i><span class="nm">${esc(nm)}</span><span class="q">×${q}</span></span>`;
+  }).join('');
+  return `<div class="oc-items">${chips}</div>`;
+}
+function ocAmtCellHtml(c){
+  if(ocType(c)!=='item') return ocAmtText(c);
+  const its=ocItems(c);
+  return `<span class="oc-amt-item"><span>${its.length} รายการ</span><small>รวม ${ocItemQty(c).toLocaleString('th-TH')} ชิ้น</small></span>`;
+}
 function ocGetType(){ const r=document.querySelector('input[name="oc-type"]:checked'); return r?r.value:'money'; }
 function ocSetType(t){
   const r=document.querySelector('input[name="oc-type"][value="'+t+'"]'); if(r) r.checked=true;
@@ -3018,7 +3041,7 @@ function renderOc(){
   emptyHost.innerHTML='';
   tbody.innerHTML = pageList.map(c=>`<tr data-id="${c.id}">
     <td>${ocNameCellHtml(c,tokens)}</td>
-    <td class="pid">${ocAmtText(c)}</td>
+    <td class="pid">${ocAmtCellHtml(c)}</td>
     <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
     <td>${ocStatusBadge(c.status)}</td>
@@ -3090,7 +3113,7 @@ function ocChipParts(c){
   const m=ocmById(c.merchantId), dc=ocDc(c), st=ocSteam(c);
   const chip=(cls,ic,lbl,v)=>`<span class="oc-chip copy ${cls}" data-act="ocm-copy" data-v="${esc(v)}" title="คลิกเพื่อคัดลอก ${lbl}"><i class="${ic}"></i><span class="v">${esc(v)}</span></span>`;
   return {
-    item: ocItemsHtml(c),
+    item: ocItemsListHtml(c),
     dc: dc?chip('dc','fa-brands fa-discord','Discord',dc):'',
     steam: st?chip('steam','fa-brands fa-steam','Steam',st):'',
     src: m?`<span class="oc-chip src"><i class="fa-solid fa-route"></i>เส้นเงิน <button type="button" class="oc-mlink" data-act="ocm-open" data-id="${m.id}" title="ดูรายละเอียดพ่อค้า">${esc(m.name)}</button></span>`
@@ -3110,7 +3133,8 @@ function ocNameCellHtml(c, tokens){
     : '<i class="fa-solid fa-bell-slash" style="color:var(--text-faint);" title="ไม่แสดงบนบอร์ด"></i>') : '';
   return `<div class="oc-cg">
     <div class="oc-cg-name"><span class="oc-nm" title="${esc(ocName(c))}">${highlightText(ocName(c),tokens)}</span><span class="oc-bell">${bell}</span></div>
-    <div class="oc-cg-x">${ocXferHtml(c)}${p.item}</div>
+    <div class="oc-cg-x">${ocXferHtml(c)}</div>
+    ${p.item?`<div class="oc-cg-it">${p.item}</div>`:''}
     <div class="oc-cg-dc">${p.dc}</div><div class="oc-cg-st">${p.steam}</div><div class="oc-cg-src">${p.src}</div>
   </div>`;
 }
@@ -3211,9 +3235,9 @@ function renderOcMerchantDetailRaw(){
     </div>
     <div class="panel bracket no-sb" style="padding:6px 10px;overflow-x:auto;">
       <div class="bl"></div><div class="br"></div>
-      ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>ยอดเงิน</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
-        <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsHtml(c)}</td>
-        <td class="pid">${ocAmtText(c)}</td>
+      ${cs.length?`<div class="ocm-tbl-box ${cs.length>OCM_PAGE_SIZE?'locked':''}"><table class="plist"><thead><tr><th>คนซื้อ</th><th>รายการซื้อ</th><th>วันที่ได้รับเงิน</th><th>กำหนดคืน</th><th>สถานะ</th><th>ติ๊กเมื่อจ่ายแล้ว</th></tr></thead><tbody>${pageCs.map(c=>`<tr>
+        <td><div class="oc-nameline"><span class="oc-nm" title="${esc(ocName(c))}">${esc(ocName(c))}</span>${ocXferHtml(c)}</div>${ocItemsListHtml(c)}</td>
+        <td class="pid">${ocAmtCellHtml(c)}</td>
         <td class="pid">${c.recv?fmtDate(c.recv):'-'}</td>
     <td class="pid">${c.due?fmtDate(c.due):'-'}${c.status==='paid'&&c.paidAt?`<div style="font-size:11px;color:var(--green);margin-top:3px;">จ่ายเมื่อ ${fmtDate(c.paidAt)}</div>`:''}</td>
         <td>${ocStatusBadge(c.status)}</td>
